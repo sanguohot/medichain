@@ -1,11 +1,11 @@
 pragma solidity ^0.4.11;
 
-contract HelloWorld{
+contract Hello{
     string saySomething;
 
     event onSaySomethingElse(string newSaying);
 
-    function HelloWorld() public  {
+    function Hello() public  {
         saySomething = "Hello World!";
     }
 
@@ -15,6 +15,7 @@ contract HelloWorld{
 
     function saySomethingElse(string newSaying) public returns(bool success) {
         saySomething = newSaying;
+        onSaySomethingElse(newSaying);
         return true;
     }
 }

@@ -22,7 +22,11 @@ func main() {
 	}
 	fmt.Printf("CallContext ===> %s", result)
 	var header *types.Header
-	json.Unmarshal(result, &header)
+	err = json.Unmarshal(result, &header)
+	if err != nil {
+		fmt.Println("\nCallContext error ===>", err)
+		// 注意这里报错是一致的，可能某些数据类型未能得到转化
+	}
 	fmt.Printf("\nheader ===> %s", header.ParentHash.String())
 	fmt.Printf("\nheader ===> %s", header.Coinbase.String())
 }
