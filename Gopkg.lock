@@ -199,6 +199,7 @@
     "github.com/ethereum/go-ethereum/ethclient",
     "github.com/ethereum/go-ethereum/event",
     "github.com/ethereum/go-ethereum/rlp",
+    "github.com/ethereum/go-ethereum/rpc",
     "github.com/shopspring/decimal",
   ]
   solver-name = "gps-cdcl"
