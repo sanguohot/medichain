@@ -41,7 +41,7 @@ func main() {
 		log.Fatal("444", err)
 	}
 
-	tx, err := instance.SaySomethingElse(auth, "efg")
+	tx, err := instance.SaySomethingElse(auth, "hehe")
 	if err != nil {
 		log.Fatal("555", err)
 	}
