@@ -5,12 +5,13 @@ import (
 	"log"
 	"github.com/sanguohot/go-ethereum/accounts/abi/bind"
 	"github.com/sanguohot/go-ethereum/crypto"
-	"github.com/sanguohot/go-ethereum/common"
 	"github.com/sanguohot/go-ethereum/ethclient"
 	hello "medichain/contracts/hello" // for demo
 	"math/rand"
 	"time"
 	"math/big"
+	"crypto/ecdsa"
+	"github.com/sanguohot/go-ethereum/common"
 )
 
 func main() {
@@ -18,40 +19,52 @@ func main() {
 	client, err := ethclient.Dial("http://10.6.250.56:8545")
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 	privateKey, err := crypto.HexToECDSA("bcec428d5205abe0f0cc8a734083908d9eb8563e31f943d760786edf42ad67dd")
 	if err != nil {
-		log.Fatal("111", err)
+		log.Fatal("crypto.HexToECDSA error ===>", err)
+		return
 	}
-
-	//gasPrice, err := client.SuggestGasPrice(context.Background())
-	//if err != nil {
-	//	log.Fatal("333", err)
-	//}
+	publicKey := privateKey.Public()
+	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	if !ok {
+		log.Fatal("error casting public key to ECDSA")
+		return
+	}
+	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+	toAddress := common.HexToAddress("0xca21167a870cf8b9618d259af454c6d00b30b028")
 	auth := bind.NewKeyedTransactor(privateKey)
 	auth.Nonce = big.NewInt(rand.Int63n(100000000))
 	auth.Value = nil     // in wei
 	auth.GasLimit = uint64(1000000) // in units
 	auth.GasPrice = nil
-	auth.From = common.HexToAddress("0x64fa644d2a694681bd6addd6c5e36cccd8dcdde3")
+	auth.From = fromAddress
 
-	address := common.HexToAddress("0xca21167a870cf8b9618d259af454c6d00b30b028")
-	instance, err := hello.NewHello(address, client)
+	instance, err := hello.NewHello(toAddress, client)
 	if err != nil {
-		log.Fatal("444", err)
+		log.Fatal("hello.NewHello error ===>", err)
+		return
 	}
-
-	tx, err := instance.SaySomethingElse(auth, "hehe")
+	result, err := instance.Speak(nil)
 	if err != nil {
-		log.Fatal("555", err)
+		log.Fatal("instance.Speak error ===>", err)
+		return
+	}
+	fmt.Println("\nfirst speak ===>", string(result[:])) // "bar"
+
+	tx, err := instance.SaySomethingElse(auth, "O(∩_∩)O哈哈~好像可以了")
+	if err != nil {
+		log.Fatal("instance.SaySomethingElse", err)
+		return
 	}
 
 	fmt.Printf("\ntx sent: %s", tx.Hash().Hex()) // tx sent: 0x8d490e535678e9a24360e955d75b27ad307bdfb97a1dca51d0f3035dcee3e870
-
-	result, err := instance.Speak(nil)
+	time.Sleep(3 * time.Second)
+	result, err = instance.Speak(nil)
 	if err != nil {
-		log.Fatal("666", err)
+		log.Fatal("instance.Speak error ===>", err)
+		return
 	}
-
-	fmt.Println("\nspeak ===>", string(result[:])) // "bar"
+	fmt.Println("\nlast speak ===>", string(result[:])) // "bar"
 }
