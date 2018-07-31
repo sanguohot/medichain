@@ -209,6 +209,9 @@ func (fs FrontierSigner) Hash(tx *Transaction) common.Hash {
 		tx.data.AccountNonce,
 		tx.data.Price,
 		tx.data.GasLimit,
+		// modify begin - by sanguohot for fisco-bcos usage
+		tx.data.BlockLimit,
+		// modify end   - by sanguohot for fisco-bcos usage
 		tx.data.Recipient,
 		tx.data.Amount,
 		tx.data.Payload,

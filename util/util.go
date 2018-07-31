@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/sanguohot/go-ethereum/common"
+	"github.com/sanguohot/go-ethereum/common/hexutil"
 	"github.com/shopspring/decimal"
 )
 

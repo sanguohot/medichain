@@ -47,6 +47,9 @@ type txdata struct {
 	AccountNonce uint64          `json:"nonce"    gencodec:"required"`
 	Price        *big.Int        `json:"gasPrice" gencodec:"required"`
 	GasLimit     uint64          `json:"gas"      gencodec:"required"`
+	// modify begin - by sanguohot for fisco-bcos usage
+	BlockLimit   uint64          `json:"blockLimit"      gencodec:"required"`
+	// modify end   - by sanguohot for fisco-bcos usage
 	Recipient    *common.Address `json:"to"       rlp:"nil"` // nil means contract creation
 	Amount       *big.Int        `json:"value"    gencodec:"required"`
 	Payload      []byte          `json:"input"    gencodec:"required"`
@@ -57,13 +60,18 @@ type txdata struct {
 	S *big.Int `json:"s" gencodec:"required"`
 
 	// This is only used when marshaling to JSON.
-	Hash *common.Hash `json:"hash" rlp:"-"`
+	// modify begin - by sanguohot for fisco-bcos usage
+	//Hash *common.Hash `json:"hash" rlp:"-"`
+	// modify end   - by sanguohot for fisco-bcos usage
 }
 
 type txdataMarshaling struct {
 	AccountNonce hexutil.Uint64
 	Price        *hexutil.Big
 	GasLimit     hexutil.Uint64
+	// modify begin - by sanguohot for fisco-bcos usage
+	BlockLimit   hexutil.Uint64
+	// modify end   - by sanguohot for fisco-bcos usage
 	Amount       *hexutil.Big
 	Payload      hexutil.Bytes
 	V            *hexutil.Big
@@ -88,8 +96,11 @@ func newTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit 
 		Recipient:    to,
 		Payload:      data,
 		Amount:       new(big.Int),
-		GasLimit:     gasLimit,
 		Price:        new(big.Int),
+		// modify begin - by sanguohot for fisco-bcos usage
+		GasLimit:     gasLimit,
+		BlockLimit:   724,
+		// modify end   - by sanguohot for fisco-bcos usage
 		V:            new(big.Int),
 		R:            new(big.Int),
 		S:            new(big.Int),
@@ -141,9 +152,11 @@ func (tx *Transaction) DecodeRLP(s *rlp.Stream) error {
 
 // MarshalJSON encodes the web3 RPC transaction format.
 func (tx *Transaction) MarshalJSON() ([]byte, error) {
-	hash := tx.Hash()
+	// modify begin - by sanguohot for fisco-bcos usage
+	//hash := tx.Hash()
 	data := tx.data
-	data.Hash = &hash
+	//data.Hash = &hash
+	// modify end   - by sanguohot for fisco-bcos usage
 	return data.MarshalJSON()
 }
 

@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/sanguohot/go-ethereum/rpc"
 	"encoding/json"
-	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/sanguohot/go-ethereum/core/types"
 )
 
 func main() {
@@ -29,4 +29,5 @@ func main() {
 	}
 	fmt.Printf("\nheader ===> %s", header.ParentHash.String())
 	fmt.Printf("\nheader ===> %s", header.Coinbase.String())
+	fmt.Printf("\nheader ===> %s", header.Number)
 }

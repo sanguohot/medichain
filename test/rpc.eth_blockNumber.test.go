@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/sanguohot/go-ethereum/rpc"
 )
 
 func main() {

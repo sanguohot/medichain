@@ -18,25 +18,35 @@ func (t txdata) MarshalJSON() ([]byte, error) {
 		AccountNonce hexutil.Uint64  `json:"nonce"    gencodec:"required"`
 		Price        *hexutil.Big    `json:"gasPrice" gencodec:"required"`
 		GasLimit     hexutil.Uint64  `json:"gas"      gencodec:"required"`
+		// modify begin - by sanguohot for fisco-bcos usage
+		BlockLimit   hexutil.Uint64  `json:"blockLimit"      gencodec:"required"`
+		// modify end   - by sanguohot for fisco-bcos usage
 		Recipient    *common.Address `json:"to"       rlp:"nil"`
 		Amount       *hexutil.Big    `json:"value"    gencodec:"required"`
 		Payload      hexutil.Bytes   `json:"input"    gencodec:"required"`
 		V            *hexutil.Big    `json:"v" gencodec:"required"`
 		R            *hexutil.Big    `json:"r" gencodec:"required"`
 		S            *hexutil.Big    `json:"s" gencodec:"required"`
-		Hash         *common.Hash    `json:"hash" rlp:"-"`
+		// modify begin - by sanguohot for fisco-bcos usage
+		//Hash         *common.Hash    `json:"hash" rlp:"-"`
+		// modify end   - by sanguohot for fisco-bcos usage
 	}
 	var enc txdata
 	enc.AccountNonce = hexutil.Uint64(t.AccountNonce)
 	enc.Price = (*hexutil.Big)(t.Price)
 	enc.GasLimit = hexutil.Uint64(t.GasLimit)
+	// modify begin - by sanguohot for fisco-bcos usage
+	enc.BlockLimit = hexutil.Uint64(t.BlockLimit)
+	// modify end   - by sanguohot for fisco-bcos usage
 	enc.Recipient = t.Recipient
 	enc.Amount = (*hexutil.Big)(t.Amount)
 	enc.Payload = t.Payload
 	enc.V = (*hexutil.Big)(t.V)
 	enc.R = (*hexutil.Big)(t.R)
 	enc.S = (*hexutil.Big)(t.S)
-	enc.Hash = t.Hash
+	// modify begin - by sanguohot for fisco-bcos usage
+	//enc.Hash = t.Hash
+	// modify end   - by sanguohot for fisco-bcos usage
 	return json.Marshal(&enc)
 }
 
@@ -45,13 +55,18 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 		AccountNonce *hexutil.Uint64 `json:"nonce"    gencodec:"required"`
 		Price        *hexutil.Big    `json:"gasPrice" gencodec:"required"`
 		GasLimit     *hexutil.Uint64 `json:"gas"      gencodec:"required"`
+		// modify begin - by sanguohot for fisco-bcos usage
+		BlockLimit   *hexutil.Uint64 `json:"blockLimit"      gencodec:"required"`
+		// modify end   - by sanguohot for fisco-bcos usage
 		Recipient    *common.Address `json:"to"       rlp:"nil"`
 		Amount       *hexutil.Big    `json:"value"    gencodec:"required"`
 		Payload      *hexutil.Bytes  `json:"input"    gencodec:"required"`
 		V            *hexutil.Big    `json:"v" gencodec:"required"`
 		R            *hexutil.Big    `json:"r" gencodec:"required"`
 		S            *hexutil.Big    `json:"s" gencodec:"required"`
-		Hash         *common.Hash    `json:"hash" rlp:"-"`
+		// modify begin - by sanguohot for fisco-bcos usage
+		//Hash         *common.Hash    `json:"hash" rlp:"-"`
+		// modify end   - by sanguohot for fisco-bcos usage
 	}
 	var dec txdata
 	if err := json.Unmarshal(input, &dec); err != nil {
@@ -69,6 +84,9 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 		return errors.New("missing required field 'gas' for txdata")
 	}
 	t.GasLimit = uint64(*dec.GasLimit)
+	// modify begin - by sanguohot for fisco-bcos usage
+	t.BlockLimit = uint64(*dec.BlockLimit)
+	// modify end   - by sanguohot for fisco-bcos usage
 	if dec.Recipient != nil {
 		t.Recipient = dec.Recipient
 	}
@@ -92,8 +110,10 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 		return errors.New("missing required field 's' for txdata")
 	}
 	t.S = (*big.Int)(dec.S)
-	if dec.Hash != nil {
-		t.Hash = dec.Hash
-	}
+	// modify begin - by sanguohot for fisco-bcos usage
+	//if dec.Hash != nil {
+	//	t.Hash = dec.Hash
+	//}
+	// modify end   - by sanguohot for fisco-bcos usage
 	return nil
 }

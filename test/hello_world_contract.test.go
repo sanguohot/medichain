@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/sanguohot/go-ethereum/accounts/abi/bind"
+	"github.com/sanguohot/go-ethereum/crypto"
+	"github.com/sanguohot/go-ethereum/ethclient"
 
 	helloWorldContracts "medichain/contracts/hello" // for demo
 )

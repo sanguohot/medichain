@@ -201,12 +201,14 @@ func (c *BoundContract) transact(opts *TransactOpts, contract *common.Address, i
 	}
 	// Figure out the gas allowance and gas price values
 	gasPrice := opts.GasPrice
-	if gasPrice == nil {
-		gasPrice, err = c.transactor.SuggestGasPrice(ensureContext(opts.Context))
-		if err != nil {
-			return nil, fmt.Errorf("failed to suggest gas price: %v", err)
-		}
-	}
+	// modify begin - by sanguohot for fisco-bcos usage
+	//if gasPrice == nil {
+	//	gasPrice, err = c.transactor.SuggestGasPrice(ensureContext(opts.Context))
+	//	if err != nil {
+	//		return nil, fmt.Errorf("failed to suggest gas price: %v", err)
+	//	}
+	//}
+	// modify end   - by sanguohot for fisco-bcos usage
 	gasLimit := opts.GasLimit
 	if gasLimit == 0 {
 		// Gas estimation cannot succeed without code for method invocations
