@@ -33,11 +33,12 @@ func main() {
 		return
 	}
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-	toAddress := common.HexToAddress("0xca21167a870cf8b9618d259af454c6d00b30b028")
+	toAddress := common.HexToAddress("0xb349Eba018bFA9d89Da90829629D39668F6653A2")
 	auth := bind.NewKeyedTransactor(privateKey)
 	auth.Nonce = big.NewInt(rand.Int63n(100000000))
 	auth.Value = nil     // in wei
 	auth.GasLimit = uint64(1000000) // in units
+	auth.BlockLimit = uint64(0) // i change the source code, then it can auto figure out if pass zero value
 	auth.GasPrice = nil
 	auth.From = fromAddress
 
@@ -53,7 +54,7 @@ func main() {
 	}
 	fmt.Println("\nfirst speak ===>", string(result[:])) // "bar"
 
-	tx, err := instance.SaySomethingElse(auth, "O(∩_∩)O哈哈~好像可以了")
+	tx, err := instance.SaySomethingElse(auth, "o(╯□╰)o")
 	if err != nil {
 		log.Fatal("instance.SaySomethingElse", err)
 		return

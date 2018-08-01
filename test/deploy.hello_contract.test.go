@@ -57,8 +57,8 @@ func main() {
 		return
 	}
 
-	fmt.Println(address.Hex())   // 0x147B8eb97fD247D06C4006D269c90C1908Fb5D54
-	fmt.Println(tx.Hash().Hex()) // 0xdae8ba5444eefdc99f4d45cd0c4f24056cba6a02cefbf78066ef9f4188ff7dc0
+	fmt.Println(address.Hex())   // 0xb349Eba018bFA9d89Da90829629D39668F6653A2
+	fmt.Println(tx.Hash().Hex()) // 0x1a14fcadcc25488b126ef3b4617126e5a753a8257b7f8e3fccb3b3ec9f40923e
 
 	_ = instance
 }

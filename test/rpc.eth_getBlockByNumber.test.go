@@ -32,8 +32,9 @@ func main() {
 	fmt.Println(block.Time().Uint64())       // 1527211625
 	fmt.Println(block.Difficulty().Uint64()) // 3217000136609065
 	fmt.Println(block.TxHash().Hex())          // 0x9e8751ebb5069389b855bba72d94902cc385042661498a415979b7b6ee9ba4b9
+	block.Body().
 	// block hash计算不对
-	fmt.Println(block.Hash().Hex())
+	fmt.Println("block hash ===>", block.Hash().Hex())
 	fmt.Println(hexutil.Encode(block.Extra()))
 	fmt.Println(len(block.Transactions()))   // 144
 	count, err := client.TransactionCount(context.Background(), common.HexToHash("0xfa9f2281e202f74c5c78228c22c89d8a9b4a39fb6e33bd57b4de677e991dc028"))
