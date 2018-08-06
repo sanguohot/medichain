@@ -4,10 +4,10 @@ import (
 	"crypto/ecdsa"
 	"crypto/rand"
 	"log"
-	"github.com/sanguohot/go-ethereum/crypto"
-	"github.com/sanguohot/go-ethereum/crypto/ecies"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/crypto/ecies"
 	"fmt"
-	"github.com/sanguohot/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 

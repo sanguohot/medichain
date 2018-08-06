@@ -7,7 +7,7 @@ import (
 
 	"medichain/util"
 
-	"github.com/sanguohot/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 func main() {

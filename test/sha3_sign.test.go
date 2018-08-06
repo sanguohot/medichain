@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sanguohot/go-ethereum/common/hexutil"
-	"github.com/sanguohot/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
 func main() {

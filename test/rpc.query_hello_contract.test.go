@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/sanguohot/go-ethereum/common"
-	"github.com/sanguohot/go-ethereum/ethclient"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
 	hello "medichain/contracts/hello" // for demo
 )
 

@@ -6,12 +6,12 @@ package hello
 import (
 	"strings"
 
-	ethereum "github.com/sanguohot/go-ethereum"
-	"github.com/sanguohot/go-ethereum/accounts/abi"
-	"github.com/sanguohot/go-ethereum/accounts/abi/bind"
-	"github.com/sanguohot/go-ethereum/common"
-	"github.com/sanguohot/go-ethereum/core/types"
-	"github.com/sanguohot/go-ethereum/event"
+	ethereum "github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/event"
 )
 
 // HelloABI is the input ABI used to generate the binding from.

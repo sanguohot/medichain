@@ -3,15 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/sanguohot/go-ethereum/common"
-	"github.com/sanguohot/go-ethereum/ethclient"
-	ethereum "github.com/sanguohot/go-ethereum"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
+	ethereum "github.com/ethereum/go-ethereum"
 	hello "medichain/contracts/hello"
 	"context"
 	"math/big"
 	"strings"
-	"github.com/sanguohot/go-ethereum/crypto"
-	"github.com/sanguohot/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/accounts/abi"
 )
 
 func main() {

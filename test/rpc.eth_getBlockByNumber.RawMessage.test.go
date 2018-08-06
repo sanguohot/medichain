@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/sanguohot/go-ethereum/rpc"
+	"github.com/ethereum/go-ethereum/rpc"
 	"encoding/json"
-	"github.com/sanguohot/go-ethereum/core/types"
-	"github.com/sanguohot/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func main() {

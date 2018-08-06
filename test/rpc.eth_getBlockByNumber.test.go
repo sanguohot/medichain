@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/sanguohot/go-ethereum/ethclient"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"math/big"
-	"github.com/sanguohot/go-ethereum/common/hexutil"
-	"github.com/sanguohot/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func main() {
