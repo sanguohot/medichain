@@ -3,7 +3,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:e82fb0031a31a1044bef71818b4b75b3ff81312a923068978cb0fd1833b1f455"
+  digest = "1:7d191fd0c54ff370eaf6116a14dafe2a328df487baea280699f597aae858d00d"
   name = "github.com/aristanetworks/goarista"
   packages = ["monotime"]
   pruneopts = "UT"
@@ -11,14 +11,22 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:6aabc1566d6351115d561d038da82a4c19b46c3b6e17f4a0a2fa60260663dc79"
+  digest = "1:2c00f064ba355903866cbfbf3f7f4c0fe64af6638cc7d1b8bdcf3181bc67f1d8"
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
   pruneopts = "UT"
   revision = "9a2f9524024889e129a5422aca2cff73cb3eabf6"
 
 [[projects]]
-  digest = "1:cbffb6adcec9cf842affeac139cca1c26d6787bf9b438d4f2a069d067123c127"
+  digest = "1:c166378e8ab0f794f293dfb941d250dd70b035b05dec58879f717621d0fe1714"
+  name = "github.com/deckarep/golang-set"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "1d4478f51bed434f1dadf96dcd9b43aabac66795"
+  version = "v1.7"
+
+[[projects]]
+  digest = "1:063660303c3779be9c4221df17465af58f4d1e3039ad776f80492cade6dea473"
   name = "github.com/ethereum/go-ethereum"
   packages = [
     ".",
@@ -33,7 +41,6 @@
     "core/types",
     "crypto",
     "crypto/ecies",
-    "crypto/randentropy",
     "crypto/secp256k1",
     "crypto/sha3",
     "ethclient",
@@ -48,8 +55,9 @@
     "trie",
   ]
   pruneopts = "UT"
-  revision = "37685930d953bcbe023f9bc65b135a8d8b8f1488"
-  version = "v1.8.12"
+  revision = "225171a4bfcc16bd12a1906b1e0d43d0b18c353b"
+  source = "github.com/sanguohot/go-ethereum"
+  version = "v1.8.13"
 
 [[projects]]
   digest = "1:c4a2528ccbcabf90f9f3c464a5fc9e302d592861bbfd0b7135a7de8a943d0406"
@@ -101,7 +109,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:922191411ad8f61bcd8018ac127589bb489712c1d1a0ab2497aca4b16de417d2"
+  digest = "1:b3cfb8d82b1601a846417c3f31c03a7961862cb2c98dcf0959c473843e6d9a2b"
   name = "github.com/syndtr/goleveldb"
   packages = [
     "leveldb",
@@ -122,7 +130,15 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:6821bdf5fd1822feef766cc899a293cfadae430feb926dd42cd19cb0a9970f61"
+  digest = "1:e824960107263faa245b6f03e078df35f3f9da8d5002762fbd423f5e56850a45"
+  name = "github.com/vedranvuk/magnet"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "9a8503cc354349589c83b2fd12bfb69f23284191"
+
+[[projects]]
+  branch = "master"
+  digest = "1:29672ea8ec3ef342d345f668d47666e45366b7691080ee4c07bf4851f4fa8864"
   name = "golang.org/x/crypto"
   packages = [
     "pbkdf2",
@@ -149,7 +165,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a464115f461c773a2b5ac42633ded88addc01fa36458345a7620959d839c578b"
+  digest = "1:e1c96c8c8ce0af57da9dccb008e540b3d13b55ea04b530fb4fceb81706082bdd"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -158,14 +174,6 @@
   ]
   pruneopts = "UT"
   revision = "475b7a1e12f029fbb4d210958352057952ea9f7a"
-
-[[projects]]
-  digest = "1:3ccd10c863188cfe0d936fcfe6a055c95362e43af8e7039e33baade846928e74"
-  name = "gopkg.in/fatih/set.v0"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "57907de300222151a123d29255ed17f5ed43fad3"
-  version = "v0.1.0"
 
 [[projects]]
   branch = "v2"
@@ -201,6 +209,7 @@
     "github.com/ethereum/go-ethereum/rlp",
     "github.com/ethereum/go-ethereum/rpc",
     "github.com/shopspring/decimal",
+    "github.com/vedranvuk/magnet",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
