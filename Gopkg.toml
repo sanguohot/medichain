@@ -33,6 +33,6 @@
       unused-packages = false
 
 [[constraint]]
+  branch = "fisco-bcos-v1.8.13"
   name = "github.com/ethereum/go-ethereum"
   source = "github.com/sanguohot/go-ethereum"
-  version = "1.8.13"

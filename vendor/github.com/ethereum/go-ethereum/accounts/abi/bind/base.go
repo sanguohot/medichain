@@ -52,6 +52,9 @@ type TransactOpts struct {
 	Value    *big.Int // Funds to transfer along along the transaction (nil = 0 = no funds)
 	GasPrice *big.Int // Gas price to use for the transaction execution (nil = gas price oracle)
 	GasLimit uint64   // Gas limit to set for the transaction execution (0 = estimate)
+	// modify begin - by sanguohot for fisco-bcos usage
+	BlockLimit uint64   // Block limit to set for the fisco-bcos transaction execution
+	// modify end   - by sanguohot for fisco-bcos usage
 
 	Context context.Context // Network context to support cancellation and timeouts (nil = no timeout)
 }
@@ -201,12 +204,23 @@ func (c *BoundContract) transact(opts *TransactOpts, contract *common.Address, i
 	}
 	// Figure out the gas allowance and gas price values
 	gasPrice := opts.GasPrice
-	if gasPrice == nil {
-		gasPrice, err = c.transactor.SuggestGasPrice(ensureContext(opts.Context))
+	// modify begin - by sanguohot for fisco-bcos usage
+	//if gasPrice == nil {
+	//	gasPrice, err = c.transactor.SuggestGasPrice(ensureContext(opts.Context))
+	//	if err != nil {
+	//		return nil, fmt.Errorf("failed to suggest gas price: %v", err)
+	//	}
+	//}
+	blockLimit := opts.BlockLimit
+	if blockLimit == 0 {
+		blockLimit, err = c.transactor.EstimateBlockLimit(ensureContext(opts.Context))
 		if err != nil {
-			return nil, fmt.Errorf("failed to suggest gas price: %v", err)
+			return nil, fmt.Errorf("failed to estimate block limit: %v", err)
 		}
+		//
+		blockLimit += 100
 	}
+	// modify end   - by sanguohot for fisco-bcos usage
 	gasLimit := opts.GasLimit
 	if gasLimit == 0 {
 		// Gas estimation cannot succeed without code for method invocations
@@ -227,9 +241,9 @@ func (c *BoundContract) transact(opts *TransactOpts, contract *common.Address, i
 	// Create the transaction, sign it and schedule it for execution
 	var rawTx *types.Transaction
 	if contract == nil {
-		rawTx = types.NewContractCreation(nonce, value, gasLimit, gasPrice, input)
+		rawTx = types.NewContractCreation(nonce, value, gasLimit, blockLimit, gasPrice, input)
 	} else {
-		rawTx = types.NewTransaction(nonce, c.address, value, gasLimit, gasPrice, input)
+		rawTx = types.NewTransaction(nonce, c.address, value, gasLimit, blockLimit, gasPrice, input)
 	}
 	if opts.Signer == nil {
 		return nil, errors.New("no signer to authorize the transaction with")

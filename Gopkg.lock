@@ -7,7 +7,7 @@
   name = "github.com/aristanetworks/goarista"
   packages = ["monotime"]
   pruneopts = "UT"
-  revision = "7fdf701d5bbf6a590d62664bced14b66db2b675c"
+  revision = "b2d71c282dc706f4b4f6c15b65810e1202ecd53f"
 
 [[projects]]
   branch = "master"
@@ -15,7 +15,7 @@
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
   pruneopts = "UT"
-  revision = "9a2f9524024889e129a5422aca2cff73cb3eabf6"
+  revision = "cf05f92c3f815bbd5091ed6c73eff51f7b1945e8"
 
 [[projects]]
   digest = "1:c166378e8ab0f794f293dfb941d250dd70b035b05dec58879f717621d0fe1714"
@@ -26,7 +26,8 @@
   version = "v1.7"
 
 [[projects]]
-  digest = "1:063660303c3779be9c4221df17465af58f4d1e3039ad776f80492cade6dea473"
+  branch = "fisco-bcos-v1.8.13"
+  digest = "1:b56e1377f845afeec23d4efe3be8a15204b5f5e11bca218202168ccd6c51be20"
   name = "github.com/ethereum/go-ethereum"
   packages = [
     ".",
@@ -54,10 +55,9 @@
     "rpc",
     "trie",
   ]
-  pruneopts = "UT"
-  revision = "225171a4bfcc16bd12a1906b1e0d43d0b18c353b"
+  pruneopts = "T"
+  revision = "12bc0bf432dc9d3bcc713a41569c22d9618dbe9d"
   source = "github.com/sanguohot/go-ethereum"
-  version = "v1.8.13"
 
 [[projects]]
   digest = "1:c4a2528ccbcabf90f9f3c464a5fc9e302d592861bbfd0b7135a7de8a943d0406"
@@ -92,12 +92,12 @@
   version = "v0.9.0"
 
 [[projects]]
-  digest = "1:9695b472826ca23e521d650849fefac3102dddbf841c9a4b35fb9d3ed5d17011"
+  digest = "1:0b8dd7447e420afff0260179dc892711e837edd1d446bc78dab924624a3c3c81"
   name = "github.com/rs/cors"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ca016a06a5753f8ba03029c0aa5e54afb1bf713f"
-  version = "v1.4.0"
+  revision = "3fb1b69b103a84de38a19c3c6ec073dd6caa4d3f"
+  version = "v1.5.0"
 
 [[projects]]
   digest = "1:81e02c4edb639c80559c0650f9401d3e2dcc3256d1fa215382bb7c83c1db9126"
@@ -145,7 +145,7 @@
     "scrypt",
   ]
   pruneopts = "UT"
-  revision = "c126467f60eb25f8f27e5a981f32a87e3965053f"
+  revision = "56440b844dfe139a8ac053f4ecac0b20b79058f4"
 
 [[projects]]
   branch = "master"
@@ -153,15 +153,15 @@
   name = "golang.org/x/net"
   packages = ["websocket"]
   pruneopts = "UT"
-  revision = "3673e40ba22529d22c3fd7c93e97b0ce50fa7bdd"
+  revision = "f4c29de78a2a91c00474a2e689954305c350adf9"
 
 [[projects]]
   branch = "master"
-  digest = "1:dbe2ad3afac439a4bfd3e1b0352c4869dc26aae52662dcab72355408776ed5d5"
+  digest = "1:6171b61a4a42ff7c8a1bd0cfb569c247e1654ec4d918b7da84228974216751f5"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "e072cadbbdc8dd3d3ffa82b8b4b9304c261d9311"
+  revision = "34b17bdb430002e9db9ae7ddc8480b9fa05edc22"
 
 [[projects]]
   branch = "master"
@@ -173,7 +173,7 @@
     "internal/fastwalk",
   ]
   pruneopts = "UT"
-  revision = "475b7a1e12f029fbb4d210958352057952ea9f7a"
+  revision = "3c07937fe18c27668fd78bbaed3d6b8b39e202ea"
 
 [[projects]]
   branch = "v2"

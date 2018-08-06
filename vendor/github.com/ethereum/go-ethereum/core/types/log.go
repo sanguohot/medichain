@@ -57,9 +57,11 @@ type Log struct {
 
 type logMarshaling struct {
 	Data        hexutil.Bytes
-	BlockNumber hexutil.Uint64
-	TxIndex     hexutil.Uint
-	Index       hexutil.Uint
+	// modify begin - by sanguohot for fisco-bcos usage
+	//BlockNumber hexutil.Uint64
+	//TxIndex     hexutil.Uint
+	//Index       hexutil.Uint
+	// modify end   - by sanguohot for fisco-bcos usage
 }
 
 type rlpLog struct {
@@ -130,3 +132,4 @@ func (l *LogForStorage) DecodeRLP(s *rlp.Stream) error {
 	}
 	return err
 }
+

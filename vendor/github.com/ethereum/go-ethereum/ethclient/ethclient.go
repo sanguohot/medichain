@@ -182,6 +182,11 @@ type txExtraInfo struct {
 }
 
 func (tx *rpcTransaction) UnmarshalJSON(msg []byte) error {
+	// modify begin - by sanguohot for fisco-bcos usage
+	if tx.tx == nil {
+		return nil
+	}
+	// modify end   - by sanguohot for fisco-bcos usage
 	if err := json.Unmarshal(msg, &tx.tx); err != nil {
 		return err
 	}
@@ -464,6 +469,18 @@ func (ec *Client) SuggestGasPrice(ctx context.Context) (*big.Int, error) {
 	}
 	return (*big.Int)(&hex), nil
 }
+
+// modify begin - by sanguohot for fisco-bcos usage
+// EstimateBlockLimit retrieves the currently estimated block limit required by
+// fisco-bcos.
+func (ec *Client) EstimateBlockLimit(ctx context.Context) (uint64, error) {
+	header, err := ec.HeaderByNumber(ctx, nil)
+	if err != nil {
+		return 0, err
+	}
+	return header.Number.Uint64(), nil
+}
+// modify end - by sanguohot for fisco-bcos usage
 
 // EstimateGas tries to estimate the gas needed to execute a specific transaction based on
 // the current pending state of the backend blockchain. There is no guarantee that this is

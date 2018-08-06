@@ -13,45 +13,47 @@ import (
 
 var _ = (*txdataMarshaling)(nil)
 
+// MarshalJSON marshals as JSON.
 func (t txdata) MarshalJSON() ([]byte, error) {
 	type txdata struct {
 		AccountNonce hexutil.Uint64  `json:"nonce"    gencodec:"required"`
 		Price        *hexutil.Big    `json:"gasPrice" gencodec:"required"`
 		GasLimit     hexutil.Uint64  `json:"gas"      gencodec:"required"`
+		BlockLimit   hexutil.Uint64  `json:"blockLimit"`
 		Recipient    *common.Address `json:"to"       rlp:"nil"`
 		Amount       *hexutil.Big    `json:"value"    gencodec:"required"`
 		Payload      hexutil.Bytes   `json:"input"    gencodec:"required"`
 		V            *hexutil.Big    `json:"v" gencodec:"required"`
 		R            *hexutil.Big    `json:"r" gencodec:"required"`
 		S            *hexutil.Big    `json:"s" gencodec:"required"`
-		Hash         *common.Hash    `json:"hash" rlp:"-"`
 	}
 	var enc txdata
 	enc.AccountNonce = hexutil.Uint64(t.AccountNonce)
 	enc.Price = (*hexutil.Big)(t.Price)
 	enc.GasLimit = hexutil.Uint64(t.GasLimit)
+	enc.BlockLimit = hexutil.Uint64(t.BlockLimit)
 	enc.Recipient = t.Recipient
 	enc.Amount = (*hexutil.Big)(t.Amount)
 	enc.Payload = t.Payload
 	enc.V = (*hexutil.Big)(t.V)
 	enc.R = (*hexutil.Big)(t.R)
 	enc.S = (*hexutil.Big)(t.S)
-	enc.Hash = t.Hash
 	return json.Marshal(&enc)
 }
 
+// UnmarshalJSON unmarshals from JSON.
 func (t *txdata) UnmarshalJSON(input []byte) error {
 	type txdata struct {
 		AccountNonce *hexutil.Uint64 `json:"nonce"    gencodec:"required"`
 		Price        *hexutil.Big    `json:"gasPrice" gencodec:"required"`
 		GasLimit     *hexutil.Uint64 `json:"gas"      gencodec:"required"`
+		BlockLimit   *hexutil.Uint64 `json:"blockLimit"`
 		Recipient    *common.Address `json:"to"       rlp:"nil"`
 		Amount       *hexutil.Big    `json:"value"    gencodec:"required"`
 		Payload      *hexutil.Bytes  `json:"input"    gencodec:"required"`
 		V            *hexutil.Big    `json:"v" gencodec:"required"`
 		R            *hexutil.Big    `json:"r" gencodec:"required"`
 		S            *hexutil.Big    `json:"s" gencodec:"required"`
-		Hash         *common.Hash    `json:"hash" rlp:"-"`
 	}
 	var dec txdata
 	if err := json.Unmarshal(input, &dec); err != nil {
@@ -69,6 +71,9 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 		return errors.New("missing required field 'gas' for txdata")
 	}
 	t.GasLimit = uint64(*dec.GasLimit)
+	if dec.BlockLimit != nil {
+		t.BlockLimit = uint64(*dec.BlockLimit)
+	}
 	if dec.Recipient != nil {
 		t.Recipient = dec.Recipient
 	}
@@ -92,8 +97,5 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 		return errors.New("missing required field 's' for txdata")
 	}
 	t.S = (*big.Int)(dec.S)
-	if dec.Hash != nil {
-		t.Hash = dec.Hash
-	}
 	return nil
 }
