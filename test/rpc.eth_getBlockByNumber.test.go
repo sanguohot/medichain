@@ -32,7 +32,6 @@ func main() {
 	fmt.Println(block.Time().Uint64())       // 1527211625
 	fmt.Println(block.Difficulty().Uint64()) // 3217000136609065
 	fmt.Println(block.TxHash().Hex())          // 0x9e8751ebb5069389b855bba72d94902cc385042661498a415979b7b6ee9ba4b9
-	block.Body().
 	// block hash计算不对
 	fmt.Println("block hash ===>", block.Hash().Hex())
 	fmt.Println(hexutil.Encode(block.Extra()))
