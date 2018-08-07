@@ -31,7 +31,7 @@ func main() {
 	// block hash计算不对
 	fmt.Println("block.Hash ===>", block.Hash().Hex())
 	fmt.Println("block.Extra ===>", hexutil.Encode(block.Extra()))
-	fmt.Println("block.Transactions ===>", len(block.Transactions()))   // 144
+	fmt.Println("block.Transactions ===>", block.Transactions())   // 144
 	count, err := client.TransactionCount(context.Background(), common.HexToHash("0xe2192c151e5060b5b26c4fdf9d0ec887edcfd5da64595acc2dc49948e2b4a45b"))
 	if err != nil {
 		fmt.Println("client.TransactionCount ===> %s", err)

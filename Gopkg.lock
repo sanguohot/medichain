@@ -27,7 +27,7 @@
 
 [[projects]]
   branch = "fisco-bcos-v1.8.13"
-  digest = "1:e867ad43fad3e305374fdbe0e06105e69fe8cb522666f5fe4056105a4357e73d"
+  digest = "1:390524941ab3a63af65a918fff834f20b38ec49fa554e490604823cfe409eb27"
   name = "github.com/ethereum/go-ethereum"
   packages = [
     ".",
@@ -56,7 +56,7 @@
     "trie",
   ]
   pruneopts = "T"
-  revision = "5d5ba56ec3c061f43a9147d2f079f704f356e135"
+  revision = "87b5154de1c8270020d4b5b038a4656e739a5687"
   source = "github.com/sanguohot/go-ethereum"
 
 [[projects]]
@@ -145,7 +145,7 @@
     "scrypt",
   ]
   pruneopts = "UT"
-  revision = "56440b844dfe139a8ac053f4ecac0b20b79058f4"
+  revision = "f027049dab0ad238e394a753dba2d14753473a04"
 
 [[projects]]
   branch = "master"
@@ -157,11 +157,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:6171b61a4a42ff7c8a1bd0cfb569c247e1654ec4d918b7da84228974216751f5"
+  digest = "1:7e758f807faab4ca5614488e6397d2365f9a5767f6699a805bbe92a1d1a6da23"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "34b17bdb430002e9db9ae7ddc8480b9fa05edc22"
+  revision = "2be389f392cd91df245b41638f818a1c041f0c08"
 
 [[projects]]
   branch = "master"
