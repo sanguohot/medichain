@@ -12,15 +12,17 @@ import (
 )
 
 func main() {
-	client, err := ethclient.Dial("https://mainnet.infura.io")
+	client, err := ethclient.Dial("http://10.6.250.56:8545")
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
-	blockNumber := big.NewInt(647)
+	blockNumber := big.NewInt(652)
 	block, err := client.BlockByNumber(context.Background(), blockNumber)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 	for _, tx := range block.Transactions() {

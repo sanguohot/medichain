@@ -3,7 +3,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7d191fd0c54ff370eaf6116a14dafe2a328df487baea280699f597aae858d00d"
+  digest = "1:e82fb0031a31a1044bef71818b4b75b3ff81312a923068978cb0fd1833b1f455"
   name = "github.com/aristanetworks/goarista"
   packages = ["monotime"]
   pruneopts = "UT"
@@ -11,7 +11,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2c00f064ba355903866cbfbf3f7f4c0fe64af6638cc7d1b8bdcf3181bc67f1d8"
+  digest = "1:6aabc1566d6351115d561d038da82a4c19b46c3b6e17f4a0a2fa60260663dc79"
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
   pruneopts = "UT"
@@ -27,7 +27,7 @@
 
 [[projects]]
   branch = "fisco-bcos-v1.8.13"
-  digest = "1:92dc5f7f91618dfbea4deecab0e0efb734e8a48d8a393faae39544c52f122b47"
+  digest = "1:e867ad43fad3e305374fdbe0e06105e69fe8cb522666f5fe4056105a4357e73d"
   name = "github.com/ethereum/go-ethereum"
   packages = [
     ".",
@@ -109,7 +109,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b3cfb8d82b1601a846417c3f31c03a7961862cb2c98dcf0959c473843e6d9a2b"
+  digest = "1:922191411ad8f61bcd8018ac127589bb489712c1d1a0ab2497aca4b16de417d2"
   name = "github.com/syndtr/goleveldb"
   packages = [
     "leveldb",
@@ -138,7 +138,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:29672ea8ec3ef342d345f668d47666e45366b7691080ee4c07bf4851f4fa8864"
+  digest = "1:6821bdf5fd1822feef766cc899a293cfadae430feb926dd42cd19cb0a9970f61"
   name = "golang.org/x/crypto"
   packages = [
     "pbkdf2",
@@ -165,7 +165,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:e1c96c8c8ce0af57da9dccb008e540b3d13b55ea04b530fb4fceb81706082bdd"
+  digest = "1:a464115f461c773a2b5ac42633ded88addc01fa36458345a7620959d839c578b"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",

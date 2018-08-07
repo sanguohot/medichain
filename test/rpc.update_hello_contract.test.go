@@ -33,12 +33,12 @@ func main() {
 		return
 	}
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-	toAddress := common.HexToAddress("0xB818715eb048286A608B5E9851877AD7A30a41A0")
+	toAddress := common.HexToAddress("0x5100132E59B4fe81Bc05aEED6839eF6df9DD190F")
 	auth := bind.NewKeyedTransactor(privateKey) // 设置私钥和签名方法
 	auth.Nonce = big.NewInt(rand.Int63n(100000000)) // 也是fisco-bcos的randomid字段，这里按照web3.js计算随机数
 	auth.Value = nil
 	auth.GasLimit = uint64(1000000)
-	auth.BlockLimit = uint64(740) // 区别go-etherneum，似乎是fisco-bcos判断了范围？
+	//auth.BlockLimit = uint64(740) // 区别go-etherneum，似乎是fisco-bcos判断了范围？
 	auth.GasPrice = nil
 	auth.From = fromAddress
 	instance, err := hello.NewHello(toAddress, client)
@@ -52,7 +52,7 @@ func main() {
 		return
 	}
 	fmt.Println("\nfirst speak ===>", string(result[:])) //
-	tx, err := instance.SaySomethingElse(auth, "━((*′д｀)爻(′д｀*))━!!!!") // 调用Hello.sol 的 SaySomethingElse方法
+	tx, err := instance.SaySomethingElse(auth, "ddddddddddd") // 调用Hello.sol 的 SaySomethingElse方法
 	if err != nil {
 		log.Fatal("instance.SaySomethingElse", err)
 		return

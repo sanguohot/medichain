@@ -58,5 +58,5 @@ func main() {
 	fmt.Printf("\nheader ===> %s", header.Coinbase.String())
 	fmt.Printf("\nheader ===> %s", header.Number)
 	fmt.Printf("\nblock ===> %s", body.Hash.String())
-	fmt.Println("\nTransactions ===>", body.Transactions)     // 5671744
+	fmt.Println("\nTransactions ===>", body.Transactions[0].BlockNumber)     // 5671744
 }
