@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"math/big"
 	"github.com/ethereum/go-ethereum/common"
 
 	"github.com/ethereum/go-ethereum/core/types"
@@ -18,8 +17,7 @@ func main() {
 		return
 	}
 
-	blockNumber := big.NewInt(675)
-	block, err := client.BlockByNumber(context.Background(), blockNumber)
+	block, err := client.BlockByNumber(context.Background(), nil)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -30,13 +28,17 @@ func main() {
 		// 注意这里与之前的hash计算不一致, 明天考虑是否需要修改
 		// Transaction.Hash ===> It uniquely identifies the transaction.
 		// FrontierSigner.Hash ===> It does not uniquely identify the transaction.
-		fmt.Println(tx.Hash().Hex())        // 0x5d49fcaa394c97ec8a9c3e7bd9e8388d420fb050a52083ca52ff24b3b65bc9c2
-		fmt.Println(tx.Value().String())    // 10000000000000000
-		fmt.Println(tx.Gas())               // 105000
-		fmt.Println(tx.GasPrice().Uint64()) // 102000000000
-		fmt.Println(tx.Nonce())             // 110644
-		fmt.Println(tx.Data())              // []
-		fmt.Println(tx.To().Hex())          // 0x55fE59D8Ad77035154dDd0AD0388D09Dd4047A8e
+		// as fisco-bcos use blockLimit to generate a tx hash, and does not return it the rpc call
+		// we can not get the same one by types.HomesteadSigner{}.Hash(tx)
+		fmt.Println("does not uniquely:types.HomesteadSigner{}.Hash(tx) ===>", types.HomesteadSigner{}.Hash(tx).Hex())
+		fmt.Println("uniquely:tx.Hash() ===>", tx.Hash().Hex())        // 0x5d49fcaa394c97ec8a9c3e7bd9e8388d420fb050a52083ca52ff24b3b65bc9c2
+		fmt.Println("tx.data.AccountNonce ===>", tx.Nonce())
+		fmt.Println("tx.data.Price ===>", tx.GasPrice())
+		fmt.Println("tx.data.GasLimit ===>", tx.Gas())
+		fmt.Println("tx.data.BlockLimit ===>", tx.BlockLimit())
+		fmt.Println("tx.data.Recipient ===>", tx.To().Hex())
+		fmt.Println("tx.data.Amount ===>", tx.Value())
+		fmt.Println("tx.data.Payload ===>", tx.Data())
 		msg, err := tx.AsMessage(types.HomesteadSigner{})
 		if err != nil {
 			log.Fatal(err)
