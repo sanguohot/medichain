@@ -25,9 +25,9 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-	fmt.Println(receipt.Logs)
-	fmt.Println(receipt.Status)
-	fmt.Println(receipt.TxHash.Hex())
+	fmt.Println("receipt.Logs ===>", receipt.Logs)
+	fmt.Println("receipt.Status ===>", receipt.Status)
+	fmt.Println("receipt.TxHash ===>", receipt.TxHash.Hex())
 	contractAbi, err := abi.JSON(strings.NewReader(string(hello.HelloABI)))
 	if err != nil {
 		log.Fatal("abi.JSON", err)
@@ -46,7 +46,7 @@ func main() {
 			return
 		}
 
-		fmt.Println("event ===>", event)
+		fmt.Println("event onSaySomethingElse===>", event)
 
 		var topics [4]string
 		for i := range vLog.Topics {

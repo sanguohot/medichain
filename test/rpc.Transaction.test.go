@@ -37,14 +37,16 @@ func main() {
 		fmt.Println(tx.Nonce())             // 110644
 		fmt.Println(tx.Data())              // []
 		fmt.Println(tx.To().Hex())          // 0x55fE59D8Ad77035154dDd0AD0388D09Dd4047A8e
-
-		if msg, err := tx.AsMessage(types.HomesteadSigner{}); err != nil {
-			fmt.Println(msg.From().Hex()) // 0x0fD081e3Bb178dc45c0cb23202069ddA57064258
+		msg, err := tx.AsMessage(types.HomesteadSigner{})
+		if err != nil {
+			log.Fatal(err)
+			return
 		}
-
+		fmt.Println("from ===>", msg.From().Hex())
 		receipt, err := client.TransactionReceipt(context.Background(), tx.Hash())
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		fmt.Println(receipt.Status) // 1
