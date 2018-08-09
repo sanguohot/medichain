@@ -8,6 +8,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 func main() {
@@ -38,7 +39,9 @@ func main() {
 		fmt.Println("tx.data.BlockLimit ===>", tx.BlockLimit())
 		fmt.Println("tx.data.Recipient ===>", tx.To().Hex())
 		fmt.Println("tx.data.Amount ===>", tx.Value())
-		fmt.Println("tx.data.Payload ===>", tx.Data())
+		fmt.Println("tx.data.Payload ===>", hexutil.Encode(tx.Data()))
+		// we get the real tx hash in fisco-bcos
+		fmt.Println("tx.data.hash ===>", tx.FiscoHash().Hex())
 		msg, err := tx.AsMessage(types.HomesteadSigner{})
 		if err != nil {
 			log.Fatal(err)

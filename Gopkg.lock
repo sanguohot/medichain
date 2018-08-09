@@ -27,7 +27,7 @@
 
 [[projects]]
   branch = "fisco-bcos-v1.8.13"
-  digest = "1:d0bde22377910719507f2a29069d95f2fed88181907d29dc1b1731aa4f93132f"
+  digest = "1:7e007bc34be2d1cee511a17a2b46fd8cffa45de7e05d87f2a3c4be759971c748"
   name = "github.com/ethereum/go-ethereum"
   packages = [
     ".",
@@ -56,7 +56,7 @@
     "trie",
   ]
   pruneopts = "T"
-  revision = "b3280d22d95cd0ec9c220de8749eb779822284fa"
+  revision = "1cadb7ee25b6882ad4023f791ec69f106b98930c"
   source = "github.com/sanguohot/go-ethereum"
 
 [[projects]]
