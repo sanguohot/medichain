@@ -3,14 +3,41 @@ package main
 import (
 	"medichain/file"
 	"fmt"
-	"log"
+	"medichain/util"
+	"io/ioutil"
+	"bytes"
 )
 
 func main() {
-	fileBytes, err := file.DownloadFromBigDataCenter("562f2ea6e41020fd7bf5426bd77cd59c")
+	var err error
+	bigDataItemList, err := file.GetFilesInFolder(file.FolderCode)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return
 	}
-	fmt.Printf("\ndownload file length %d", len(fileBytes))
+	fmt.Println(len(bigDataItemList), bigDataItemList[9].FileCode)
+	_, err = file.CreateFolderInBigDataCenter(file.FolderName)
+	if err != nil {
+		fmt.Println(err)
+		//return
+	}
+	fileName := "e:/evan/test.txt"
+	fileBytesUp, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	err = file.UploadToBigDataCenter(fileBytesUp)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fileBytesDown, err := file.DownloadFromBigDataCenter(util.Md5(fileBytesUp))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("\ndownload file length %d", len(fileBytesDown))
+	fmt.Println("\nbytes.Equal(fileBytesUp, fileBytesDown) ===>", bytes.Equal(fileBytesUp, fileBytesDown))
+	fmt.Println(string(fileBytesDown))
 }

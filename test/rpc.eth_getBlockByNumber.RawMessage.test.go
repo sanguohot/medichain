@@ -10,9 +10,9 @@ import (
 )
 
 func main() {
-	client, err := rpc.Dial("http://10.6.250.56:8545")
+	client, err := rpc.Dial("http://10.6.250.54:8546")
 	if err != nil {
-		fmt.Println("dail http://10.6.250.56:8545 ===>", err)
+		fmt.Println("dail http://10.6.250.54:8546 ===>", err)
 		return
 	}
 	var result json.RawMessage

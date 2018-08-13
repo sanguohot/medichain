@@ -7,7 +7,7 @@
   name = "github.com/aristanetworks/goarista"
   packages = ["monotime"]
   pruneopts = "UT"
-  revision = "b2d71c282dc706f4b4f6c15b65810e1202ecd53f"
+  revision = "70ad3c3262ada0444973f3f02e4a8339319236b3"
 
 [[projects]]
   branch = "master"
@@ -15,7 +15,7 @@
   name = "github.com/btcsuite/btcd"
   packages = ["btcec"]
   pruneopts = "UT"
-  revision = "cf05f92c3f815bbd5091ed6c73eff51f7b1945e8"
+  revision = "f899737d7f2764dc13e4d01ff00108ec58f766a9"
 
 [[projects]]
   digest = "1:c166378e8ab0f794f293dfb941d250dd70b035b05dec58879f717621d0fe1714"
@@ -197,19 +197,19 @@
   name = "golang.org/x/net"
   packages = ["websocket"]
   pruneopts = "UT"
-  revision = "f9ce57c11b242f0f1599cf25c89d8cb02c45295a"
+  revision = "c39426892332e1bb5ec0a434a079bf82f5d30c54"
 
 [[projects]]
   branch = "master"
-  digest = "1:76b5ca88193bf744f729c2fde12151b24364ffaca3fd092069d9ca2ea6e1f999"
+  digest = "1:33a43cb31975899cfcd81600d1390467db1778ae87102f80668a753fed8c663e"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "904bdc257025c7b3f43c19360ad3ab85783fad78"
+  revision = "98c5dad5d1a0e8a73845ecc8897d0bd56586511d"
 
 [[projects]]
   branch = "master"
-  digest = "1:e1c96c8c8ce0af57da9dccb008e540b3d13b55ea04b530fb4fceb81706082bdd"
+  digest = "1:a05bd2d296bc727082abcb63ff52615b4dcc6219d8b61e99fd83d605dc779a18"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -217,7 +217,7 @@
     "internal/fastwalk",
   ]
   pruneopts = "UT"
-  revision = "ad8705d9f66de7461d0035a9b184c5bc66c7ae64"
+  revision = "27709f6afec43b6c6d899bd199bf0f39c731216c"
 
 [[projects]]
   digest = "1:cbc72c4c4886a918d6ab4b95e347ffe259846260f99ebdd8a198c2331cf2b2e9"
@@ -258,6 +258,7 @@
     "github.com/ethereum/go-ethereum",
     "github.com/ethereum/go-ethereum/accounts/abi",
     "github.com/ethereum/go-ethereum/accounts/abi/bind",
+    "github.com/ethereum/go-ethereum/accounts/keystore",
     "github.com/ethereum/go-ethereum/common",
     "github.com/ethereum/go-ethereum/common/hexutil",
     "github.com/ethereum/go-ethereum/core/types",

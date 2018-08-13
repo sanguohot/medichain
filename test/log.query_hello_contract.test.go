@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	client, err := ethclient.Dial("http://10.6.250.56:8545")
+	client, err := ethclient.Dial("wss://10.6.250.54:8822")
 	if err != nil {
 		log.Fatal(err)
 		return
