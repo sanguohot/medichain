@@ -36,7 +36,7 @@ OxwS2/BvSyCKXLQkgBCK79moFvaFi81BKm8r1MMWpV7uQQwdsdgj
 		return
 	}
 	config := &tls.Config{Certificates: []tls.Certificate{cert}}
-	ln, err := tls.Listen("tcp", ":6443", config)
+	ln, err := tls.Listen("tcp", ":8822", config)
 	if err != nil {
 		log.Println(err)
 		return

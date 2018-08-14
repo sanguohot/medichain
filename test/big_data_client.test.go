@@ -15,7 +15,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(len(bigDataItemList), bigDataItemList[9].FileCode)
+	fmt.Println("bigDataItemList size ===>", len(bigDataItemList))
 	_, err = file.CreateFolderInBigDataCenter(file.FolderName)
 	if err != nil {
 		fmt.Println(err)

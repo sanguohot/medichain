@@ -145,6 +145,25 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:80d47c7f2eeb0784716af7659820ae0702b5cd5d482614dbc8a27fe73b3a131f"
+  name = "github.com/spacemonkeygo/openssl"
+  packages = [
+    ".",
+    "utils",
+  ]
+  pruneopts = "UT"
+  revision = "5da517866c3d32d56491026886bfd86d3c006302"
+
+[[projects]]
+  branch = "master"
+  digest = "1:d6956eb95db39859627c18e1dd425b2ddd1a0d6000b643a4d4ada8fc887c1e09"
+  name = "github.com/spacemonkeygo/spacelog"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2296661a0572a51438413369004fa931c2641923"
+
+[[projects]]
+  branch = "master"
   digest = "1:b3cfb8d82b1601a846417c3f31c03a7961862cb2c98dcf0959c473843e6d9a2b"
   name = "github.com/syndtr/goleveldb"
   packages = [
@@ -271,6 +290,7 @@
     "github.com/ethereum/go-ethereum/rpc",
     "github.com/gin-gonic/gin",
     "github.com/shopspring/decimal",
+    "github.com/spacemonkeygo/openssl",
     "github.com/vedranvuk/magnet",
   ]
   solver-name = "gps-cdcl"
