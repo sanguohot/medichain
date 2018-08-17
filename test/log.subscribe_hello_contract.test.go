@@ -32,7 +32,7 @@ func toFilterArg(q ethereum.FilterQuery) interface{} {
 }
 func main() {
 	// subscribe an event require websocket channel or ipc
-	client, err := rpc.Dial("wss://10.6.250.54:8822")
+	client, err := rpc.Dial("ws://10.6.250.53:8000")
 	if err != nil {
 		log.Fatal("ethclient.Dial ===> ", err)
 		return
