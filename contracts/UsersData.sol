@@ -13,6 +13,13 @@ contract UsersData is Validate,Super {
         bytes32 idCartNoHash;
         uint time;
     }
+    event onAddUser(bytes16 uuid, address userAddress, bytes16 orgUuid, bytes32[2] publicKey, bytes32 idCartNoHash, uint time);
+    event onDelUser(bytes16 uuid);
+    event onSetActive(bytes16 uuid, bool active);
+    event onSetUserAddressAndPublicKey(bytes16 uuid, address userAddress, bytes32[2] publicKey);
+    event onSetOrgUuid(bytes16 uuid, bytes16 orgUuid);
+    event onSetIdCartNoHash(bytes16 uuid, bytes32 idCartNoHash);
+    event onSetTime(bytes16 uuid, uint time);
 
     mapping(bytes16 => User) uuidToUserMap;
     mapping(bytes32 => bytes16) idCartNoHashToUuidMap;
@@ -63,16 +70,19 @@ contract UsersData is Validate,Super {
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
         userAddressToUuidMap[userAddress] = uuid;
         uuidList.push(uuid);
+        onAddUser(uuid, userAddress, orgUuid, publicKey, idCartNoHash, time);
     }
     function delUser(bytes16 uuid)
     public onlySuperOrOwner onlyActive(uuid) {
         delete idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash];
         delete userAddressToUuidMap[uuidToUserMap[uuid].userAddress];
-        setActive(uuid, false);
+        uuidToUserMap[uuid].active = false;
+        onDelUser(uuid);
     }
     function setActive(bytes16 uuid, bool active)
     public onlySuperOrOwner {
         uuidToUserMap[uuid].active = active;
+        onSetActive(uuid, active);
     }
     // as address and publicKey are always a pair, so do not set them seperately.
     function setUserAddressAndPublicKey(bytes16 uuid, address userAddress, bytes32[2] publicKey)
@@ -80,20 +90,24 @@ contract UsersData is Validate,Super {
         uuidToUserMap[uuid].userAddress = userAddress;
         uuidToUserMap[uuid].publicKey = publicKey;
         userAddressToUuidMap[userAddress] = uuid;
+        onSetUserAddressAndPublicKey(uuid, userAddress, publicKey);
     }
     function setOrgUuid(bytes16 uuid, bytes16 orgUuid)
     public onlySuperOrOwner onlyActive(uuid){
         uuidToUserMap[uuid].orgUuid = orgUuid;
+        onSetOrgUuid(uuid, orgUuid);
     }
     function setIdCartNoHash(bytes16 uuid, bytes32 idCartNoHash)
     public onlySuperOrOwner onlyActive(uuid) bytes32NotZero(idCartNoHash) idCartNoHashNotExist(idCartNoHash) {
         delete idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash];
         uuidToUserMap[uuid].idCartNoHash = idCartNoHash;
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
+        onSetIdCartNoHash(uuid, idCartNoHash);
     }
     function setTime(bytes16 uuid, uint time)
     public onlySuperOrOwner onlyActive(uuid) uintNotZero(time) {
         uuidToUserMap[uuid].time = time;
+        onSetTime(uuid, time);
     }
 
     // as it is seeable to everyone on the blockchain, so no need to check any input or the right.
