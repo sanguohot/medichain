@@ -4,8 +4,6 @@ import "./Validate.sol";
 import "./Super.sol";
 
 contract UsersData is Validate,Super {
-    address owner;
-    string[] superUsers;
     Proxy proxy;
     struct User{
         bool active;
@@ -22,7 +20,6 @@ contract UsersData is Validate,Super {
     // 保存用户列表 方便以后导出 只增不减 注意检查唯一性
     bytes16[] uuidList;
     function UsersData(address proxyAddress) public {
-        owner = msg.sender;
         proxy = Proxy(proxyAddress);
     }
 
@@ -59,10 +56,6 @@ contract UsersData is Validate,Super {
         _;
     }
 
-    // this should be done first if it is called by other contracts.
-    function addUserToSuperUsers(string name) public onlyOwner stringNotEmpty(name) {
-        superUsers.push(name);
-    }
     function addUser(bytes16 uuid, address userAddress, bytes16 orgUuid, bytes32[2] publicKey, bytes32 idCartNoHash, uint time)
     public onlySuperOrOwner userAddressNotExist(userAddress) publicKeyNotZero(publicKey) idCartNoHashNotExist(idCartNoHash) uintNotZero(time) {
         uuidToUserMap[uuid] = User(true, userAddress, orgUuid, publicKey, idCartNoHash, time);
