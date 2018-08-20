@@ -2,9 +2,12 @@ pragma solidity ^0.4.11;
 import "./Proxy.sol";
 import "./Validate.sol";
 import "./Super.sol";
+import "./OrgsData.sol";
 
 contract UsersData is Validate,Super {
     Proxy proxy;
+    address orgContractAddress;
+    OrgsData orgsData;
     struct User{
         bool active;
         address userAddress;
@@ -62,10 +65,21 @@ contract UsersData is Validate,Super {
         require(!uuidToUserMap[uuid].active);
         _;
     }
-
+    function isOrgExist(bytes16 orgUuid) private returns (bool) {
+        address addr = proxy.get("OrgsData");
+        if(addr == 0x0){
+            return false;
+        }
+        if(addr != orgContractAddress){
+            orgsData = OrgsData(addr);
+            orgContractAddress = addr;
+        }
+        return orgsData.isUuidExist(orgUuid);
+    }
     function addUser(bytes16 uuid, address userAddress, bytes16 orgUuid, bytes32[2] publicKey, bytes32 idCartNoHash, uint time)
     public onlySuperOrOwner userAddressNotExist(userAddress) idCartNoHashNotExist(idCartNoHash) uintNotZero(time)
     publicKeyNotZero(publicKey) addressMatchPublicKey(userAddress, publicKey) {
+        require(isOrgExist(orgUuid));
         uuidToUserMap[uuid] = User(true, userAddress, orgUuid, publicKey, idCartNoHash, time);
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
         userAddressToUuidMap[userAddress] = uuid;
@@ -94,6 +108,7 @@ contract UsersData is Validate,Super {
     }
     function setOrgUuid(bytes16 uuid, bytes16 orgUuid)
     public onlySuperOrOwner onlyActive(uuid){
+        require(isOrgExist(orgUuid));
         uuidToUserMap[uuid].orgUuid = orgUuid;
         onSetOrgUuid(uuid, orgUuid);
     }

@@ -146,4 +146,11 @@ contract OrgsData  is Validate,Super {
     function getUuidByIndex(uint256 index) public constant returns (bytes16) {
         return uuidList[index];
     }
+    function isUuidExist(bytes16 uuid)
+    public constant returns (bool) {
+        if (uuidToOrgMap[uuid].orgAddress != 0x0){
+            return true;
+        }
+        return false;
+    }
 }
