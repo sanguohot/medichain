@@ -68,8 +68,14 @@ contract OrgsData  is Validate,Super {
         bytes32 nameHash = keccak256(name);
         addOrgCore(uuid, orgAddress, publicKey, nameHash, name, time);
     }
+    function delOrg(bytes16 uuid)
+    public onlySuperOrOwner onlyActive(uuid) {
+        delete nameHashToUuidMap[uuidToOrgMap[uuid].nameHash];
+        delete orgAddressToUuidMap[uuidToOrgMap[uuid].orgAddress];
+        setActive(uuid, false);
+    }
     function setActive(bytes16 uuid, bool active)
-    public onlyOwner {
+    public onlySuperOrOwner {
         uuidToOrgMap[uuid].active = active;
     }
     // as address and publicKey are always a pair, so do not set them seperately.

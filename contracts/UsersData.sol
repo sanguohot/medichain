@@ -64,8 +64,14 @@ contract UsersData is Validate,Super {
         userAddressToUuidMap[userAddress] = uuid;
         uuidList.push(uuid);
     }
+    function delUser(bytes16 uuid)
+    public onlySuperOrOwner onlyActive(uuid) {
+        delete idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash];
+        delete userAddressToUuidMap[uuidToUserMap[uuid].userAddress];
+        setActive(uuid, false);
+    }
     function setActive(bytes16 uuid, bool active)
-    public onlyOwner {
+    public onlySuperOrOwner {
         uuidToUserMap[uuid].active = active;
     }
     // as address and publicKey are always a pair, so do not set them seperately.
