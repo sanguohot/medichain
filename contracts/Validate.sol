@@ -31,4 +31,8 @@ contract Validate is Address {
         require(getAddressFromPublicKeyV2(pub) == addr);
         _;
     }
+    modifier nameHashMatchName(bytes32 hash, bytes32[4] name) {
+        require(keccak256(name) == hash);
+        _;
+    }
 }

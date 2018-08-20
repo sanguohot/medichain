@@ -1,8 +1,10 @@
 pragma solidity ^0.4.11;
 import "./Proxy.sol";
+import "./Validate.sol";
+import "./Super.sol";
 
-contract OrgsData{
-    address owner;
+contract OrgsData  is Validate,Super {
+    Proxy proxy;
     struct Org{
         bool active;
         address orgAddress;
@@ -15,11 +17,12 @@ contract OrgsData{
     mapping(bytes16 => Org) uuidToOrgMap;
     mapping(bytes32 => bytes16) nameHashToUuidMap;
     mapping(address => bytes16) orgAddressToUuidMap;
-    // 保存机构列表 方便以后导出 只增不减 注意检查唯一性
+    // 保存用户列表 方便以后导出 只增不减 注意检查唯一性
     bytes16[] uuidList;
     function OrgsData(address proxyAddress) public {
-        owner = msg.sender;
+        proxy = Proxy(proxyAddress);
     }
+
     modifier nameHashNotExist(bytes32 nameHash) {
         require(nameHashToUuidMap[nameHash] == 0x0);
         _;
@@ -44,31 +47,49 @@ contract OrgsData{
         require(uuidToOrgMap[uuid].orgAddress == 0x0);
         _;
     }
-
-    function addOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, uint time)
-    public onlySuperOrOwner orgAddressNotExist(orgAddress) publicKeyNotZero(publicKey) nameHashNotExist(nameHash) uintNotZero(time) {
-        uuidToOrgMap[uuid] = Org(true, orgAddress, publicKey, nameHash, time);
+    modifier onlyActive(bytes16 uuid) {
+        require(uuidToOrgMap[uuid].active);
+        _;
+    }
+    modifier onlyNotActive(bytes16 uuid) {
+        require(!uuidToOrgMap[uuid].active);
+        _;
+    }
+    function addOrgCore(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time)
+    private onlySuperOrOwner orgAddressNotExist(orgAddress) publicKeyNotZero(publicKey) uintNotZero(time)
+    addressMatchPublicKey(orgAddress, publicKey) nameHashNotExist(nameHash){
+        uuidToOrgMap[uuid] = Org(true, orgAddress, publicKey, nameHash, name, time);
         nameHashToUuidMap[nameHash] = uuid;
         orgAddressToUuidMap[orgAddress] = uuid;
         uuidList.push(uuid);
+    }
+    function addOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32[4] name, uint time)
+    public {
+        bytes32 nameHash = keccak256(name);
+        addOrgCore(uuid, orgAddress, publicKey, nameHash, name, time);
     }
     function setActive(bytes16 uuid, bool active)
     public onlyOwner {
         uuidToOrgMap[uuid].active = active;
     }
-    function setOrgAddress(bytes16 uuid, address orgAddress)
-    public onlySuperOrOwner onlyActive(uuid) addressNotZero(orgAddress) {
+    // as address and publicKey are always a pair, so do not set them seperately.
+    function setOrgAddressAndPublicKey(bytes16 uuid, address orgAddress, bytes32[2] publicKey)
+    public onlySuperOrOwner onlyActive(uuid) orgAddressNotExist(orgAddress) publicKeyNotZero(publicKey) addressMatchPublicKey(orgAddress, publicKey) {
         uuidToOrgMap[uuid].orgAddress = orgAddress;
-    }
-    function setPublicKey(bytes16 uuid, bytes32[2] publicKey)
-    public onlySuperOrOwner onlyActive(uuid) publicKeyNotZero(publicKey) {
         uuidToOrgMap[uuid].publicKey = publicKey;
+        orgAddressToUuidMap[orgAddress] = uuid;
     }
-    function setNameHash(bytes16 uuid, bytes32 nameHash)
-    public onlySuperOrOwner onlyActive(uuid) bytes32NotZero(nameHash) nameHashNotExist(nameHash) {
-        nameHashToUuidMap[uuidToOrgMap[uuid].nameHash] = 0x0;
+    function setNameHashAndNameCore(bytes16 uuid, bytes32 nameHash, bytes32[4] name)
+    private onlySuperOrOwner onlyActive(uuid) bytes32NotZero(nameHash) nameHashNotExist(nameHash) {
+        delete nameHashToUuidMap[uuidToOrgMap[uuid].nameHash];
         uuidToOrgMap[uuid].nameHash = nameHash;
+        uuidToOrgMap[uuid].name = name;
         nameHashToUuidMap[nameHash] = uuid;
+    }
+    function setNameHashAndName(bytes16 uuid, bytes32[4] name)
+    public {
+        bytes32 nameHash = keccak256(name);
+        setNameHashAndNameCore(uuid, nameHash, name);
     }
     function setTime(bytes16 uuid, uint time)
     public onlySuperOrOwner onlyActive(uuid) uintNotZero(time) {
