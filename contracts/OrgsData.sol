@@ -3,8 +3,6 @@ import "./Proxy.sol";
 
 contract OrgsData{
     address owner;
-    string[] superOrgs;
-    Proxy proxy;
     struct Org{
         bool active;
         address orgAddress;
@@ -21,41 +19,6 @@ contract OrgsData{
     bytes16[] uuidList;
     function OrgsData(address proxyAddress) public {
         owner = msg.sender;
-        proxy = Proxy(proxyAddress);
-    }
-    function isSuperOrg() public constant returns (bool valid) {
-        valid = false;
-        for (uint i=0; i<superOrgs.length; i++) {
-            if (msg.sender == proxy.get(superOrgs[i])){
-                valid = true;
-                break;
-            }
-        }
-        return valid;
-    }
-    modifier uuidNotZero(bytes16 uuid) {
-        require(uuid != 0x0);
-        _;
-    }
-    modifier publicKeyNotZero(bytes32[2] publicKey) {
-        require(publicKey[0]!=0x0 && publicKey[1]!=0x0);
-        _;
-    }
-    modifier addressNotZero(address account) {
-        require(account != 0x0);
-        _;
-    }
-    modifier stringNotEmpty(string str) {
-        require(str != "");
-        _;
-    }
-    modifier uintNotZero(uint u) {
-        require(u != 0x0);
-        _;
-    }
-    modifier bytes32NotZero(bytes32 b32) {
-        require(b32 != 0x0);
-        _;
     }
     modifier nameHashNotExist(bytes32 nameHash) {
         require(nameHashToUuidMap[nameHash] == 0x0);
@@ -81,33 +44,9 @@ contract OrgsData{
         require(uuidToOrgMap[uuid].orgAddress == 0x0);
         _;
     }
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
-    modifier onlySuperOrg() {
-        require(isSuperOrg());
-        _;
-    }
-    modifier onlyActive(bytes16 uuid) {
-        require(uuidToOrgMap[uuid].active);
-        _;
-    }
-    modifier onlyNotActive(bytes16 uuid) {
-        require(!uuidToOrgMap[uuid].active);
-        _;
-    }
-    modifier onlySuperOrgOrOwner() {
-        require(msg.sender==owner || isSuperOrg());
-        _;
-    }
 
-    // this should be done first if it is called by other contracts.
-    function addOrgToSuperOrgs(string name) public onlyOwner stringNotEmpty(name) {
-        superOrgs.push(name);
-    }
     function addOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, uint time)
-    public onlySuperOrgOrOwner orgAddressNotExist(orgAddress) publicKeyNotZero(publicKey) nameHashNotExist(nameHash) uintNotZero(time) {
+    public onlySuperOrOwner orgAddressNotExist(orgAddress) publicKeyNotZero(publicKey) nameHashNotExist(nameHash) uintNotZero(time) {
         uuidToOrgMap[uuid] = Org(true, orgAddress, publicKey, nameHash, time);
         nameHashToUuidMap[nameHash] = uuid;
         orgAddressToUuidMap[orgAddress] = uuid;
@@ -118,21 +57,21 @@ contract OrgsData{
         uuidToOrgMap[uuid].active = active;
     }
     function setOrgAddress(bytes16 uuid, address orgAddress)
-    public onlySuperOrgOrOwner onlyActive(uuid) addressNotZero(orgAddress) {
+    public onlySuperOrOwner onlyActive(uuid) addressNotZero(orgAddress) {
         uuidToOrgMap[uuid].orgAddress = orgAddress;
     }
     function setPublicKey(bytes16 uuid, bytes32[2] publicKey)
-    public onlySuperOrgOrOwner onlyActive(uuid) publicKeyNotZero(publicKey) {
+    public onlySuperOrOwner onlyActive(uuid) publicKeyNotZero(publicKey) {
         uuidToOrgMap[uuid].publicKey = publicKey;
     }
     function setNameHash(bytes16 uuid, bytes32 nameHash)
-    public onlySuperOrgOrOwner onlyActive(uuid) bytes32NotZero(nameHash) nameHashNotExist(nameHash) {
+    public onlySuperOrOwner onlyActive(uuid) bytes32NotZero(nameHash) nameHashNotExist(nameHash) {
         nameHashToUuidMap[uuidToOrgMap[uuid].nameHash] = 0x0;
         uuidToOrgMap[uuid].nameHash = nameHash;
         nameHashToUuidMap[nameHash] = uuid;
     }
     function setTime(bytes16 uuid, uint time)
-    public onlySuperOrgOrOwner onlyActive(uuid) uintNotZero(time) {
+    public onlySuperOrOwner onlyActive(uuid) uintNotZero(time) {
         uuidToOrgMap[uuid].time = time;
     }
 

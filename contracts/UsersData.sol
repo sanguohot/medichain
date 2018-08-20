@@ -1,9 +1,9 @@
 pragma solidity ^0.4.11;
 import "./Proxy.sol";
 import "./Validate.sol";
-import "./Supper.sol";
+import "./Super.sol";
 
-contract UsersData is Validate,Supper {
+contract UsersData is Validate,Super {
     address owner;
     string[] superUsers;
     Proxy proxy;
@@ -64,7 +64,7 @@ contract UsersData is Validate,Supper {
         superUsers.push(name);
     }
     function addUser(bytes16 uuid, address userAddress, bytes16 orgUuid, bytes32[2] publicKey, bytes32 idCartNoHash, uint time)
-    public onlySuperUserOrOwner userAddressNotExist(userAddress) publicKeyNotZero(publicKey) idCartNoHashNotExist(idCartNoHash) uintNotZero(time) {
+    public onlySuperOrOwner userAddressNotExist(userAddress) publicKeyNotZero(publicKey) idCartNoHashNotExist(idCartNoHash) uintNotZero(time) {
         uuidToUserMap[uuid] = User(true, userAddress, orgUuid, publicKey, idCartNoHash, time);
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
         userAddressToUuidMap[userAddress] = uuid;
@@ -75,25 +75,25 @@ contract UsersData is Validate,Supper {
         uuidToUserMap[uuid].active = active;
     }
     function setUserAddress(bytes16 uuid, address userAddress)
-    public onlySuperUserOrOwner onlyActive(uuid) addressNotZero(userAddress) {
+    public onlySuperOrOwner onlyActive(uuid) addressNotZero(userAddress) {
         uuidToUserMap[uuid].userAddress = userAddress;
     }
     function setOrgUuid(bytes16 uuid, bytes16 orgUuid)
-    public onlySuperUserOrOwner onlyActive(uuid){
+    public onlySuperOrOwner onlyActive(uuid){
         uuidToUserMap[uuid].orgUuid = orgUuid;
     }
     function setPublicKey(bytes16 uuid, bytes32[2] publicKey)
-    public onlySuperUserOrOwner onlyActive(uuid) publicKeyNotZero(publicKey) {
+    public onlySuperOrOwner onlyActive(uuid) publicKeyNotZero(publicKey) {
         uuidToUserMap[uuid].publicKey = publicKey;
     }
     function setIdCartNoHash(bytes16 uuid, bytes32 idCartNoHash)
-    public onlySuperUserOrOwner onlyActive(uuid) bytes32NotZero(idCartNoHash) idCartNoHashNotExist(idCartNoHash) {
+    public onlySuperOrOwner onlyActive(uuid) bytes32NotZero(idCartNoHash) idCartNoHashNotExist(idCartNoHash) {
         idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash] = 0x0;
         uuidToUserMap[uuid].idCartNoHash = idCartNoHash;
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
     }
     function setTime(bytes16 uuid, uint time)
-    public onlySuperUserOrOwner onlyActive(uuid) uintNotZero(time) {
+    public onlySuperOrOwner onlyActive(uuid) uintNotZero(time) {
         uuidToUserMap[uuid].time = time;
     }
 
