@@ -13,6 +13,12 @@ contract OrgsData  is Validate,Super {
         bytes32[4] name; // 华中科技大学同济医学院附属妇女儿童医疗保健中心 69 bytes
         uint time;
     }
+    event onAddOrgCore(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time);
+    event onDelOrg(bytes16 uuid);
+    event onSetActive(bytes16 uuid, bool active);
+    event onSetOrgAddressAndPublicKey(bytes16 uuid, address orgAddress, bytes32[2] publicKey);
+    event onSetNameHashAndNameCore(bytes16 uuid, bytes32 nameHash, bytes32[4] name);
+    event onSetTime(bytes16 uuid, uint time);
 
     mapping(bytes16 => Org) uuidToOrgMap;
     mapping(bytes32 => bytes16) nameHashToUuidMap;
@@ -62,6 +68,7 @@ contract OrgsData  is Validate,Super {
         nameHashToUuidMap[nameHash] = uuid;
         orgAddressToUuidMap[orgAddress] = uuid;
         uuidList.push(uuid);
+        onAddOrgCore(uuid, orgAddress, publicKey, nameHash, name, time);
     }
     function addOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32[4] name, uint time)
     public {
@@ -72,11 +79,13 @@ contract OrgsData  is Validate,Super {
     public onlySuperOrOwner onlyActive(uuid) {
         delete nameHashToUuidMap[uuidToOrgMap[uuid].nameHash];
         delete orgAddressToUuidMap[uuidToOrgMap[uuid].orgAddress];
-        setActive(uuid, false);
+        uuidToOrgMap[uuid].active = false;
+        onDelOrg(uuid);
     }
     function setActive(bytes16 uuid, bool active)
     public onlySuperOrOwner {
         uuidToOrgMap[uuid].active = active;
+        onSetActive(uuid, active);
     }
     // as address and publicKey are always a pair, so do not set them seperately.
     function setOrgAddressAndPublicKey(bytes16 uuid, address orgAddress, bytes32[2] publicKey)
@@ -84,6 +93,7 @@ contract OrgsData  is Validate,Super {
         uuidToOrgMap[uuid].orgAddress = orgAddress;
         uuidToOrgMap[uuid].publicKey = publicKey;
         orgAddressToUuidMap[orgAddress] = uuid;
+        onSetOrgAddressAndPublicKey(uuid, orgAddress, publicKey);
     }
     function setNameHashAndNameCore(bytes16 uuid, bytes32 nameHash, bytes32[4] name)
     private onlySuperOrOwner onlyActive(uuid) bytes32NotZero(nameHash) nameHashNotExist(nameHash) {
@@ -91,6 +101,7 @@ contract OrgsData  is Validate,Super {
         uuidToOrgMap[uuid].nameHash = nameHash;
         uuidToOrgMap[uuid].name = name;
         nameHashToUuidMap[nameHash] = uuid;
+        onSetNameHashAndNameCore(uuid, nameHash, name);
     }
     function setNameHashAndName(bytes16 uuid, bytes32[4] name)
     public {
@@ -100,6 +111,7 @@ contract OrgsData  is Validate,Super {
     function setTime(bytes16 uuid, uint time)
     public onlySuperOrOwner onlyActive(uuid) uintNotZero(time) {
         uuidToOrgMap[uuid].time = time;
+        onSetTime(uuid, time);
     }
 
     // as it is seeable to everyone on the blockchain, so no need to check any input or the right.
