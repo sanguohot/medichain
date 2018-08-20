@@ -1,6 +1,7 @@
 pragma solidity ^0.4.11;
+import "./Address.sol";
 
-contract Validate{
+contract Validate is Address {
     modifier uuidNotZero(bytes16 uuid) {
         require(uuid != 0x0);
         _;
@@ -24,6 +25,10 @@ contract Validate{
     }
     modifier bytes32NotZero(bytes32 b32) {
         require(b32 != 0x0);
+        _;
+    }
+    modifier addressMatchPublicKey(address addr, bytes32[2] pub) {
+        require(getAddressFromPublicKeyV2(pub) == addr);
         _;
     }
 }

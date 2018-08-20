@@ -57,7 +57,8 @@ contract UsersData is Validate,Super {
     }
 
     function addUser(bytes16 uuid, address userAddress, bytes16 orgUuid, bytes32[2] publicKey, bytes32 idCartNoHash, uint time)
-    public onlySuperOrOwner userAddressNotExist(userAddress) publicKeyNotZero(publicKey) idCartNoHashNotExist(idCartNoHash) uintNotZero(time) {
+    public onlySuperOrOwner userAddressNotExist(userAddress) publicKeyNotZero(publicKey) idCartNoHashNotExist(idCartNoHash) uintNotZero(time)
+    addressMatchPublicKey(userAddress, publicKey) {
         uuidToUserMap[uuid] = User(true, userAddress, orgUuid, publicKey, idCartNoHash, time);
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
         userAddressToUuidMap[userAddress] = uuid;
@@ -67,21 +68,20 @@ contract UsersData is Validate,Super {
     public onlyOwner {
         uuidToUserMap[uuid].active = active;
     }
-    function setUserAddress(bytes16 uuid, address userAddress)
-    public onlySuperOrOwner onlyActive(uuid) addressNotZero(userAddress) {
+    // as address and publicKey are always a pair, so do not set them seperately.
+    function setUserAddressAndPublicKey(bytes16 uuid, address userAddress, bytes32[2] publicKey)
+    public onlySuperOrOwner onlyActive(uuid) addressNotZero(userAddress) publicKeyNotZero(publicKey) addressMatchPublicKey(userAddress, publicKey) {
         uuidToUserMap[uuid].userAddress = userAddress;
+        uuidToUserMap[uuid].publicKey = publicKey;
+        userAddressToUuidMap[userAddress] = uuid;
     }
     function setOrgUuid(bytes16 uuid, bytes16 orgUuid)
     public onlySuperOrOwner onlyActive(uuid){
         uuidToUserMap[uuid].orgUuid = orgUuid;
     }
-    function setPublicKey(bytes16 uuid, bytes32[2] publicKey)
-    public onlySuperOrOwner onlyActive(uuid) publicKeyNotZero(publicKey) {
-        uuidToUserMap[uuid].publicKey = publicKey;
-    }
     function setIdCartNoHash(bytes16 uuid, bytes32 idCartNoHash)
     public onlySuperOrOwner onlyActive(uuid) bytes32NotZero(idCartNoHash) idCartNoHashNotExist(idCartNoHash) {
-        idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash] = 0x0;
+        delete idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash];
         uuidToUserMap[uuid].idCartNoHash = idCartNoHash;
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
     }
