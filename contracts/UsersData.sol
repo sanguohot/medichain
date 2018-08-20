@@ -1,7 +1,9 @@
 pragma solidity ^0.4.11;
 import "./Proxy.sol";
+import "./Validate.sol";
+import "./Supper.sol";
 
-contract UsersData{
+contract UsersData is Validate,Supper {
     address owner;
     string[] superUsers;
     Proxy proxy;
@@ -23,40 +25,7 @@ contract UsersData{
         owner = msg.sender;
         proxy = Proxy(proxyAddress);
     }
-    function isSuperUser() public constant returns (bool valid) {
-        valid = false;
-        for (uint i=0; i<superUsers.length; i++) {
-            if (msg.sender == proxy.get(superUsers[i])){
-                valid = true;
-                break;
-            }
-        }
-        return valid;
-    }
-    modifier uuidNotZero(bytes16 uuid) {
-        require(uuid != 0x0);
-        _;
-    }
-    modifier publicKeyNotZero(bytes32[2] publicKey) {
-        require(publicKey[0]!=0x0 && publicKey[1]!=0x0);
-        _;
-    }
-    modifier addressNotZero(address account) {
-        require(account != 0x0);
-        _;
-    }
-    modifier stringNotEmpty(string str) {
-        require(str != "");
-        _;
-    }
-    modifier uintNotZero(uint u) {
-        require(u != 0x0);
-        _;
-    }
-    modifier bytes32NotZero(bytes32 b32) {
-        require(b32 != 0x0);
-        _;
-    }
+
     modifier idCartNoHashNotExist(bytes32 idCartNoHash) {
         require(idCartNoHashToUuidMap[idCartNoHash] == 0x0);
         _;
@@ -81,24 +50,12 @@ contract UsersData{
         require(uuidToUserMap[uuid].userAddress == 0x0);
         _;
     }
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
-    modifier onlySuperUser() {
-        require(isSuperUser());
-        _;
-    }
     modifier onlyActive(bytes16 uuid) {
         require(uuidToUserMap[uuid].active);
         _;
     }
     modifier onlyNotActive(bytes16 uuid) {
         require(!uuidToUserMap[uuid].active);
-        _;
-    }
-    modifier onlySuperUserOrOwner() {
-        require(msg.sender==owner || isSuperUser());
         _;
     }
 

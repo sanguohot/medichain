@@ -20,4 +20,6 @@ func main() {
 	for i,byte := range id {
 		fmt.Printf("\n%d ===> %x", i, byte)
 	}
+	//a := []byte("华中科技大学同济医学院附属妇女儿童医疗保健中心")
+	//fmt.Println("\n", len(a))
 }
