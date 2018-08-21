@@ -1,7 +1,7 @@
 pragma solidity ^0.4.11;
 
 //abi info base contract
-contract Proxy{
+contract EasyCns {
     address owner;
     mapping(string => address) nameToAddressMap;
     //constrct function

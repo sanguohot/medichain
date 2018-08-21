@@ -1,10 +1,10 @@
 pragma solidity ^0.4.11;
-import "./Proxy.sol";
+import "./EasyCns.sol";
 import "./Validate.sol";
 import "./Super.sol";
 
 contract OrgsData  is Validate,Super {
-    Proxy proxy;
+    EasyCns easyCns;
     struct Org{
         bool active;
         address orgAddress;
@@ -23,10 +23,10 @@ contract OrgsData  is Validate,Super {
     mapping(bytes16 => Org) uuidToOrgMap;
     mapping(bytes32 => bytes16) nameHashToUuidMap;
     mapping(address => bytes16) orgAddressToUuidMap;
-    // 保存用户列表 方便以后导出 只增不减 注意检查唯一性
+    // 保存列表 方便以后导出 只增不减 注意检查唯一性
     bytes16[] uuidList;
-    function OrgsData(address proxyAddress) public {
-        proxy = Proxy(proxyAddress);
+    function OrgsData(address easyCnsAddress) public {
+        easyCns = EasyCns(easyCnsAddress);
     }
 
     modifier nameHashNotExist(bytes32 nameHash) {
