@@ -30,6 +30,16 @@ contract FilesData is Validate,Super {
         bytes16[] signerUuidList;
         mapping(bytes16 => bool) signerUuidMap;
     }
+    event onAddFile(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
+    , bytes32 sha256Hash, bytes32 r, bytes32 s, uint8 v, uint time);
+    event onDelFile(bytes16 uuid);
+    event onSetActive(bytes16 uuid, bool active);
+    event onSetOwnerUuid(bytes16 uuid, bytes16 ownerUuid);
+    event onSetUploaderUuid(bytes16 uuid, bytes16 uploaderUuid);
+    event onSetFileType(bytes16 uuid, bytes32 fileType);
+    event onSetFileDesc(bytes16 uuid, bytes32[4] fileDesc);
+    event onAddSign(bytes16 uuid, bytes16 userUuid, bytes32 r, bytes32 s, uint8 v);
+    event onSetTime(bytes16 uuid, uint time);
 
     mapping(bytes16 => File) uuidToFileMap;
     mapping(bytes32 => bytes16) keccak256HashToUuidMap;
@@ -107,16 +117,20 @@ contract FilesData is Validate,Super {
         keccak256HashToUuidMap[keccak256Hash] = uuid;
         sha256HashToUuidMap[sha256Hash] = uuid;
         uuidList.push(uuid);
+        onAddFile(uuid, ownerUuid, uploaderUuid, fileType, fileDesc, keccak256Hash
+    , sha256Hash, r, s, v, time);
     }
     function delFile(bytes16 uuid)
     public onlySuperOrOwner onlyActive(uuid) {
         delete keccak256HashToUuidMap[uuidToFileMap[uuid].keccak256Hash];
         delete sha256HashToUuidMap[uuidToFileMap[uuid].sha256Hash];
         uuidToFileMap[uuid].active = false;
+        onDelFile(uuid);
     }
     function setActive(bytes16 uuid, bool active)
     public onlySuperOrOwner {
         uuidToFileMap[uuid].active = active;
+        onSetActive(uuid, active);
     }
     function setOwnerUuid(bytes16 uuid, bytes16 ownerUuid)
     public onlySuperOrOwner onlyActive(uuid) {
@@ -124,6 +138,7 @@ contract FilesData is Validate,Super {
         require(checkUsersDataOk());
         require(usersData.isUuidExist(ownerUuid));
         uuidToFileMap[uuid].ownerUuid = ownerUuid;
+        onSetOwnerUuid(uuid, ownerUuid);
     }
     function setUploaderUuid(bytes16 uuid, bytes16 uploaderUuid)
     public onlySuperOrOwner onlyActive(uuid) {
@@ -131,17 +146,20 @@ contract FilesData is Validate,Super {
         require(checkUsersDataOk());
         require(usersData.isUuidExist(uploaderUuid));
         uuidToFileMap[uuid].uploaderUuid = uploaderUuid;
+        onSetUploaderUuid(uuid, uploaderUuid);
     }
     function setFileType(bytes16 uuid, bytes32 fileType)
     public onlySuperOrOwner onlyActive(uuid) {
         require(uuid!=0x0 && fileType!=0x0);
         uuidToFileMap[uuid].fileType = fileType;
+        onSetFileType(uuid, fileType);
     }
     // fileDesc can be empty
     function setFileDesc(bytes16 uuid, bytes32[4] fileDesc)
     public onlySuperOrOwner onlyActive(uuid) {
         require(uuid != 0x0);
         uuidToFileMap[uuid].fileDesc = fileDesc;
+        onSetFileDesc(uuid, fileDesc);
     }
     // as keccak256Hash, sha256Hash, signer, sign data are always together, and are possibly relate to many people, so no change please.
 //    function setKeccak256AndSha256Hash(bytes16 uuid, bytes32 keccak256Hash, bytes32 sha256Hash)
@@ -169,11 +187,13 @@ contract FilesData is Validate,Super {
         uuidToFileMap[uuid].v.push(v);
         uuidToFileMap[uuid].signerUuidList.push(userUuid);
         uuidToFileMap[uuid].signerUuidMap[userUuid] = true;
+        onAddSign(uuid, userUuid, r, s, v);
     }
     function setTime(bytes16 uuid, uint time)
     public onlySuperOrOwner onlyActive(uuid) {
         require(time != 0x0);
         uuidToFileMap[uuid].time = time;
+        onSetTime(uuid, time);
     }
 
     // as it is seeable to everyone on the blockchain, so no need to check any input or the right.
