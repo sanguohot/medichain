@@ -127,6 +127,10 @@ contract OrgsData  is Validate,Super {
     public constant returns (bytes32) {
         return uuidToOrgMap[uuid].nameHash;
     }
+    function getName(bytes16 uuid)
+    public constant returns (bytes32[4]) {
+        return uuidToOrgMap[uuid].name;
+    }
     function getTime(bytes16 uuid)
     public constant returns (uint) {
         return uuidToOrgMap[uuid].time;

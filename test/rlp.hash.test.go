@@ -3,6 +3,8 @@ package main
 import (
 	"medichain/util"
 	"fmt"
+	"go-ethereum-change/common"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
 func main() {
@@ -67,4 +69,17 @@ func main() {
 	hash := util.RlpHash(data)
 	fmt.Println(hash.Hex())
 	util.PrintHexUseComma(hash.Bytes())
+
+	// check kecck256
+	bytes32_0 := common.Hex2BytesFixed("0100000000000000000000000000000000000000000000000000000000000000", 32)
+	bytes32_1 := common.Hex2BytesFixed("0200000000000000000000000000000000000000000000000000000000000000", 32)
+	bytes32_2 := common.Hex2BytesFixed("0100000000000000000000000000000000000000000000000000000000000000", 32)
+	bytes32_3 := common.Hex2BytesFixed("0200000000000000000000000000000000000000000000000000000000000000", 32)
+	bytes32_4 := util.BytesCombine(bytes32_0, bytes32_1, bytes32_2, bytes32_3)
+	data = []byte{0x01,0x02,0x01,0x02}
+	fmt.Println(common.Hex2BytesFixed("01", 32))
+	fmt.Println("rlp []byte ===>", util.RlpHash(data).Hex())
+	fmt.Println("rlp [4]bytes32 ===>", util.RlpHash(bytes32_4).Hex())
+	fmt.Println("keccak256 []byte ===>", crypto.Keccak256Hash(data).Hex())
+	fmt.Println("keccak256 [4]byte32 ===>", crypto.Keccak256Hash(bytes32_4).Hex())
 }
