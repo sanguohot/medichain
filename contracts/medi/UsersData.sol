@@ -79,7 +79,9 @@ contract UsersData is Validate,Super {
     function addUser(bytes16 uuid, address userAddress, bytes16 orgUuid, bytes32[2] publicKey, bytes32 idCartNoHash, uint time)
     public onlySuperOrOwner userAddressNotExist(userAddress) idCartNoHashNotExist(idCartNoHash) uintNotZero(time)
     publicKeyNotZero(publicKey) addressMatchPublicKey(userAddress, publicKey) {
-        require(isOrgExist(orgUuid));
+        if(orgUuid != 0x0){
+            require(isOrgExist(orgUuid));
+        }
         uuidToUserMap[uuid] = User(true, userAddress, orgUuid, publicKey, idCartNoHash, time);
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
         userAddressToUuidMap[userAddress] = uuid;
@@ -160,5 +162,12 @@ contract UsersData is Validate,Super {
     }
     function getUuidByIndex(uint256 index) public constant returns (bytes16) {
         return uuidList[index];
+    }
+    function isUuidExist(bytes16 uuid)
+    public constant returns (bool) {
+        if (uuidToUserMap[uuid].userAddress != 0x0){
+            return true;
+        }
+        return false;
     }
 }

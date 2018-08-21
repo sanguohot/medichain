@@ -7,10 +7,11 @@ import (
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func main() {
-	privateKey, err := crypto.HexToECDSA("fad9c8855b740a0b7ed4c221dbad0f33a83a49cad6b3fe8d5817ac83d38b6a19")
+	privateKey, err := crypto.HexToECDSA("0c31d730db5e4c8e75364cbaab0db79346bf7b9aca355381c783edd1bc479135")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,8 +24,9 @@ func main() {
 
 	data := []byte("我hello")
 	hash := crypto.Keccak256Hash(data)
+	hash = common.HexToHash("0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8")
 	fmt.Println(hash.Hex()[2:]) // ea098d51cb2fa1a8e5d402f27c5c41e01015c04a43ac5bf09350efae0ab9cfe9
-
+	
 	signature, err := crypto.Sign(hash.Bytes(), privateKey)
 	if err != nil {
 		log.Fatal(err)

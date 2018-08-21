@@ -5,7 +5,7 @@ contract EasyCns {
     address owner;
     mapping(string => address) nameToAddressMap;
     //constrct function
-    function Proxy() public {
+    function EasyCns() public {
         owner = msg.sender;
     }
     modifier onlyOwner() {

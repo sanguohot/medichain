@@ -70,7 +70,7 @@ func main() {
 	fmt.Println(hash.Hex())
 	util.PrintHexUseComma(hash.Bytes())
 	fmt.Println("hello world rlp ===>", util.RlpHash([]byte("hello world")).Hex())
-	fmt.Println("hello world keccak256 ===>", crypto.Keccak256Hash([]byte("hello world")).Hex())
+	fmt.Println("hello world keccak256 ===>", crypto.Keccak256Hash([]byte("门诊、急诊、住院")).Hex())
 	// check kecck256
 	bytes32_0 := common.Hex2BytesFixed("0100000000000000000000000000000000000000000000000000000000000000", 32)
 	bytes32_1 := common.Hex2BytesFixed("0200000000000000000000000000000000000000000000000000000000000000", 32)

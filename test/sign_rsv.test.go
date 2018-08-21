@@ -11,13 +11,13 @@ import (
 )
 
 func main() {
-	signHex := "e940084bb1940cf0ebd2a56c7b27c1b6988658a1aebccf2116ea203dc475eb8b2b7e30d2b40167fe01a35891c2b6f7181d4720135d4a459f7b2c1ee9df90a40701"
+	signHex := "0666b163dcaf5264fc5574edf800a5c8638ad7a5e263a96c4f74202944b9a1d96bc72958dac5bf3c5bc4521fc9f57dac6e2147105ae3d20be4fdc45e99f9409100"
 	signBytes, err := hex.DecodeString(signHex)
 	if err != nil {
 		log.Fatal(err)
 	}
 	r, s, v := util.SigRSV(signBytes)
-	fmt.Println("r =>", hexutil.Encode(r[:])[2:])
-	fmt.Println("s =>",hexutil.Encode(s[:])[2:])
+	fmt.Println("r =>", hexutil.Encode(r[:])[:])
+	fmt.Println("s =>",hexutil.Encode(s[:])[:])
 	fmt.Println("v =>", v)
 }
