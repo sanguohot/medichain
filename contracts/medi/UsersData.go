@@ -11,11 +11,11 @@ import (
 	"strings"
 )
 
-// MediABI is the input ABI used to generate the binding from.
-const MediABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"}]=======EasyCns.sol:EasyCns=======[{\"constant\":true,\"inputs\":[{\"name\":\"name\",\"type\":\"string\"}],\"name\":\"get\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"Proxy\",\"outputs\":[],\"payable\":false,\"type\":\"function\"}]=======OrgsData.sol:OrgsData=======[{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"name\",\"type\":\"bytes32[4]\"}],\"name\":\"setNameHashAndName\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getNameHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"name\":\"name\",\"type\":\"bytes32[4]\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"addOrg\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"setActive\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getPublicKey\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[2]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"setOrgAddressAndPublicKey\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"setTime\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getUuidListSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"delOrg\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"isUuidExist\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getOrgAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"nameHash\",\"type\":\"bytes32\"}],\"name\":\"getUuidByNameHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getName\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[4]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"orgAddress\",\"type\":\"address\"}],\"name\":\"getUuidByOrgAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"isSuper\",\"outputs\":[{\"name\":\"valid\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getTime\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"easyCnsAddress\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"indexed\":false,\"name\":\"nameHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"name\",\"type\":\"bytes32[4]\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onAddOrgCore\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"onDelOrg\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"onSetActive\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"onSetOrgAddressAndPublicKey\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"nameHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"name\",\"type\":\"bytes32[4]\"}],\"name\":\"onSetNameHashAndNameCore\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onSetTime\",\"type\":\"event\"}]=======Super.sol:Super=======[{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"isSuper\",\"outputs\":[{\"name\":\"valid\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"type\":\"constructor\"}]=======UsersData.sol:UsersData=======[{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"setActive\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"getUuidByIdCartNoHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"setIdCartNoHash\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getPublicKey\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[2]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getUserAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"setTime\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getOrgUuid\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"userAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"setUserAddressAndPublicKey\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getUuidListSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"userAddress\",\"type\":\"address\"},{\"name\":\"orgUuid\",\"type\":\"bytes16\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"addUser\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"getUuidByUserAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgUuid\",\"type\":\"bytes16\"}],\"name\":\"setOrgUuid\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"isSuper\",\"outputs\":[{\"name\":\"valid\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getIdCartNoHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"delUser\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getTime\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"easyCnsAddress\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"userAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"orgUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"indexed\":false,\"name\":\"idCartNoHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onAddUser\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"onDelUser\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"onSetActive\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"userAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"onSetUserAddressAndPublicKey\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgUuid\",\"type\":\"bytes16\"}],\"name\":\"onSetOrgUuid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"onSetIdCartNoHash\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onSetTime\",\"type\":\"event\"}]=======Validate.sol:Validate=======[{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"}]"
+// UsersDataABI is the input ABI used to generate the binding from.
+const UsersDataABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"}]=======EasyCns.sol:EasyCns=======[{\"constant\":true,\"inputs\":[{\"name\":\"name\",\"type\":\"string\"}],\"name\":\"get\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"Proxy\",\"outputs\":[],\"payable\":false,\"type\":\"function\"}]=======OrgsData.sol:OrgsData=======[{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"name\",\"type\":\"bytes32[4]\"}],\"name\":\"setNameHashAndName\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getNameHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"name\":\"name\",\"type\":\"bytes32[4]\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"addOrg\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"setActive\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getPublicKey\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[2]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"setOrgAddressAndPublicKey\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"setTime\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getUuidListSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"delOrg\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"isUuidExist\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getOrgAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"nameHash\",\"type\":\"bytes32\"}],\"name\":\"getUuidByNameHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getName\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[4]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"orgAddress\",\"type\":\"address\"}],\"name\":\"getUuidByOrgAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"isSuper\",\"outputs\":[{\"name\":\"valid\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getTime\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"easyCnsAddress\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"indexed\":false,\"name\":\"nameHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"name\",\"type\":\"bytes32[4]\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onAddOrgCore\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"onDelOrg\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"onSetActive\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"onSetOrgAddressAndPublicKey\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"nameHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"name\",\"type\":\"bytes32[4]\"}],\"name\":\"onSetNameHashAndNameCore\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onSetTime\",\"type\":\"event\"}]=======Super.sol:Super=======[{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"isSuper\",\"outputs\":[{\"name\":\"valid\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"type\":\"constructor\"}]=======UsersData.sol:UsersData=======[{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"setActive\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"getUuidByIdCartNoHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"setIdCartNoHash\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getPublicKey\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[2]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getUserAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"setTime\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getOrgUuid\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"userAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"setUserAddressAndPublicKey\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getUuidListSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"userAddress\",\"type\":\"address\"},{\"name\":\"orgUuid\",\"type\":\"bytes16\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"addUser\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"getUuidByUserAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgUuid\",\"type\":\"bytes16\"}],\"name\":\"setOrgUuid\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"isSuper\",\"outputs\":[{\"name\":\"valid\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getIdCartNoHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"delUser\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getTime\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"easyCnsAddress\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"userAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"orgUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"indexed\":false,\"name\":\"idCartNoHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onAddUser\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"onDelUser\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"onSetActive\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"userAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"onSetUserAddressAndPublicKey\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgUuid\",\"type\":\"bytes16\"}],\"name\":\"onSetOrgUuid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"onSetIdCartNoHash\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onSetTime\",\"type\":\"event\"}]=======Validate.sol:Validate=======[{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes\"}],\"name\":\"getAddressFromPublicKeyV1\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"getAddressFromPublicKeyV2\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"}]"
 
-// MediBin is the compiled bytecode used for deploying new contracts.
-const MediBin = `6060604052341561000c57fe5b5b6102588061001c6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680633627bcfa146100465780635185a34d146100e0575bfe5b341561004e57fe5b61009e600480803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610163565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100e857fe5b610121600480806040019060028060200260405190810160405280929190826002602002808284378201915050505050919050506101d2565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6000816040518082805190602001908083835b602083106101995780518252602082019150602081019050602083039250610176565b6001836020036101000a03801982511681845116808217855250505050505090500191505060405180910390206001900490505b919050565b600081604051808260026020028083836000831461020f575b80518252602083111561020f576020820191506020810190506020830392506101eb565b50505090500191505060405180910390206001900490505b9190505600a165627a7a72305820f758f31c8d2a6c75d5da0e65d5f6bda15b51c6259a4435650a8253df9a2c58fb0029
+// UsersDataBin is the compiled bytecode used for deploying new contracts.
+const UsersDataBin = `6060604052341561000c57fe5b5b6102588061001c6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680633627bcfa146100465780635185a34d146100e0575bfe5b341561004e57fe5b61009e600480803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610163565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100e857fe5b610121600480806040019060028060200260405190810160405280929190826002602002808284378201915050505050919050506101d2565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6000816040518082805190602001908083835b602083106101995780518252602082019150602081019050602083039250610176565b6001836020036101000a03801982511681845116808217855250505050505090500191505060405180910390206001900490505b919050565b600081604051808260026020028083836000831461020f575b80518252602083111561020f576020820191506020810190506020830392506101eb565b50505090500191505060405180910390206001900490505b9190505600a165627a7a72305820f758f31c8d2a6c75d5da0e65d5f6bda15b51c6259a4435650a8253df9a2c58fb0029
 
 ======= EasyCns.sol:EasyCns =======
 6060604052341561000c57fe5b5b6103858061001c6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063693ec85e14610051578063a815ff15146100eb578063fd782de514610164575bfe5b341561005957fe5b6100a9600480803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610176565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100f357fe5b610162600480803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509190803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061020a565b005b341561016c57fe5b610174610315565b005b60006001826040518082805190602001908083835b602083106101ae578051825260208201915060208101905060208303925061018b565b6001836020036101000a038019825116818451168082178552505050505050905001915050908152602001604051809103902060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156102675760006000fd5b806001836040518082805190602001908083835b6020831061029e578051825260208201915060208101905060208303925061027b565b6001836020036101000a038019825116818451168082178552505050505050905001915050908152602001604051809103902060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b5b5050565b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b5600a165627a7a72305820c9207c18050000867f6afeb4ee96e79091165a28bbf64432870d087cebae909c0029
@@ -32,117 +32,117 @@ const MediBin = `6060604052341561000c57fe5b5b6102588061001c6000396000f3006060604
 ======= Validate.sol:Validate =======
 6060604052341561000c57fe5b5b6102588061001c6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680633627bcfa146100465780635185a34d146100e0575bfe5b341561004e57fe5b61009e600480803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610163565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100e857fe5b610121600480806040019060028060200260405190810160405280929190826002602002808284378201915050505050919050506101d2565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6000816040518082805190602001908083835b602083106101995780518252602082019150602081019050602083039250610176565b6001836020036101000a03801982511681845116808217855250505050505090500191505060405180910390206001900490505b919050565b600081604051808260026020028083836000831461020f575b80518252602083111561020f576020820191506020810190506020830392506101eb565b50505090500191505060405180910390206001900490505b9190505600a165627a7a72305820e41fa7b88c191ce767bac7b3e4f2b986aee899b35fc81cca6874a712d734d58d0029`
 
-// DeployMedi deploys a new Ethereum contract, binding an instance of Medi to it.
-func DeployMedi(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *Medi, error) {
-	parsed, err := abi.JSON(strings.NewReader(MediABI))
+// DeployUsersData deploys a new Ethereum contract, binding an instance of UsersData to it.
+func DeployUsersData(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *UsersData, error) {
+	parsed, err := abi.JSON(strings.NewReader(UsersDataABI))
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
-	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(MediBin), backend)
+	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(UsersDataBin), backend)
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
-	return address, tx, &Medi{MediCaller: MediCaller{contract: contract}, MediTransactor: MediTransactor{contract: contract}, MediFilterer: MediFilterer{contract: contract}}, nil
+	return address, tx, &UsersData{UsersDataCaller: UsersDataCaller{contract: contract}, UsersDataTransactor: UsersDataTransactor{contract: contract}, UsersDataFilterer: UsersDataFilterer{contract: contract}}, nil
 }
 
-// Medi is an auto generated Go binding around an Ethereum contract.
-type Medi struct {
-	MediCaller     // Read-only binding to the contract
-	MediTransactor // Write-only binding to the contract
-	MediFilterer   // Log filterer for contract events
+// UsersData is an auto generated Go binding around an Ethereum contract.
+type UsersData struct {
+	UsersDataCaller     // Read-only binding to the contract
+	UsersDataTransactor // Write-only binding to the contract
+	UsersDataFilterer   // Log filterer for contract events
 }
 
-// MediCaller is an auto generated read-only Go binding around an Ethereum contract.
-type MediCaller struct {
+// UsersDataCaller is an auto generated read-only Go binding around an Ethereum contract.
+type UsersDataCaller struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// MediTransactor is an auto generated write-only Go binding around an Ethereum contract.
-type MediTransactor struct {
+// UsersDataTransactor is an auto generated write-only Go binding around an Ethereum contract.
+type UsersDataTransactor struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// MediFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
-type MediFilterer struct {
+// UsersDataFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
+type UsersDataFilterer struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// MediSession is an auto generated Go binding around an Ethereum contract,
+// UsersDataSession is an auto generated Go binding around an Ethereum contract,
 // with pre-set call and transact options.
-type MediSession struct {
-	Contract     *Medi             // Generic contract binding to set the session for
+type UsersDataSession struct {
+	Contract     *UsersData        // Generic contract binding to set the session for
 	CallOpts     bind.CallOpts     // Call options to use throughout this session
 	TransactOpts bind.TransactOpts // Transaction auth options to use throughout this session
 }
 
-// MediCallerSession is an auto generated read-only Go binding around an Ethereum contract,
+// UsersDataCallerSession is an auto generated read-only Go binding around an Ethereum contract,
 // with pre-set call options.
-type MediCallerSession struct {
-	Contract *MediCaller   // Generic contract caller binding to set the session for
-	CallOpts bind.CallOpts // Call options to use throughout this session
+type UsersDataCallerSession struct {
+	Contract *UsersDataCaller // Generic contract caller binding to set the session for
+	CallOpts bind.CallOpts    // Call options to use throughout this session
 }
 
-// MediTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
+// UsersDataTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
 // with pre-set transact options.
-type MediTransactorSession struct {
-	Contract     *MediTransactor   // Generic contract transactor binding to set the session for
-	TransactOpts bind.TransactOpts // Transaction auth options to use throughout this session
+type UsersDataTransactorSession struct {
+	Contract     *UsersDataTransactor // Generic contract transactor binding to set the session for
+	TransactOpts bind.TransactOpts    // Transaction auth options to use throughout this session
 }
 
-// MediRaw is an auto generated low-level Go binding around an Ethereum contract.
-type MediRaw struct {
-	Contract *Medi // Generic contract binding to access the raw methods on
+// UsersDataRaw is an auto generated low-level Go binding around an Ethereum contract.
+type UsersDataRaw struct {
+	Contract *UsersData // Generic contract binding to access the raw methods on
 }
 
-// MediCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
-type MediCallerRaw struct {
-	Contract *MediCaller // Generic read-only contract binding to access the raw methods on
+// UsersDataCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
+type UsersDataCallerRaw struct {
+	Contract *UsersDataCaller // Generic read-only contract binding to access the raw methods on
 }
 
-// MediTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
-type MediTransactorRaw struct {
-	Contract *MediTransactor // Generic write-only contract binding to access the raw methods on
+// UsersDataTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
+type UsersDataTransactorRaw struct {
+	Contract *UsersDataTransactor // Generic write-only contract binding to access the raw methods on
 }
 
-// NewMedi creates a new instance of Medi, bound to a specific deployed contract.
-func NewMedi(address common.Address, backend bind.ContractBackend) (*Medi, error) {
-	contract, err := bindMedi(address, backend, backend, backend)
+// NewUsersData creates a new instance of UsersData, bound to a specific deployed contract.
+func NewUsersData(address common.Address, backend bind.ContractBackend) (*UsersData, error) {
+	contract, err := bindUsersData(address, backend, backend, backend)
 	if err != nil {
 		return nil, err
 	}
-	return &Medi{MediCaller: MediCaller{contract: contract}, MediTransactor: MediTransactor{contract: contract}, MediFilterer: MediFilterer{contract: contract}}, nil
+	return &UsersData{UsersDataCaller: UsersDataCaller{contract: contract}, UsersDataTransactor: UsersDataTransactor{contract: contract}, UsersDataFilterer: UsersDataFilterer{contract: contract}}, nil
 }
 
-// NewMediCaller creates a new read-only instance of Medi, bound to a specific deployed contract.
-func NewMediCaller(address common.Address, caller bind.ContractCaller) (*MediCaller, error) {
-	contract, err := bindMedi(address, caller, nil, nil)
+// NewUsersDataCaller creates a new read-only instance of UsersData, bound to a specific deployed contract.
+func NewUsersDataCaller(address common.Address, caller bind.ContractCaller) (*UsersDataCaller, error) {
+	contract, err := bindUsersData(address, caller, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &MediCaller{contract: contract}, nil
+	return &UsersDataCaller{contract: contract}, nil
 }
 
-// NewMediTransactor creates a new write-only instance of Medi, bound to a specific deployed contract.
-func NewMediTransactor(address common.Address, transactor bind.ContractTransactor) (*MediTransactor, error) {
-	contract, err := bindMedi(address, nil, transactor, nil)
+// NewUsersDataTransactor creates a new write-only instance of UsersData, bound to a specific deployed contract.
+func NewUsersDataTransactor(address common.Address, transactor bind.ContractTransactor) (*UsersDataTransactor, error) {
+	contract, err := bindUsersData(address, nil, transactor, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &MediTransactor{contract: contract}, nil
+	return &UsersDataTransactor{contract: contract}, nil
 }
 
-// NewMediFilterer creates a new log filterer instance of Medi, bound to a specific deployed contract.
-func NewMediFilterer(address common.Address, filterer bind.ContractFilterer) (*MediFilterer, error) {
-	contract, err := bindMedi(address, nil, nil, filterer)
+// NewUsersDataFilterer creates a new log filterer instance of UsersData, bound to a specific deployed contract.
+func NewUsersDataFilterer(address common.Address, filterer bind.ContractFilterer) (*UsersDataFilterer, error) {
+	contract, err := bindUsersData(address, nil, nil, filterer)
 	if err != nil {
 		return nil, err
 	}
-	return &MediFilterer{contract: contract}, nil
+	return &UsersDataFilterer{contract: contract}, nil
 }
 
-// bindMedi binds a generic wrapper to an already deployed contract.
-func bindMedi(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := abi.JSON(strings.NewReader(MediABI))
+// bindUsersData binds a generic wrapper to an already deployed contract.
+func bindUsersData(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := abi.JSON(strings.NewReader(UsersDataABI))
 	if err != nil {
 		return nil, err
 	}
@@ -153,88 +153,88 @@ func bindMedi(address common.Address, caller bind.ContractCaller, transactor bin
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_Medi *MediRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
-	return _Medi.Contract.MediCaller.contract.Call(opts, result, method, params...)
+func (_UsersData *UsersDataRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+	return _UsersData.Contract.UsersDataCaller.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_Medi *MediRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Medi.Contract.MediTransactor.contract.Transfer(opts)
+func (_UsersData *UsersDataRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _UsersData.Contract.UsersDataTransactor.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_Medi *MediRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Medi.Contract.MediTransactor.contract.Transact(opts, method, params...)
+func (_UsersData *UsersDataRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _UsersData.Contract.UsersDataTransactor.contract.Transact(opts, method, params...)
 }
 
 // Call invokes the (constant) contract method with params as input values and
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_Medi *MediCallerRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
-	return _Medi.Contract.contract.Call(opts, result, method, params...)
+func (_UsersData *UsersDataCallerRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+	return _UsersData.Contract.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_Medi *MediTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Medi.Contract.contract.Transfer(opts)
+func (_UsersData *UsersDataTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _UsersData.Contract.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_Medi *MediTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Medi.Contract.contract.Transact(opts, method, params...)
+func (_UsersData *UsersDataTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _UsersData.Contract.contract.Transact(opts, method, params...)
 }
 
 // GetAddressFromPublicKeyV1 is a free data retrieval call binding the contract method 0x3627bcfa.
 //
 // Solidity: function getAddressFromPublicKeyV1(_publicKey bytes) constant returns(address)
-func (_Medi *MediCaller) GetAddressFromPublicKeyV1(opts *bind.CallOpts, _publicKey []byte) (common.Address, error) {
+func (_UsersData *UsersDataCaller) GetAddressFromPublicKeyV1(opts *bind.CallOpts, _publicKey []byte) (common.Address, error) {
 	var (
 		ret0 = new(common.Address)
 	)
 	out := ret0
-	err := _Medi.contract.Call(opts, out, "getAddressFromPublicKeyV1", _publicKey)
+	err := _UsersData.contract.Call(opts, out, "getAddressFromPublicKeyV1", _publicKey)
 	return *ret0, err
 }
 
 // GetAddressFromPublicKeyV1 is a free data retrieval call binding the contract method 0x3627bcfa.
 //
 // Solidity: function getAddressFromPublicKeyV1(_publicKey bytes) constant returns(address)
-func (_Medi *MediSession) GetAddressFromPublicKeyV1(_publicKey []byte) (common.Address, error) {
-	return _Medi.Contract.GetAddressFromPublicKeyV1(&_Medi.CallOpts, _publicKey)
+func (_UsersData *UsersDataSession) GetAddressFromPublicKeyV1(_publicKey []byte) (common.Address, error) {
+	return _UsersData.Contract.GetAddressFromPublicKeyV1(&_UsersData.CallOpts, _publicKey)
 }
 
 // GetAddressFromPublicKeyV1 is a free data retrieval call binding the contract method 0x3627bcfa.
 //
 // Solidity: function getAddressFromPublicKeyV1(_publicKey bytes) constant returns(address)
-func (_Medi *MediCallerSession) GetAddressFromPublicKeyV1(_publicKey []byte) (common.Address, error) {
-	return _Medi.Contract.GetAddressFromPublicKeyV1(&_Medi.CallOpts, _publicKey)
+func (_UsersData *UsersDataCallerSession) GetAddressFromPublicKeyV1(_publicKey []byte) (common.Address, error) {
+	return _UsersData.Contract.GetAddressFromPublicKeyV1(&_UsersData.CallOpts, _publicKey)
 }
 
 // GetAddressFromPublicKeyV2 is a free data retrieval call binding the contract method 0x5185a34d.
 //
 // Solidity: function getAddressFromPublicKeyV2(_publicKey bytes32[2]) constant returns(address)
-func (_Medi *MediCaller) GetAddressFromPublicKeyV2(opts *bind.CallOpts, _publicKey [2][32]byte) (common.Address, error) {
+func (_UsersData *UsersDataCaller) GetAddressFromPublicKeyV2(opts *bind.CallOpts, _publicKey [2][32]byte) (common.Address, error) {
 	var (
 		ret0 = new(common.Address)
 	)
 	out := ret0
-	err := _Medi.contract.Call(opts, out, "getAddressFromPublicKeyV2", _publicKey)
+	err := _UsersData.contract.Call(opts, out, "getAddressFromPublicKeyV2", _publicKey)
 	return *ret0, err
 }
 
 // GetAddressFromPublicKeyV2 is a free data retrieval call binding the contract method 0x5185a34d.
 //
 // Solidity: function getAddressFromPublicKeyV2(_publicKey bytes32[2]) constant returns(address)
-func (_Medi *MediSession) GetAddressFromPublicKeyV2(_publicKey [2][32]byte) (common.Address, error) {
-	return _Medi.Contract.GetAddressFromPublicKeyV2(&_Medi.CallOpts, _publicKey)
+func (_UsersData *UsersDataSession) GetAddressFromPublicKeyV2(_publicKey [2][32]byte) (common.Address, error) {
+	return _UsersData.Contract.GetAddressFromPublicKeyV2(&_UsersData.CallOpts, _publicKey)
 }
 
 // GetAddressFromPublicKeyV2 is a free data retrieval call binding the contract method 0x5185a34d.
 //
 // Solidity: function getAddressFromPublicKeyV2(_publicKey bytes32[2]) constant returns(address)
-func (_Medi *MediCallerSession) GetAddressFromPublicKeyV2(_publicKey [2][32]byte) (common.Address, error) {
-	return _Medi.Contract.GetAddressFromPublicKeyV2(&_Medi.CallOpts, _publicKey)
+func (_UsersData *UsersDataCallerSession) GetAddressFromPublicKeyV2(_publicKey [2][32]byte) (common.Address, error) {
+	return _UsersData.Contract.GetAddressFromPublicKeyV2(&_UsersData.CallOpts, _publicKey)
 }
