@@ -29,30 +29,6 @@ contract OrgsData  is Validate,Super {
         easyCns = EasyCns(easyCnsAddress);
     }
 
-    modifier nameHashNotExist(bytes32 nameHash) {
-        require(nameHashToUuidMap[nameHash] == 0x0);
-        _;
-    }
-    modifier nameHashExist(bytes32 nameHash) {
-        require(nameHashToUuidMap[nameHash] != 0x0);
-        _;
-    }
-    modifier orgAddressNotExist(address orgAddress) {
-        require(orgAddressToUuidMap[orgAddress] == 0x0);
-        _;
-    }
-    modifier orgAddressExist(address orgAddress) {
-        require(orgAddressToUuidMap[orgAddress] != 0x0);
-        _;
-    }
-    modifier orgExist(bytes16 uuid) {
-        require(uuidToOrgMap[uuid].orgAddress != 0x0);
-        _;
-    }
-    modifier orgNotExist(bytes16 uuid) {
-        require(uuidToOrgMap[uuid].orgAddress == 0x0);
-        _;
-    }
     modifier onlyActive(bytes16 uuid) {
         require(uuidToOrgMap[uuid].active);
         _;
@@ -61,9 +37,31 @@ contract OrgsData  is Validate,Super {
         require(!uuidToOrgMap[uuid].active);
         _;
     }
+    function nameHashNotExist(bytes32 nameHash) private returns (bool) {
+        return (nameHashToUuidMap[nameHash] == 0x0);
+    }
+    function nameHashExist(bytes32 nameHash) private returns (bool) {
+        return (nameHashToUuidMap[nameHash] != 0x0);
+    }
+    function orgAddressNotExist(address orgAddress) private returns (bool) {
+        return (orgAddressToUuidMap[orgAddress] == 0x0);
+    }
+    function orgAddressExist(address orgAddress) private returns (bool) {
+        return (orgAddressToUuidMap[orgAddress] != 0x0);
+    }
+    function orgExist(bytes16 uuid) private returns (bool) {
+        return (uuidToOrgMap[uuid].orgAddress != 0x0);
+    }
+    function orgNotExist(bytes16 uuid) private returns (bool) {
+        return (uuidToOrgMap[uuid].orgAddress == 0x0);
+    }
     function addOrgCore(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time)
-    private onlySuperOrOwner orgAddressNotExist(orgAddress) publicKeyNotZero(publicKey) uintNotZero(time)
-    addressMatchPublicKey(orgAddress, publicKey) nameHashNotExist(nameHash){
+    public onlySuperOrOwner onlyNotActive(uuid) {
+        require(uuid!=0x0 && orgAddress!=0x0 && publicKeyNotZero(publicKey) && nameHash!=0x0 && time!=0x0);
+        require(nameHashNotExist(nameHash));
+        require(orgAddressNotExist(orgAddress));
+        require(addressMatchPublicKey(orgAddress, publicKey));
+        require(nameHash == keccak256(name));
         uuidToOrgMap[uuid] = Org(true, orgAddress, publicKey, nameHash, name, time);
         nameHashToUuidMap[nameHash] = uuid;
         orgAddressToUuidMap[orgAddress] = uuid;
@@ -89,14 +87,19 @@ contract OrgsData  is Validate,Super {
     }
     // as address and publicKey are always a pair, so do not set them seperately.
     function setOrgAddressAndPublicKey(bytes16 uuid, address orgAddress, bytes32[2] publicKey)
-    public onlySuperOrOwner onlyActive(uuid) orgAddressNotExist(orgAddress) publicKeyNotZero(publicKey) addressMatchPublicKey(orgAddress, publicKey) {
+    public onlySuperOrOwner onlyActive(uuid) {
+        require(uuid!=0x0 && orgAddress!=0x0 && publicKeyNotZero(publicKey));
+        require(orgAddressNotExist(orgAddress));
+        require(addressMatchPublicKey(orgAddress, publicKey));
         uuidToOrgMap[uuid].orgAddress = orgAddress;
         uuidToOrgMap[uuid].publicKey = publicKey;
         orgAddressToUuidMap[orgAddress] = uuid;
         onSetOrgAddressAndPublicKey(uuid, orgAddress, publicKey);
     }
     function setNameHashAndNameCore(bytes16 uuid, bytes32 nameHash, bytes32[4] name)
-    private onlySuperOrOwner onlyActive(uuid) bytes32NotZero(nameHash) nameHashNotExist(nameHash) {
+    public onlySuperOrOwner onlyActive(uuid) {
+        require(uuid!=0x0 && nameHash!=0x0);
+        require(nameHash == keccak256(name));
         delete nameHashToUuidMap[uuidToOrgMap[uuid].nameHash];
         uuidToOrgMap[uuid].nameHash = nameHash;
         uuidToOrgMap[uuid].name = name;
@@ -109,38 +112,41 @@ contract OrgsData  is Validate,Super {
         setNameHashAndNameCore(uuid, nameHash, name);
     }
     function setTime(bytes16 uuid, uint time)
-    public onlySuperOrOwner onlyActive(uuid) uintNotZero(time) {
+    public onlySuperOrOwner onlyActive(uuid) {
+        require(uuid!=0x0 && time!=0x0);
         uuidToOrgMap[uuid].time = time;
         onSetTime(uuid, time);
     }
 
     // as it is seeable to everyone on the blockchain, so no need to check any input or the right.
     function getOrgAddress(bytes16 uuid)
-    public constant returns (address) {
+    public onlyActive(uuid) constant returns (address) {
         return uuidToOrgMap[uuid].orgAddress;
     }
     function getPublicKey(bytes16 uuid)
-    public constant returns (bytes32[2]) {
+    public onlyActive(uuid) constant returns (bytes32[2]) {
         return uuidToOrgMap[uuid].publicKey;
     }
     function getNameHash(bytes16 uuid)
-    public constant returns (bytes32) {
+    public onlyActive(uuid) constant returns (bytes32) {
         return uuidToOrgMap[uuid].nameHash;
     }
     function getName(bytes16 uuid)
-    public constant returns (bytes32[4]) {
+    public onlyActive(uuid) constant returns (bytes32[4]) {
         return uuidToOrgMap[uuid].name;
     }
     function getTime(bytes16 uuid)
-    public constant returns (uint) {
+    public onlyActive(uuid) constant returns (uint) {
         return uuidToOrgMap[uuid].time;
     }
     function getUuidByNameHash(bytes32 nameHash)
     public constant returns (bytes16) {
+        require(uuidToOrgMap[nameHashToUuidMap[nameHash]].active);
         return nameHashToUuidMap[nameHash];
     }
     function getUuidByOrgAddress(address orgAddress)
     public constant returns (bytes16) {
+        require(uuidToOrgMap[orgAddressToUuidMap[orgAddress]].active);
         return orgAddressToUuidMap[orgAddress];
     }
     function getUuidListSize()
@@ -148,11 +154,12 @@ contract OrgsData  is Validate,Super {
         return uuidList.length;
     }
     function getUuidByIndex(uint256 index) public constant returns (bytes16) {
+        require(index>=0 && index<getUuidListSize());
         return uuidList[index];
     }
     function isUuidExist(bytes16 uuid)
     public constant returns (bool) {
-        if (uuidToOrgMap[uuid].orgAddress != 0x0){
+        if (uuidToOrgMap[uuid].active){
             return true;
         }
         return false;

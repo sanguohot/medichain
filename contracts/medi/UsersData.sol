@@ -6,7 +6,7 @@ import "./OrgsData.sol";
 
 contract UsersData is Validate,Super {
     EasyCns easyCns;
-    address orgContractAddress;
+    address orgsDataContractAddress;
     OrgsData orgsData;
     struct User{
         bool active;
@@ -33,30 +33,6 @@ contract UsersData is Validate,Super {
         easyCns = EasyCns(easyCnsAddress);
     }
 
-    modifier idCartNoHashNotExist(bytes32 idCartNoHash) {
-        require(idCartNoHashToUuidMap[idCartNoHash] == 0x0);
-        _;
-    }
-    modifier idCartNoHashExist(bytes32 idCartNoHash) {
-        require(idCartNoHashToUuidMap[idCartNoHash] != 0x0);
-        _;
-    }
-    modifier userAddressNotExist(address userAddress) {
-        require(userAddressToUuidMap[userAddress] == 0x0);
-        _;
-    }
-    modifier userAddressExist(address userAddress) {
-        require(userAddressToUuidMap[userAddress] != 0x0);
-        _;
-    }
-    modifier userExist(bytes16 uuid) {
-        require(uuidToUserMap[uuid].userAddress != 0x0);
-        _;
-    }
-    modifier userNotExist(bytes16 uuid) {
-        require(uuidToUserMap[uuid].userAddress == 0x0);
-        _;
-    }
     modifier onlyActive(bytes16 uuid) {
         require(uuidToUserMap[uuid].active);
         _;
@@ -65,23 +41,44 @@ contract UsersData is Validate,Super {
         require(!uuidToUserMap[uuid].active);
         _;
     }
-    function isOrgExist(bytes16 orgUuid) private returns (bool) {
+    function idCartNoHashNotExist(bytes32 idCartNoHash) private returns (bool) {
+        return (idCartNoHashToUuidMap[idCartNoHash] == 0x0);
+    }
+    function idCartNoHashExist(bytes32 idCartNoHash) private returns (bool) {
+        return (idCartNoHashToUuidMap[idCartNoHash] != 0x0);
+    }
+    function userAddressNotExist(address userAddress) private returns (bool) {
+        return (userAddressToUuidMap[userAddress] == 0x0);
+    }
+    function userAddressExist(address userAddress) private returns (bool) {
+        return (userAddressToUuidMap[userAddress] != 0x0);
+    }
+    function userExist(bytes16 uuid) private returns (bool) {
+        return (uuidToUserMap[uuid].userAddress != 0x0);
+    }
+    function userNotExist(bytes16 uuid) private returns (bool) {
+        return (uuidToUserMap[uuid].userAddress == 0x0);
+    }
+    function checkOrgsDataOk() private returns (bool) {
         address addr = easyCns.get("OrgsData");
         if(addr == 0x0){
             return false;
         }
-        if(addr != orgContractAddress){
+        if(addr != orgsDataContractAddress){
             orgsData = OrgsData(addr);
-            orgContractAddress = addr;
+            orgsDataContractAddress = addr;
         }
-        return orgsData.isUuidExist(orgUuid);
+        return true;
     }
     function addUser(bytes16 uuid, address userAddress, bytes16 orgUuid, bytes32[2] publicKey, bytes32 idCartNoHash, uint time)
-    public onlySuperOrOwner userAddressNotExist(userAddress) idCartNoHashNotExist(idCartNoHash) uintNotZero(time)
-    publicKeyNotZero(publicKey) addressMatchPublicKey(userAddress, publicKey) {
+    public onlySuperOrOwner onlyNotActive(uuid) {
+        require(uuid!=0x0 && userAddress!=0x0 && publicKeyNotZero(publicKey) && idCartNoHash!=0x0 && time!=0x0);
         if(orgUuid != 0x0){
             require(isOrgExist(orgUuid));
         }
+        require(idCartNoHashNotExist(idCartNoHash));
+        require(userAddressNotExist(userAddress));
+        require(addressMatchPublicKey(userAddress, publicKey));
         uuidToUserMap[uuid] = User(true, userAddress, orgUuid, publicKey, idCartNoHash, time);
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
         userAddressToUuidMap[userAddress] = uuid;
@@ -90,6 +87,7 @@ contract UsersData is Validate,Super {
     }
     function delUser(bytes16 uuid)
     public onlySuperOrOwner onlyActive(uuid) {
+        require(uuid != 0x0);
         delete idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash];
         delete userAddressToUuidMap[uuidToUserMap[uuid].userAddress];
         uuidToUserMap[uuid].active = false;
@@ -97,12 +95,16 @@ contract UsersData is Validate,Super {
     }
     function setActive(bytes16 uuid, bool active)
     public onlySuperOrOwner {
+        require(uuid != 0x0);
         uuidToUserMap[uuid].active = active;
         onSetActive(uuid, active);
     }
     // as address and publicKey are always a pair, so do not set them seperately.
     function setUserAddressAndPublicKey(bytes16 uuid, address userAddress, bytes32[2] publicKey)
-    public onlySuperOrOwner onlyActive(uuid) userAddressNotExist(userAddress) publicKeyNotZero(publicKey) addressMatchPublicKey(userAddress, publicKey) {
+    public onlySuperOrOwner onlyActive(uuid) {
+        require(uuid!=0x0 && userAddress!=0x0 && publicKeyNotZero(publicKey));
+        require(userAddressNotExist(userAddress));
+        require(addressMatchPublicKey(userAddress, publicKey));
         uuidToUserMap[uuid].userAddress = userAddress;
         uuidToUserMap[uuid].publicKey = publicKey;
         userAddressToUuidMap[userAddress] = uuid;
@@ -110,42 +112,47 @@ contract UsersData is Validate,Super {
     }
     function setOrgUuid(bytes16 uuid, bytes16 orgUuid)
     public onlySuperOrOwner onlyActive(uuid){
-        require(isOrgExist(orgUuid));
+        require(uuid != 0x0);
+        if(orgUuid != 0x0){
+            require(isOrgExist(orgUuid));
+        }
         uuidToUserMap[uuid].orgUuid = orgUuid;
         onSetOrgUuid(uuid, orgUuid);
     }
     function setIdCartNoHash(bytes16 uuid, bytes32 idCartNoHash)
     public onlySuperOrOwner onlyActive(uuid) bytes32NotZero(idCartNoHash) idCartNoHashNotExist(idCartNoHash) {
+        require(uuid!=0x0 && idCartNoHash!=0x0);
         delete idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash];
         uuidToUserMap[uuid].idCartNoHash = idCartNoHash;
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
         onSetIdCartNoHash(uuid, idCartNoHash);
     }
     function setTime(bytes16 uuid, uint time)
-    public onlySuperOrOwner onlyActive(uuid) uintNotZero(time) {
+    public onlySuperOrOwner onlyActive(uuid) {
+        require(uuid!=0x0 && time!=0x0);
         uuidToUserMap[uuid].time = time;
         onSetTime(uuid, time);
     }
 
     // as it is seeable to everyone on the blockchain, so no need to check any input or the right.
     function getUserAddress(bytes16 uuid)
-    public constant returns (address) {
+    public onlyActive(uuid) constant returns (address) {
         return uuidToUserMap[uuid].userAddress;
     }
     function getOrgUuid(bytes16 uuid)
-    public constant returns (bytes16) {
+    public onlyActive(uuid) constant returns (bytes16) {
         return uuidToUserMap[uuid].orgUuid;
     }
     function getPublicKey(bytes16 uuid)
-    public constant returns (bytes32[2]) {
+    public onlyActive(uuid) constant returns (bytes32[2]) {
         return uuidToUserMap[uuid].publicKey;
     }
     function getIdCartNoHash(bytes16 uuid)
-    public constant returns (bytes32) {
+    public onlyActive(uuid) constant returns (bytes32) {
         return uuidToUserMap[uuid].idCartNoHash;
     }
     function getTime(bytes16 uuid)
-    public constant returns (uint) {
+    public onlyActive(uuid) constant returns (uint) {
         return uuidToUserMap[uuid].time;
     }
     function getUuidByIdCartNoHash(bytes32 idCartNoHash)
@@ -165,7 +172,7 @@ contract UsersData is Validate,Super {
     }
     function isUuidExist(bytes16 uuid)
     public constant returns (bool) {
-        if (uuidToUserMap[uuid].userAddress != 0x0){
+        if (uuidToUserMap[uuid].active){
             return true;
         }
         return false;

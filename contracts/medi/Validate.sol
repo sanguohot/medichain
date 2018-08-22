@@ -6,10 +6,6 @@ contract Validate is Address {
         require(uuid != 0x0);
         _;
     }
-    modifier publicKeyNotZero(bytes32[2] publicKey) {
-        require(publicKey[0]!=0x0 && publicKey[1]!=0x0);
-        _;
-    }
     modifier addressNotZero(address account) {
         require(account != 0x0);
         _;
@@ -27,12 +23,13 @@ contract Validate is Address {
         require(b32 != 0x0);
         _;
     }
-    modifier addressMatchPublicKey(address addr, bytes32[2] pub) {
-        require(getAddressFromPublicKeyV2(pub) == addr);
-        _;
+    function addressMatchPublicKey(address addr, bytes32[2] pub) public returns (bool) {
+        return (getAddressFromPublicKeyV2(pub) == addr);
     }
-    modifier nameHashMatchName(bytes32 hash, bytes32[4] name) {
-        require(keccak256(name) == hash);
-        _;
+    function nameHashMatchName(bytes32 hash, bytes32[4] name) public returns (bool) {
+        return (keccak256(name) == hash);
+    }
+    function publicKeyNotZero(bytes32[2] publicKey) public returns (bool) {
+        return (publicKey[0]!=0x0 && publicKey[1]!=0x0);
     }
 }
