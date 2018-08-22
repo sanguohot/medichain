@@ -6,7 +6,7 @@ import "./FilesData.sol";
 import "./Const.sol";
 import "./SafeMath.sol";
 
-contract Controller is Const,SafeMath {
+contract Controller is Const {
     EasyCns easyCns;
     address orgsDataContractAddress;
     OrgsData orgsData;
@@ -14,7 +14,7 @@ contract Controller is Const,SafeMath {
     UsersData usersData;
     address filesDataContractAddress;
     FilesData filesData;
-    uint constant MAX_LIMIT=100;
+    uint8 constant MAX_LIMIT = 10;
 
     function Controller(address easyCnsAddress) public {
         easyCns = EasyCns(easyCnsAddress);
@@ -110,17 +110,19 @@ contract Controller is Const,SafeMath {
             filesData.getTime(uuid)
         );
     }
-    function getFileSignersAndDataByUuid(bytes16 uuid, uint256 start, uint256 limit) public constant returns (bytes16[], bytes32[], bytes32[], uint[]) {
-        require(start>=0x0 && limit>0 && limit<=MAX_LIMIT);
-        require(checkFilesDataOk());
-        uint256 size = filesData.getFileSignerSize(uuid);
+    function getMax(uint256 size, uint256 start, uint256 limit) private constant returns (uint256) {
         require(start < size);
-        uint256 startAddLimit = add(start, limit);
-        uint256 max = (size < startAddLimit) ? size : startAddLimit;
-        bytes16[] memory uuidl;
-        bytes32[] memory rl;
-        bytes32[] memory sl;
-        uint[] memory vl;
+        uint256 startAddLimit = SafeMath.add(start, limit);
+        return (size < startAddLimit) ? size : startAddLimit;
+    }
+    function getFileSignersAndDataByUuid(bytes16 uuid, uint256 start, uint256 limit) public constant returns (bytes16[], bytes32[], bytes32[], uint[]) {
+        require(start>=0 && limit>0 && limit<=MAX_LIMIT);
+        require(checkFilesDataOk());
+        uint256 max = getMax(filesData.getFileSignerSize(uuid), start, limit);
+        bytes16[] memory uuidl = new bytes16[](max);
+        bytes32[] memory rl = new bytes32[](max);
+        bytes32[] memory sl = new bytes32[](max);
+        uint[] memory vl = new uint[](max);
         for(uint256 i=start; i<max; i++){
             uuidl[i] = filesData.getFileSignerUuidByIndex(uuid, i);
             (rl[i], sl[i], vl[i]) = filesData.getFileSignDataByIndex(uuid, i);

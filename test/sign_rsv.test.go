@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	signHex := "0666b163dcaf5264fc5574edf800a5c8638ad7a5e263a96c4f74202944b9a1d96bc72958dac5bf3c5bc4521fc9f57dac6e2147105ae3d20be4fdc45e99f9409100"
+	signHex := "4c1e4e004b76df03ab0d85eef5ff7f888fa1c22c956abd56219825b993fdd5ed68061b7f04f7a66cba7f8a4bb2ee9b721e7cef3e882b870e733befefe125835001"
 	signBytes, err := hex.DecodeString(signHex)
 	if err != nil {
 		log.Fatal(err)
