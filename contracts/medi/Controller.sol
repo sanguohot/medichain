@@ -4,8 +4,9 @@ import "./OrgsData.sol";
 import "./UsersData.sol";
 import "./FilesData.sol";
 import "./Const.sol";
+import "./SafeMath.sol";
 
-contract Controller is Const {
+contract Controller is Const,SafeMath {
     EasyCns easyCns;
     address orgsDataContractAddress;
     OrgsData orgsData;
@@ -13,6 +14,7 @@ contract Controller is Const {
     UsersData usersData;
     address filesDataContractAddress;
     FilesData filesData;
+    uint constant MAX_LIMIT=100;
 
     function Controller(address easyCnsAddress) public {
         easyCns = EasyCns(easyCnsAddress);
@@ -108,16 +110,26 @@ contract Controller is Const {
             filesData.getTime(uuid)
         );
     }
-//    function getFileSignersAndDataByUuid(bytes16 uuid, uint256 start, uint256 limit) public constant returns (bytes16, bytes16, bytes32, bytes32[4], bytes32, bytes32, uint) {
-//        require(checkFilesDataOk());
-//        return (
-//        filesData.getOwnerUuid(uuid),
-//        filesData.getUploaderUuid(uuid),
-//        filesData.getFileType(uuid),
-//        filesData.getFileDesc(uuid),
-//        filesData.getSha256Hash(uuid),
-//        filesData.getKeccak256Hash(uuid),
-//        filesData.getTime(uuid)
-//        );
-//    }
+    function getFileSignersAndDataByUuid(bytes16 uuid, uint256 start, uint256 limit) public constant returns (bytes16[], bytes32[], bytes32[], uint[]) {
+        require(start>=0x0 && limit>0 && limit<=MAX_LIMIT);
+        require(checkFilesDataOk());
+        uint256 size = filesData.getFileSignerSize(uuid);
+        require(start < size);
+        uint256 startAddLimit = add(start, limit);
+        uint256 max = (size < startAddLimit) ? size : startAddLimit;
+        bytes16[] memory uuidl;
+        bytes32[] memory rl;
+        bytes32[] memory sl;
+        uint[] memory vl;
+        for(uint256 i=start; i<max; i++){
+            uuidl[i] = filesData.getFileSignerUuidByIndex(uuid, i);
+            (rl[i], sl[i], vl[i]) = filesData.getFileSignDataByIndex(uuid, i);
+        }
+        return (
+            uuidl,
+            rl,
+            sl,
+            vl
+        );
+    }
 }
