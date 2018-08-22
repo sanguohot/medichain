@@ -3,11 +3,14 @@ import "./EasyCns.sol";
 import "./Validate.sol";
 import "./Super.sol";
 import "./UsersData.sol";
+import "./OrgsData.sol";
 
 contract FilesData is Validate,Super {
     EasyCns easyCns;
     address usersDataContractAddress;
+    address orgsDataContractAddress;
     UsersData usersData;
+    OrgsData orgsData;
     struct File{
         bool active;
         bytes16 ownerUuid;
@@ -87,6 +90,17 @@ contract FilesData is Validate,Super {
         }
         return true;
     }
+    function checkOrgsDataOk() private returns (bool) {
+        address addr = easyCns.get("OrgsData");
+        if(addr == 0x0){
+            return false;
+        }
+        if(addr != orgsDataContractAddress){
+            orgsData = OrgsData(addr);
+            orgsDataContractAddress = addr;
+        }
+        return true;
+    }
     function addFile(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
     , bytes32 sha256Hash, bytes32 r, bytes32 s, uint8 v, uint time)
     public onlySuperOrOwner onlyNotActive(uuid) {
@@ -98,6 +112,11 @@ contract FilesData is Validate,Super {
         require(checkUsersDataOk());
         require(usersData.isUuidExist(ownerUuid));
         require(usersData.isUuidExist(uploaderUuid));
+        // 上传文件的用户可以不属于一个机构
+        if(usersData.getOrgUuid(uploaderUuid) != 0x0){
+            require(checkOrgsDataOk());
+            require(orgsData.isUuidExist(usersData.getOrgUuid(uploaderUuid)));
+        }
         require(usersData.getUserAddress(uploaderUuid) == ecrecover(keccak256Hash, v, r, s));
         File memory file;
         file.active = true;
@@ -118,7 +137,7 @@ contract FilesData is Validate,Super {
         sha256HashToUuidMap[sha256Hash] = uuid;
         uuidList.push(uuid);
         onAddFile(uuid, ownerUuid, uploaderUuid, fileType, fileDesc, keccak256Hash
-    , sha256Hash, r, s, v, time);
+        , sha256Hash, r, s, v, time);
     }
     function delFile(bytes16 uuid)
     public onlySuperOrOwner onlyActive(uuid) {
@@ -162,19 +181,19 @@ contract FilesData is Validate,Super {
         onSetFileDesc(uuid, fileDesc);
     }
     // as keccak256Hash, sha256Hash, signer, sign data are always together, and are possibly relate to many people, so no change please.
-//    function setKeccak256AndSha256Hash(bytes16 uuid, bytes32 keccak256Hash, bytes32 sha256Hash)
-//    public onlySuperOrOwner onlyActive(uuid) {
-//        require(uuid!=0x0 && keccak256Hash!=0x0 && sha256Hash!=0x0);
-//        require(sha256HashNotExist(sha256Hash));
-//        require(keccak256HashNotExist(keccak256Hash));
-//        require(sha256Hash != keccak256Hash);
-//        delete keccak256HashToUuidMap[uuidToFileMap[uuid].keccak256Hash];
-//        delete sha256HashToUuidMap[uuidToFileMap[uuid].sha256Hash];
-//        uuidToFileMap[uuid].keccak256Hash = keccak256Hash;
-//        uuidToFileMap[uuid].sha256Hash = sha256Hash;
-//        keccak256HashToUuidMap[keccak256Hash] = uuid;
-//        sha256HashToUuidMap[sha256Hash] = uuid;
-//    }
+    //    function setKeccak256AndSha256Hash(bytes16 uuid, bytes32 keccak256Hash, bytes32 sha256Hash)
+    //    public onlySuperOrOwner onlyActive(uuid) {
+    //        require(uuid!=0x0 && keccak256Hash!=0x0 && sha256Hash!=0x0);
+    //        require(sha256HashNotExist(sha256Hash));
+    //        require(keccak256HashNotExist(keccak256Hash));
+    //        require(sha256Hash != keccak256Hash);
+    //        delete keccak256HashToUuidMap[uuidToFileMap[uuid].keccak256Hash];
+    //        delete sha256HashToUuidMap[uuidToFileMap[uuid].sha256Hash];
+    //        uuidToFileMap[uuid].keccak256Hash = keccak256Hash;
+    //        uuidToFileMap[uuid].sha256Hash = sha256Hash;
+    //        keccak256HashToUuidMap[keccak256Hash] = uuid;
+    //        sha256HashToUuidMap[sha256Hash] = uuid;
+    //    }
     function addSign(bytes16 uuid, bytes16 userUuid, bytes32 r, bytes32 s, uint8 v)
     public onlySuperOrOwner onlyActive(uuid) {
         require(uuid!=0x0 && userUuid!=0x0 && r!=0x0 && s!=0x0);
