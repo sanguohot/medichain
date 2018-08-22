@@ -13,11 +13,11 @@ contract OrgsData  is Validate,Super {
         bytes32[4] name; // 华中科技大学同济医学院附属妇女儿童医疗保健中心 69 bytes
         uint time;
     }
-    event onAddOrgCore(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time);
+    event onAddOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time);
     event onDelOrg(bytes16 uuid);
     event onSetActive(bytes16 uuid, bool active);
     event onSetOrgAddressAndPublicKey(bytes16 uuid, address orgAddress, bytes32[2] publicKey);
-    event onSetNameHashAndNameCore(bytes16 uuid, bytes32 nameHash, bytes32[4] name);
+    event onSetNameHashAndName(bytes16 uuid, bytes32 nameHash, bytes32[4] name);
     event onSetTime(bytes16 uuid, uint time);
 
     mapping(bytes16 => Org) uuidToOrgMap;
@@ -55,7 +55,7 @@ contract OrgsData  is Validate,Super {
     function orgNotExist(bytes16 uuid) private returns (bool) {
         return (uuidToOrgMap[uuid].orgAddress == 0x0);
     }
-    function addOrgCore(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time)
+    function addOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time)
     public onlySuperOrOwner onlyNotActive(uuid) {
         require(uuid!=0x0 && orgAddress!=0x0 && publicKeyNotZero(publicKey) && nameHash!=0x0 && time!=0x0);
         require(nameHashNotExist(nameHash));
@@ -66,12 +66,7 @@ contract OrgsData  is Validate,Super {
         nameHashToUuidMap[nameHash] = uuid;
         orgAddressToUuidMap[orgAddress] = uuid;
         uuidList.push(uuid);
-        onAddOrgCore(uuid, orgAddress, publicKey, nameHash, name, time);
-    }
-    function addOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32[4] name, uint time)
-    public {
-        bytes32 nameHash = keccak256(name);
-        addOrgCore(uuid, orgAddress, publicKey, nameHash, name, time);
+        onAddOrg(uuid, orgAddress, publicKey, nameHash, name, time);
     }
     function delOrg(bytes16 uuid)
     public onlySuperOrOwner onlyActive(uuid) {
@@ -96,7 +91,7 @@ contract OrgsData  is Validate,Super {
         orgAddressToUuidMap[orgAddress] = uuid;
         onSetOrgAddressAndPublicKey(uuid, orgAddress, publicKey);
     }
-    function setNameHashAndNameCore(bytes16 uuid, bytes32 nameHash, bytes32[4] name)
+    function setNameHashAndName(bytes16 uuid, bytes32 nameHash, bytes32[4] name)
     public onlySuperOrOwner onlyActive(uuid) {
         require(uuid!=0x0 && nameHash!=0x0);
         require(nameHash == keccak256(name));
@@ -104,12 +99,7 @@ contract OrgsData  is Validate,Super {
         uuidToOrgMap[uuid].nameHash = nameHash;
         uuidToOrgMap[uuid].name = name;
         nameHashToUuidMap[nameHash] = uuid;
-        onSetNameHashAndNameCore(uuid, nameHash, name);
-    }
-    function setNameHashAndName(bytes16 uuid, bytes32[4] name)
-    public {
-        bytes32 nameHash = keccak256(name);
-        setNameHashAndNameCore(uuid, nameHash, name);
+        onSetNameHashAndName(uuid, nameHash, name);
     }
     function setTime(bytes16 uuid, uint time)
     public onlySuperOrOwner onlyActive(uuid) {
