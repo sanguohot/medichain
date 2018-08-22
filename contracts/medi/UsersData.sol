@@ -3,8 +3,9 @@ import "./EasyCns.sol";
 import "./Validate.sol";
 import "./Super.sol";
 import "./OrgsData.sol";
+import "./Const.sol";
 
-contract UsersData is Validate,Super {
+contract UsersData is Validate,Super,Const {
     EasyCns easyCns;
     address orgsDataContractAddress;
     OrgsData orgsData;
@@ -60,7 +61,7 @@ contract UsersData is Validate,Super {
         return (uuidToUserMap[uuid].userAddress == 0x0);
     }
     function checkOrgsDataOk() private returns (bool) {
-        address addr = easyCns.get("OrgsData");
+        address addr = easyCns.get(getOrgsDataName());
         if(addr == 0x0){
             return false;
         }
@@ -74,7 +75,7 @@ contract UsersData is Validate,Super {
     public onlySuperOrOwner onlyNotActive(uuid) {
         require(uuid!=0x0 && userAddress!=0x0 && publicKeyNotZero(publicKey) && idCartNoHash!=0x0 && time!=0x0);
         if(orgUuid != 0x0){
-            require(isOrgExist(orgUuid));
+            require(orgsData.isUuidExist(orgUuid));
         }
         require(idCartNoHashNotExist(idCartNoHash));
         require(userAddressNotExist(userAddress));
@@ -114,14 +115,15 @@ contract UsersData is Validate,Super {
     public onlySuperOrOwner onlyActive(uuid){
         require(uuid != 0x0);
         if(orgUuid != 0x0){
-            require(isOrgExist(orgUuid));
+            require(orgsData.isUuidExist(orgUuid));
         }
         uuidToUserMap[uuid].orgUuid = orgUuid;
         onSetOrgUuid(uuid, orgUuid);
     }
     function setIdCartNoHash(bytes16 uuid, bytes32 idCartNoHash)
-    public onlySuperOrOwner onlyActive(uuid) bytes32NotZero(idCartNoHash) idCartNoHashNotExist(idCartNoHash) {
+    public onlySuperOrOwner onlyActive(uuid) {
         require(uuid!=0x0 && idCartNoHash!=0x0);
+        require(idCartNoHashNotExist(idCartNoHash));
         delete idCartNoHashToUuidMap[uuidToUserMap[uuid].idCartNoHash];
         uuidToUserMap[uuid].idCartNoHash = idCartNoHash;
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
