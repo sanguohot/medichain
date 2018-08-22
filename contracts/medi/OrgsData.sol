@@ -37,22 +37,22 @@ contract OrgsData  is Validate,Super {
         require(!uuidToOrgMap[uuid].active);
         _;
     }
-    function nameHashNotExist(bytes32 nameHash) private returns (bool) {
+    function nameHashNotExist(bytes32 nameHash) private constant returns (bool) {
         return (nameHashToUuidMap[nameHash] == 0x0);
     }
-    function nameHashExist(bytes32 nameHash) private returns (bool) {
+    function nameHashExist(bytes32 nameHash) private constant returns (bool) {
         return (nameHashToUuidMap[nameHash] != 0x0);
     }
-    function orgAddressNotExist(address orgAddress) private returns (bool) {
+    function orgAddressNotExist(address orgAddress) private constant returns (bool) {
         return (orgAddressToUuidMap[orgAddress] == 0x0);
     }
-    function orgAddressExist(address orgAddress) private returns (bool) {
+    function orgAddressExist(address orgAddress) private constant returns (bool) {
         return (orgAddressToUuidMap[orgAddress] != 0x0);
     }
-    function orgExist(bytes16 uuid) private returns (bool) {
+    function orgExist(bytes16 uuid) private constant returns (bool) {
         return (uuidToOrgMap[uuid].orgAddress != 0x0);
     }
-    function orgNotExist(bytes16 uuid) private returns (bool) {
+    function orgNotExist(bytes16 uuid) private constant returns (bool) {
         return (uuidToOrgMap[uuid].orgAddress == 0x0);
     }
     function addOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time)

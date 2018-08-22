@@ -61,26 +61,26 @@ contract FilesData is Validate,Super,Const {
         require(!uuidToFileMap[uuid].active);
         _;
     }
-    function keccak256HashNotExist(bytes32 keccak256Hash) private returns (bool) {
+    function keccak256HashNotExist(bytes32 keccak256Hash) private constant returns (bool) {
         return (keccak256HashToUuidMap[keccak256Hash] == 0x0);
     }
-    function keccak256HashExist(bytes32 keccak256Hash) private returns (bool) {
+    function keccak256HashExist(bytes32 keccak256Hash) private constant returns (bool) {
         return (keccak256HashToUuidMap[keccak256Hash] != 0x0);
     }
-    function sha256HashNotExist(bytes32 sha256Hash) private returns (bool) {
+    function sha256HashNotExist(bytes32 sha256Hash) private constant returns (bool) {
         return (sha256HashToUuidMap[sha256Hash] == 0x0);
     }
-    function sha256HashExist(bytes32 sha256Hash) private returns (bool) {
+    function sha256HashExist(bytes32 sha256Hash) private constant returns (bool) {
         return (sha256HashToUuidMap[sha256Hash] != 0x0);
     }
-    function fileExist(bytes16 uuid) private returns (bool) {
+    function fileExist(bytes16 uuid) private constant returns (bool) {
         return (uuidToFileMap[uuid].keccak256Hash != 0x0);
     }
-    function fileNotExist(bytes16 uuid) private returns (bool) {
+    function fileNotExist(bytes16 uuid) private constant returns (bool) {
         return (uuidToFileMap[uuid].keccak256Hash == 0x0);
     }
 
-    function checkUsersDataOk() private returns (bool) {
+    function checkUsersDataOk() private constant returns (bool) {
         address addr = easyCns.get(getUsersDataName());
         if(addr == 0x0){
             return false;
@@ -91,7 +91,7 @@ contract FilesData is Validate,Super,Const {
         }
         return true;
     }
-    function checkOrgsDataOk() private returns (bool) {
+    function checkOrgsDataOk() private constant returns (bool) {
         address addr = easyCns.get(getOrgsDataName());
         if(addr == 0x0){
             return false;

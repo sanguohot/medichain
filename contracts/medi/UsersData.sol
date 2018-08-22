@@ -42,25 +42,25 @@ contract UsersData is Validate,Super,Const {
         require(!uuidToUserMap[uuid].active);
         _;
     }
-    function idCartNoHashNotExist(bytes32 idCartNoHash) private returns (bool) {
+    function idCartNoHashNotExist(bytes32 idCartNoHash) private constant returns (bool) {
         return (idCartNoHashToUuidMap[idCartNoHash] == 0x0);
     }
-    function idCartNoHashExist(bytes32 idCartNoHash) private returns (bool) {
+    function idCartNoHashExist(bytes32 idCartNoHash) private constant returns (bool) {
         return (idCartNoHashToUuidMap[idCartNoHash] != 0x0);
     }
-    function userAddressNotExist(address userAddress) private returns (bool) {
+    function userAddressNotExist(address userAddress) private constant returns (bool) {
         return (userAddressToUuidMap[userAddress] == 0x0);
     }
-    function userAddressExist(address userAddress) private returns (bool) {
+    function userAddressExist(address userAddress) private constant returns (bool) {
         return (userAddressToUuidMap[userAddress] != 0x0);
     }
-    function userExist(bytes16 uuid) private returns (bool) {
+    function userExist(bytes16 uuid) private constant returns (bool) {
         return (uuidToUserMap[uuid].userAddress != 0x0);
     }
-    function userNotExist(bytes16 uuid) private returns (bool) {
+    function userNotExist(bytes16 uuid) private constant returns (bool) {
         return (uuidToUserMap[uuid].userAddress == 0x0);
     }
-    function checkOrgsDataOk() private returns (bool) {
+    function checkOrgsDataOk() private constant returns (bool) {
         address addr = easyCns.get(getOrgsDataName());
         if(addr == 0x0){
             return false;

@@ -23,13 +23,13 @@ contract Validate is Address {
         require(b32 != 0x0);
         _;
     }
-    function addressMatchPublicKey(address addr, bytes32[2] pub) public returns (bool) {
+    function addressMatchPublicKey(address addr, bytes32[2] pub) public constant returns (bool) {
         return (getAddressFromPublicKeyV2(pub) == addr);
     }
-    function nameHashMatchName(bytes32 hash, bytes32[4] name) public returns (bool) {
+    function nameHashMatchName(bytes32 hash, bytes32[4] name) public constant returns (bool) {
         return (keccak256(name) == hash);
     }
-    function publicKeyNotZero(bytes32[2] publicKey) public returns (bool) {
+    function publicKeyNotZero(bytes32[2] publicKey) public constant returns (bool) {
         return (publicKey[0]!=0x0 && publicKey[1]!=0x0);
     }
 }
