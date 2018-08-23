@@ -1,12 +1,11 @@
 pragma solidity ^0.4.11;
 import "./EasyCns.sol";
-import "./Validate.sol";
 import "./Super.sol";
 import "./UsersData.sol";
 import "./OrgsData.sol";
 import "./Const.sol";
 
-contract FilesData is Validate,Super {
+contract FilesData is Super {
     EasyCns easyCns;
     address usersDataContractAddress;
     address orgsDataContractAddress;

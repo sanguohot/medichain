@@ -1,11 +1,12 @@
 pragma solidity ^0.4.11;
 import "./EasyCns.sol";
-import "./Validate.sol";
+import "./ValidateUtil.sol";
+import "./ValidateModifier.sol";
 import "./Super.sol";
 import "./OrgsData.sol";
 import "./Const.sol";
 
-contract UsersData is Validate,Super {
+contract UsersData is ValidateModifier,Super {
     EasyCns easyCns;
     address orgsDataContractAddress;
     OrgsData orgsData;
@@ -73,13 +74,13 @@ contract UsersData is Validate,Super {
     }
     function addUser(bytes16 uuid, address userAddress, bytes16 orgUuid, bytes32[2] publicKey, bytes32 idCartNoHash, uint time)
     public onlySuperOrOwner onlyNotActive(uuid) {
-        require(uuid!=0x0 && userAddress!=0x0 && publicKeyNotZero(publicKey) && idCartNoHash!=0x0 && time!=0x0);
+        require(uuid!=0x0 && userAddress!=0x0 && ValidateUtil.publicKeyNotZero(publicKey) && idCartNoHash!=0x0 && time!=0x0);
         if(orgUuid != 0x0){
             require(orgsData.isUuidExist(orgUuid));
         }
         require(idCartNoHashNotExist(idCartNoHash));
         require(userAddressNotExist(userAddress));
-        require(addressMatchPublicKey(userAddress, publicKey));
+        require(ValidateUtil.addressMatchPublicKey(userAddress, publicKey));
         uuidToUserMap[uuid] = User(true, userAddress, orgUuid, publicKey, idCartNoHash, time);
         idCartNoHashToUuidMap[idCartNoHash] = uuid;
         userAddressToUuidMap[userAddress] = uuid;
@@ -103,9 +104,9 @@ contract UsersData is Validate,Super {
     // as address and publicKey are always a pair, so do not set them seperately.
     function setUserAddressAndPublicKey(bytes16 uuid, address userAddress, bytes32[2] publicKey)
     public onlySuperOrOwner onlyActive(uuid) {
-        require(uuid!=0x0 && userAddress!=0x0 && publicKeyNotZero(publicKey));
+        require(uuid!=0x0 && userAddress!=0x0 && ValidateUtil.publicKeyNotZero(publicKey));
         require(userAddressNotExist(userAddress));
-        require(addressMatchPublicKey(userAddress, publicKey));
+        require(ValidateUtil.addressMatchPublicKey(userAddress, publicKey));
         uuidToUserMap[uuid].userAddress = userAddress;
         uuidToUserMap[uuid].publicKey = publicKey;
         userAddressToUuidMap[userAddress] = uuid;

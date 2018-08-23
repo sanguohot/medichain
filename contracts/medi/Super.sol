@@ -1,7 +1,7 @@
 pragma solidity ^0.4.11;
-import "./Validate.sol";
+import "./ValidateModifier.sol";
 
-contract Super is Validate{
+contract Super is ValidateModifier {
     address owner;
     address[] supers;
     function Super() public {

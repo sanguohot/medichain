@@ -1,9 +1,10 @@
 pragma solidity ^0.4.11;
 import "./EasyCns.sol";
-import "./Validate.sol";
+import "./ValidateUtil.sol";
+import "./ValidateModifier.sol";
 import "./Super.sol";
 
-contract OrgsData  is Validate,Super {
+contract OrgsData  is ValidateModifier,Super {
     EasyCns easyCns;
     struct Org{
         bool active;
@@ -57,10 +58,10 @@ contract OrgsData  is Validate,Super {
     }
     function addOrg(bytes16 uuid, address orgAddress, bytes32[2] publicKey, bytes32 nameHash, bytes32[4] name, uint time)
     public onlySuperOrOwner onlyNotActive(uuid) {
-        require(uuid!=0x0 && orgAddress!=0x0 && publicKeyNotZero(publicKey) && nameHash!=0x0 && time!=0x0);
+        require(uuid!=0x0 && orgAddress!=0x0 && ValidateUtil.publicKeyNotZero(publicKey) && nameHash!=0x0 && time!=0x0);
         require(nameHashNotExist(nameHash));
         require(orgAddressNotExist(orgAddress));
-        require(addressMatchPublicKey(orgAddress, publicKey));
+        require(ValidateUtil.addressMatchPublicKey(orgAddress, publicKey));
         require(nameHash == keccak256(name));
         uuidToOrgMap[uuid] = Org(true, orgAddress, publicKey, nameHash, name, time);
         nameHashToUuidMap[nameHash] = uuid;
@@ -83,9 +84,9 @@ contract OrgsData  is Validate,Super {
     // as address and publicKey are always a pair, so do not set them seperately.
     function setOrgAddressAndPublicKey(bytes16 uuid, address orgAddress, bytes32[2] publicKey)
     public onlySuperOrOwner onlyActive(uuid) {
-        require(uuid!=0x0 && orgAddress!=0x0 && publicKeyNotZero(publicKey));
+        require(uuid!=0x0 && orgAddress!=0x0 && ValidateUtil.publicKeyNotZero(publicKey));
         require(orgAddressNotExist(orgAddress));
-        require(addressMatchPublicKey(orgAddress, publicKey));
+        require(ValidateUtil.addressMatchPublicKey(orgAddress, publicKey));
         uuidToOrgMap[uuid].orgAddress = orgAddress;
         uuidToOrgMap[uuid].publicKey = publicKey;
         orgAddressToUuidMap[orgAddress] = uuid;
