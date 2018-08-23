@@ -6,7 +6,7 @@ contract Super {
     function Super() public {
         owner = msg.sender;
     }
-    function isSuper(address addr) public constant returns (bool valid) {
+    function isSuper(address addr) internal constant returns (bool valid) {
         valid = false;
         for (uint i=0; i<supers.length; i++) {
             if (addr == supers[i]){
