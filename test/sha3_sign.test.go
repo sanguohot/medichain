@@ -7,7 +7,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/common"
+	//"github.com/ethereum/go-ethereum/common"
 	"encoding/hex"
 	"medichain/util"
 )
@@ -26,8 +26,8 @@ func main() {
 
 	data := []byte("我hello")
 	hash := crypto.Keccak256Hash(data)
-	hash = common.HexToHash("0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8")
-
+	//hash = common.HexToHash("0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8")
+	fmt.Println(hash.Hex())
 	signature, err := crypto.Sign(hash.Bytes(), privateKey)
 	if err != nil {
 		log.Fatal(err)

@@ -80,7 +80,7 @@ contract FilesData is Super {
         return (uuidToFileMap[uuid].keccak256Hash == 0x0);
     }
 
-    function checkUsersDataOk() private constant returns (bool) {
+    function checkUsersDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getUsersDataName());
         if(addr == 0x0){
             return false;
@@ -91,7 +91,7 @@ contract FilesData is Super {
         }
         return true;
     }
-    function checkOrgsDataOk() private constant returns (bool) {
+    function checkOrgsDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getOrgsDataName());
         if(addr == 0x0){
             return false;

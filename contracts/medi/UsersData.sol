@@ -61,7 +61,7 @@ contract UsersData is Super {
     function userNotExist(bytes16 uuid) private constant returns (bool) {
         return (uuidToUserMap[uuid].userAddress == 0x0);
     }
-    function checkOrgsDataOk() private constant returns (bool) {
+    function checkOrgsDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getOrgsDataName());
         if(addr == 0x0){
             return false;
@@ -76,6 +76,7 @@ contract UsersData is Super {
     public onlySuperOrOwner onlyNotActive(uuid) {
         require(uuid!=0x0 && userAddress!=0x0 && ValidateUtil.publicKeyNotZero(publicKey) && idCartNoHash!=0x0 && time!=0x0);
         if(orgUuid != 0x0){
+            require(checkOrgsDataOk());
             require(orgsData.isUuidExist(orgUuid));
         }
         require(idCartNoHashNotExist(idCartNoHash));
@@ -116,6 +117,7 @@ contract UsersData is Super {
     public onlySuperOrOwner onlyActive(uuid){
         require(uuid != 0x0);
         if(orgUuid != 0x0){
+            require(checkOrgsDataOk());
             require(orgsData.isUuidExist(orgUuid));
         }
         uuidToUserMap[uuid].orgUuid = orgUuid;
