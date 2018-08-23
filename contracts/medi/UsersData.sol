@@ -5,7 +5,7 @@ import "./Super.sol";
 import "./OrgsData.sol";
 import "./Const.sol";
 
-contract UsersData is Validate,Super,Const {
+contract UsersData is Validate,Super {
     EasyCns easyCns;
     address orgsDataContractAddress;
     OrgsData orgsData;
@@ -61,7 +61,7 @@ contract UsersData is Validate,Super,Const {
         return (uuidToUserMap[uuid].userAddress == 0x0);
     }
     function checkOrgsDataOk() private constant returns (bool) {
-        address addr = easyCns.get(getOrgsDataName());
+        address addr = easyCns.get(Const.getOrgsDataName());
         if(addr == 0x0){
             return false;
         }

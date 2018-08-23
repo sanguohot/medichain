@@ -6,7 +6,7 @@ import "./FilesData.sol";
 import "./Const.sol";
 import "./SafeMath.sol";
 
-contract Controller is Const {
+contract Controller {
     EasyCns easyCns;
     address orgsDataContractAddress;
     OrgsData orgsData;
@@ -20,7 +20,7 @@ contract Controller is Const {
         easyCns = EasyCns(easyCnsAddress);
     }
     function checkUsersDataOk() private returns (bool) {
-        address addr = easyCns.get(getUsersDataName());
+        address addr = easyCns.get(Const.getUsersDataName());
         if(addr == 0x0){
             return false;
         }
@@ -31,7 +31,7 @@ contract Controller is Const {
         return true;
     }
     function checkOrgsDataOk() private returns (bool) {
-        address addr = easyCns.get(getOrgsDataName());
+        address addr = easyCns.get(Const.getUsersDataName());
         if(addr == 0x0){
             return false;
         }
@@ -42,7 +42,7 @@ contract Controller is Const {
         return true;
     }
     function checkFilesDataOk() private returns (bool) {
-        address addr = easyCns.get(getFilesDataName());
+        address addr = easyCns.get(Const.getFilesDataName());
         if(addr == 0x0){
             return false;
         }
@@ -81,33 +81,33 @@ contract Controller is Const {
     function getUserByUuid(bytes16 uuid) public constant returns (address, bytes16, bytes32[2], bytes32, uint) {
         require(checkUsersDataOk());
         return (
-            usersData.getUserAddress(uuid),
-            usersData.getOrgUuid(uuid),
-            usersData.getPublicKey(uuid),
-            usersData.getIdCartNoHash(uuid),
-            usersData.getTime(uuid)
+        usersData.getUserAddress(uuid),
+        usersData.getOrgUuid(uuid),
+        usersData.getPublicKey(uuid),
+        usersData.getIdCartNoHash(uuid),
+        usersData.getTime(uuid)
         );
     }
     function getOrgByUuid(bytes16 uuid) public constant returns (address, bytes32[2], bytes32, bytes32[4], uint) {
         require(checkOrgsDataOk());
         return (
-            orgsData.getOrgAddress(uuid),
-            orgsData.getPublicKey(uuid),
-            orgsData.getNameHash(uuid),
-            orgsData.getName(uuid),
-            orgsData.getTime(uuid)
+        orgsData.getOrgAddress(uuid),
+        orgsData.getPublicKey(uuid),
+        orgsData.getNameHash(uuid),
+        orgsData.getName(uuid),
+        orgsData.getTime(uuid)
         );
     }
     function getFileByUuid(bytes16 uuid) public constant returns (bytes16, bytes16, bytes32, bytes32[4], bytes32, bytes32, uint) {
         require(checkFilesDataOk());
         return (
-            filesData.getOwnerUuid(uuid),
-            filesData.getUploaderUuid(uuid),
-            filesData.getFileType(uuid),
-            filesData.getFileDesc(uuid),
-            filesData.getSha256Hash(uuid),
-            filesData.getKeccak256Hash(uuid),
-            filesData.getTime(uuid)
+        filesData.getOwnerUuid(uuid),
+        filesData.getUploaderUuid(uuid),
+        filesData.getFileType(uuid),
+        filesData.getFileDesc(uuid),
+        filesData.getSha256Hash(uuid),
+        filesData.getKeccak256Hash(uuid),
+        filesData.getTime(uuid)
         );
     }
     function getMax(uint256 size, uint256 start, uint256 limit) private constant returns (uint256) {
@@ -128,10 +128,10 @@ contract Controller is Const {
             (rl[i], sl[i], vl[i]) = filesData.getFileSignDataByIndex(uuid, i);
         }
         return (
-            uuidl,
-            rl,
-            sl,
-            vl
+        uuidl,
+        rl,
+        sl,
+        vl
         );
     }
 }

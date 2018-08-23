@@ -6,7 +6,7 @@ import "./UsersData.sol";
 import "./OrgsData.sol";
 import "./Const.sol";
 
-contract FilesData is Validate,Super,Const {
+contract FilesData is Validate,Super {
     EasyCns easyCns;
     address usersDataContractAddress;
     address orgsDataContractAddress;
@@ -81,7 +81,7 @@ contract FilesData is Validate,Super,Const {
     }
 
     function checkUsersDataOk() private constant returns (bool) {
-        address addr = easyCns.get(getUsersDataName());
+        address addr = easyCns.get(Const.getUsersDataName());
         if(addr == 0x0){
             return false;
         }
@@ -92,7 +92,7 @@ contract FilesData is Validate,Super,Const {
         return true;
     }
     function checkOrgsDataOk() private constant returns (bool) {
-        address addr = easyCns.get(getOrgsDataName());
+        address addr = easyCns.get(Const.getOrgsDataName());
         if(addr == 0x0){
             return false;
         }
