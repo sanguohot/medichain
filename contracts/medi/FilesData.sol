@@ -50,6 +50,7 @@ contract FilesData is Super {
     // 保存列表 方便以后导出 只增不减 注意检查唯一性
     bytes16[] uuidList;
     function FilesData(address easyCnsAddress) public {
+        require(easyCnsAddress != 0x0);
         easyCns = EasyCns(easyCnsAddress);
     }
     modifier onlyActive(bytes16 uuid) {

@@ -17,6 +17,7 @@ contract Controller {
     uint8 constant MAX_LIMIT = 10;
 
     function Controller(address easyCnsAddress) public {
+        require(easyCnsAddress != 0x0);
         easyCns = EasyCns(easyCnsAddress);
     }
     function checkUsersDataOk() private returns (bool) {

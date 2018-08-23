@@ -1,12 +1,11 @@
 pragma solidity ^0.4.11;
 import "./EasyCns.sol";
 import "./ValidateUtil.sol";
-import "./ValidateModifier.sol";
 import "./Super.sol";
 import "./OrgsData.sol";
 import "./Const.sol";
 
-contract UsersData is ValidateModifier,Super {
+contract UsersData is Super {
     EasyCns easyCns;
     address orgsDataContractAddress;
     OrgsData orgsData;
@@ -32,6 +31,7 @@ contract UsersData is ValidateModifier,Super {
     // 保存列表 方便以后导出 只增不减 注意检查唯一性
     bytes16[] uuidList;
     function UsersData(address easyCnsAddress) public {
+        require(easyCnsAddress != 0x0);
         easyCns = EasyCns(easyCnsAddress);
     }
 

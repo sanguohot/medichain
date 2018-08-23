@@ -1,7 +1,6 @@
 pragma solidity ^0.4.11;
-import "./ValidateModifier.sol";
 
-contract Super is ValidateModifier {
+contract Super {
     address owner;
     address[] supers;
     function Super() public {
@@ -36,10 +35,12 @@ contract Super is ValidateModifier {
     }
 
     // this should be done first if it is called by other contracts.
-    function addSuper(address addr) public onlyOwner addressNotZero(addr) {
+    function addSuper(address addr) public onlyOwner {
+        require(addr != 0x0);
         supers.push(addr);
     }
-    function delSuper(address addr) public onlyOwner addressNotZero(addr) {
+    function delSuper(address addr) public onlyOwner {
+        require(addr != 0x0);
         for (uint i=0; i<supers.length; i++) {
             if (addr == supers[i]){
                 break;
