@@ -1,10 +1,10 @@
 pragma solidity ^0.4.11;
-import "./EasyCns.sol";
+import "./lib/EasyCns.sol";
 import "./OrgsData.sol";
 import "./UsersData.sol";
 import "./FilesData.sol";
-import "./Const.sol";
-import "./SafeMath.sol";
+import "./lib/Const.sol";
+import "./lib/SafeMath.sol";
 
 contract Controller {
     EasyCns easyCns;
@@ -17,12 +17,12 @@ contract Controller {
     uint8 constant MAX_LIMIT = 10;
 
     function Controller(address easyCnsAddress) public {
-        require(easyCnsAddress != 0x0);
+        require(Address.isContract(easyCnsAddress));
         easyCns = EasyCns(easyCnsAddress);
     }
     function checkUsersDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getUsersDataName());
-        if(addr == 0x0){
+        if(!Address.isContract(addr)){
             return false;
         }
         if(addr != usersDataContractAddress){
@@ -33,7 +33,7 @@ contract Controller {
     }
     function checkOrgsDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getUsersDataName());
-        if(addr == 0x0){
+        if(!Address.isContract(addr)){
             return false;
         }
         if(addr != orgsDataContractAddress){
@@ -44,7 +44,7 @@ contract Controller {
     }
     function checkFilesDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getFilesDataName());
-        if(addr == 0x0){
+        if(!Address.isContract(addr)){
             return false;
         }
         if(addr != filesDataContractAddress){

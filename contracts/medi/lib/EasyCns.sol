@@ -1,5 +1,6 @@
 pragma solidity ^0.4.11;
 import "./ValidateUtil.sol";
+import "./Address.sol";
 
 //abi info base contract
 contract EasyCns {
@@ -19,6 +20,7 @@ contract EasyCns {
     //set member version
     function set(string name, address addr) public onlyOwner {
         require(ValidateUtil.stringNotEmpty(name));
+        require(Address.isContract(addr));
         nameToAddressMap[name] = addr;
         onSet(name, addr);
     }

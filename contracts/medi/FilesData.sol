@@ -1,9 +1,9 @@
 pragma solidity ^0.4.11;
-import "./EasyCns.sol";
-import "./Super.sol";
+import "./lib/EasyCns.sol";
+import "./lib/Super.sol";
 import "./UsersData.sol";
 import "./OrgsData.sol";
-import "./Const.sol";
+import "./lib/Const.sol";
 
 contract FilesData is Super {
     EasyCns easyCns;
@@ -50,7 +50,7 @@ contract FilesData is Super {
     // 保存列表 方便以后导出 只增不减 注意检查唯一性
     bytes16[] uuidList;
     function FilesData(address easyCnsAddress) public {
-        require(easyCnsAddress != 0x0);
+        require(Address.isContract(easyCnsAddress));
         easyCns = EasyCns(easyCnsAddress);
     }
     modifier onlyActive(bytes16 uuid) {
@@ -82,7 +82,7 @@ contract FilesData is Super {
 
     function checkUsersDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getUsersDataName());
-        if(addr == 0x0){
+        if(!Address.isContract(addr)){
             return false;
         }
         if(addr != usersDataContractAddress){
@@ -93,7 +93,7 @@ contract FilesData is Super {
     }
     function checkOrgsDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getOrgsDataName());
-        if(addr == 0x0){
+        if(!Address.isContract(addr)){
             return false;
         }
         if(addr != orgsDataContractAddress){

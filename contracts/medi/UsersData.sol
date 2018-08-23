@@ -1,9 +1,9 @@
 pragma solidity ^0.4.11;
-import "./EasyCns.sol";
-import "./ValidateUtil.sol";
-import "./Super.sol";
+import "./lib/EasyCns.sol";
+import "./lib/ValidateUtil.sol";
+import "./lib/Super.sol";
 import "./OrgsData.sol";
-import "./Const.sol";
+import "./lib/Const.sol";
 
 contract UsersData is Super {
     EasyCns easyCns;
@@ -31,7 +31,7 @@ contract UsersData is Super {
     // 保存列表 方便以后导出 只增不减 注意检查唯一性
     bytes16[] uuidList;
     function UsersData(address easyCnsAddress) public {
-        require(easyCnsAddress != 0x0);
+        require(Address.isContract(easyCnsAddress));
         easyCns = EasyCns(easyCnsAddress);
     }
 
@@ -63,7 +63,7 @@ contract UsersData is Super {
     }
     function checkOrgsDataOk() private returns (bool) {
         address addr = easyCns.get(Const.getOrgsDataName());
-        if(addr == 0x0){
+        if(!Address.isContract(addr)){
             return false;
         }
         if(addr != orgsDataContractAddress){
@@ -114,7 +114,7 @@ contract UsersData is Super {
         onSetUserAddressAndPublicKey(uuid, userAddress, publicKey);
     }
     function setOrgUuid(bytes16 uuid, bytes16 orgUuid)
-    public onlySuperOrOwner onlyActive(uuid){
+    public onlySuperOrOwner onlyActive(uuid) {
         require(uuid != 0x0);
         if(orgUuid != 0x0){
             require(checkOrgsDataOk());
