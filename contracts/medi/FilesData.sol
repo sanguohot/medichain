@@ -1,5 +1,5 @@
 pragma solidity ^0.4.11;
-import "./lib/EasyCns.sol";
+import "./EasyCns.sol";
 import "./lib/Super.sol";
 import "./UsersData.sol";
 import "./OrgsData.sol";

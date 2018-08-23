@@ -1,6 +1,6 @@
 pragma solidity ^0.4.11;
-import "./ValidateUtil.sol";
-import "./Address.sol";
+import "./lib/ValidateUtil.sol";
+import "./lib/Address.sol";
 
 //abi info base contract
 contract EasyCns {
