@@ -1,7 +1,7 @@
 pragma solidity ^0.4.11;
 import "./Address.sol";
 
-contract Validate is Address {
+contract Validate {
     modifier uuidNotZero(bytes16 uuid) {
         require(uuid != 0x0);
         _;
@@ -24,7 +24,7 @@ contract Validate is Address {
         _;
     }
     function addressMatchPublicKey(address addr, bytes32[2] pub) public constant returns (bool) {
-        return (getAddressFromPublicKeyV2(pub) == addr);
+        return (Address.getAddressFromPublicKeyV2(pub) == addr);
     }
     function nameHashMatchName(bytes32 hash, bytes32[4] name) public constant returns (bool) {
         return (keccak256(name) == hash);
