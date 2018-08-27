@@ -27,6 +27,12 @@
 			"key": "./key/sdk.key",
 			"cert": "./key/sdk.crt",
 			"ca": "./key/ca.crt"
-		}
+		},
+		"owner": {
+			"private_key": "7aaf3e2786ff4b38f4aceb6f86ff4a3670206376087d4bd0f041f91e61412e66",
+			"public_key": "8ec34f461212f6bbfd759f400b5a80679ecd56f496148ad2c4669d9e1127965be94cbd7230c091e5bfa310596f354d1339a122e7335bdf799f504b3c1fcb07a5",
+			"address": "0x1d306aDe962d9f20590be45e68DB6246da73811D"
+		},
+		"keystore": "./key"
     }
 }

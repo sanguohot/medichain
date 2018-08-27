@@ -6,12 +6,13 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/common"
+	"log"
 )
 
 func main() {
-	client, err := ethclient.Dial("http://10.6.250.54:8546")
+	client, err := ethclient.Dial("http://10.6.250.56:8545")
 	if err != nil {
-		fmt.Println("dail http://10.6.250.54:8546 ===> %s", err)
+		fmt.Println("dail http://10.6.250.56:8845 ===> %s", err)
 		return
 	}
 	header, err := client.HeaderByNumber(context.Background(), nil)
@@ -39,4 +40,10 @@ func main() {
 	}
 
 	fmt.Println("client.TransactionCount ===>", count) // 144
+
+	bj, err := block.Header().MarshalJSON();
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(bj))
 }

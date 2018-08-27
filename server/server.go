@@ -2,9 +2,13 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"medichain/middle"
+	"medichain/server/middle"
 	"time"
 	"net/http"
+	"medichain/util"
+	"medichain/service"
+	"fmt"
+	"github.com/google/uuid"
 )
 
 func InitServer() {
@@ -23,14 +27,17 @@ func InitServer() {
 			name := c.Param("name")
 			c.String(http.StatusOK, "Hello %s", name)
 		})
-		v1.POST("/user/:name/:action", func(c *gin.Context) {
-			name := c.Param("name")
-			action := c.Param("action")
-			c.String(http.StatusOK, "Hello %s, you are %sing", name, action)
+		v1.POST("/user", func(c *gin.Context) {
+			idCartNo := c.PostForm("idCartNo")
+			err, user, _ := service.AddUser(uuid.UUID{}, idCartNo)
+			if err != nil {
+				c.String(http.StatusOK, err.Error())
+			}
+			c.JSON(http.StatusOK, user)
 		})
 	}
 	s := &http.Server{
-		Addr:           "0.0.0.0:3443:8080",
+		Addr:           fmt.Sprintf("%s:%s", util.Config.GetString("server.host.address"), util.Config.GetInt("server.host.port")),
 		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
