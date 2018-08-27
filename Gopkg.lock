@@ -164,6 +164,22 @@
   version = "v0.0.3"
 
 [[projects]]
+  digest = "1:3cafc6a5a1b8269605d9df4c6956d43d8011fc57f266ca6b9d04da6c09dee548"
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "25ecb14adfc7543176f7d85291ec7dba82c6f7e4"
+  version = "v1.9.0"
+
+[[projects]]
+  digest = "1:78bbb1ba5b7c3f2ed0ea1eab57bdd3859aec7e177811563edc41198a760b06af"
+  name = "github.com/mitchellh/go-homedir"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ae18d6b8b3205b561c79e8e5f69bff09736185f4"
+  version = "v1.0.0"
+
+[[projects]]
   branch = "master"
   digest = "1:5ab79470a1d0fb19b041a624415612f8236b3c06070161a910562f2b2d064355"
   name = "github.com/mitchellh/mapstructure"
@@ -186,6 +202,19 @@
   pruneopts = "UT"
   revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
   version = "1.0.1"
+
+[[projects]]
+  digest = "1:65a50fc16e16d2a6eddd8bac1e6fc7ba95650250fc4be1548a37b06036e8a244"
+  name = "github.com/mritd/idgen"
+  packages = [
+    "generator",
+    "metadata",
+    "models",
+    "util",
+  ]
+  pruneopts = "UT"
+  revision = "8e208d0286675b8ae9c296a72918d79e2773f7d4"
+  version = "v0.0.3"
 
 [[projects]]
   digest = "1:361de06aa7ae272616cbe71c3994a654cc6316324e30998e650f7765b20c5b33"
@@ -432,6 +461,7 @@
     "github.com/ethereum/go-ethereum/rpc",
     "github.com/gin-gonic/gin",
     "github.com/google/uuid",
+    "github.com/mritd/idgen/generator",
     "github.com/shopspring/decimal",
     "github.com/spacemonkeygo/openssl",
     "github.com/spf13/viper",

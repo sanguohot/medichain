@@ -1,4 +1,4 @@
-package file
+package data
 
 import (
 	"io/ioutil"
@@ -15,7 +15,7 @@ import (
 var (
 	// 10.0.253.8:9998
 	// 172.16.194.2:9998
-	serverAddr string = "172.16.194.2:9998"
+	serverAddr string = fmt.Sprintf("%s:%s", util.Config.GetString("big_data.host.address"), util.Config.GetInt("big_data.host.port"))
 	uploadPath string = "/ylyx/upload_single"
 	downloadPath string = "/ylyx/downloadByMd5"
 	createFolderPath string = "/ylyx/createFolder"

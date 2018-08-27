@@ -1,7 +1,7 @@
 package main
 
 import (
-	"medichain/file"
+	"medichain/data"
 	"fmt"
 	"medichain/util"
 	"io/ioutil"
@@ -10,13 +10,13 @@ import (
 
 func main() {
 	var err error
-	bigDataItemList, err := file.GetFilesInFolder(file.FolderCode)
+	bigDataItemList, err := data.GetFilesInFolder(data.FolderCode)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println("bigDataItemList size ===>", len(bigDataItemList))
-	_, err = file.CreateFolderInBigDataCenter(file.FolderName)
+	_, err = data.CreateFolderInBigDataCenter(data.FolderName)
 	if err != nil {
 		fmt.Println(err)
 		//return
@@ -27,12 +27,12 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	err = file.UploadToBigDataCenter(fileBytesUp)
+	err = data.UploadToBigDataCenter(fileBytesUp)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fileBytesDown, err := file.DownloadFromBigDataCenter(util.Md5(fileBytesUp))
+	fileBytesDown, err := data.DownloadFromBigDataCenter(util.Md5(fileBytesUp))
 	if err != nil {
 		fmt.Println(err)
 		return

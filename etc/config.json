@@ -1,0 +1,32 @@
+{
+	"server": {
+		"host": {
+			"address": "0.0.0.0",
+			"port": 8080
+		},
+		"pki": {
+			"key": "./key/sdk.key",
+			"cert": "./key/sdk.crt",
+			"ca": "./key/ca.crt"
+		}
+    },
+	"big_data": {
+		"host": {
+			"address": "172.16.194.2",
+			"port": 9998
+		}
+	},
+	"bcos": {
+		"host": {
+			"address": "10.6.250.55",
+			"rpc_port": 8546,
+			"p2p_port": 30303,
+			"channel_port": 30304
+		},
+		"pki": {
+			"key": "./key/sdk.key",
+			"cert": "./key/sdk.crt",
+			"ca": "./key/ca.crt"
+		}
+    }
+}

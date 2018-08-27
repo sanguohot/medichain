@@ -36,3 +36,7 @@
   branch = "fisco-bcos-v1.8.13"
   name = "github.com/ethereum/go-ethereum"
   source = "github.com/sanguohot/go-ethereum"
+
+[[constraint]]
+  name = "github.com/mritd/idgen"
+  version = "0.0.3"
