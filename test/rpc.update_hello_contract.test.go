@@ -52,7 +52,7 @@ func main() {
 		return
 	}
 	fmt.Println("\nfirst speak ===>", string(result[:])) //
-	tx, err := instance.SaySomethingElse(auth, "ddddddddddd") // 调用Hello.sol 的 SaySomethingElse方法
+	tx, err := instance.SaySomethingElse(auth, "eeeee") // 调用Hello.sol 的 SaySomethingElse方法
 	if err != nil {
 		log.Fatal("instance.SaySomethingElse", err)
 		return

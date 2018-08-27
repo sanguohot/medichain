@@ -3,21 +3,26 @@ package util
 import (
 	"github.com/spf13/viper"
 	"log"
-	"fmt"
 )
+
 var (
-	filePath  = "./etc/config.json"
+	defaultFilePath  = "./etc/config.json"
 	Config *viper.Viper
 )
-func InitConfig() {
+func InitConfig(filePath string) {
 	Config = viper.New()
-	Config.SetConfigFile(filePath)
+	if filePath == "" {
+		Config.SetConfigFile(defaultFilePath)
+	}else {
+		Config.SetConfigFile(filePath)
+	}
+
 	err := Config.ReadInConfig()
 	if err!=nil {
 		log.Fatal(err)
 	}
-	fmt.Println(Config.GetString("bcos.host.address"))
-	fmt.Println(Config.GetInt32("server.host.port"))
-	fmt.Println(Config.GetString("bcos.pki.ca"))
-	fmt.Println(Config.GetString("bcos.pki.cert"))
+	//fmt.Println(Config.GetString("bcos.host.address"))
+	//fmt.Println(Config.GetInt32("server.host.port"))
+	//fmt.Println(Config.GetString("bcos.pki.ca"))
+	//fmt.Println(Config.GetString("bcos.pki.cert"))
 }
