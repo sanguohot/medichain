@@ -34,6 +34,10 @@
 			"address": "0x1d306aDe962d9f20590be45e68DB6246da73811D",
 			"password": "123456"
 		},
-		"keystore": "./key"
+		"keystore": "./keystore",
+		"easy_cns": {
+			"address": "0x5c249bd450Ce5f7f61bf9e98877394792DFd589E",
+			"tx": "0xf69113b2f59d3a5cda68088d6dfeb9520f0414656f9d719659e34553c7047cc4"
+		}
     }
 }
