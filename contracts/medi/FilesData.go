@@ -4,6 +4,7 @@
 package medi
 
 import (
+	"math/big"
 	"strings"
 
 	ethereum "github.com/ethereum/go-ethereum"
@@ -15,39 +16,18 @@ import (
 )
 
 // FilesDataABI is the input ABI used to generate the binding from.
-const FilesDataABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"name\",\"type\":\"string\"}],\"name\":\"get\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"name\",\"type\":\"string\"},{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onSet\",\"type\":\"event\"}]=======FilesData.sol:FilesData=======[{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getUploaderUuid\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"setActive\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"fileType\",\"type\":\"bytes32\"}],\"name\":\"setFileType\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"ownerUuid\",\"type\":\"bytes16\"}],\"name\":\"setOwnerUuid\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getFileSignerUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"setTime\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getOwnerUuid\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getFileSignerSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"keccak256Hash\",\"type\":\"bytes32\"}],\"name\":\"getUuidByKeccak256Hash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getUuidListSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"uploaderUuid\",\"type\":\"bytes16\"}],\"name\":\"setUploaderUuid\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"ownerUuid\",\"type\":\"bytes16\"},{\"name\":\"uploaderUuid\",\"type\":\"bytes16\"},{\"name\":\"fileType\",\"type\":\"bytes32\"},{\"name\":\"fileDesc\",\"type\":\"bytes32[4]\"},{\"name\":\"keccak256Hash\",\"type\":\"bytes32\"},{\"name\":\"sha256Hash\",\"type\":\"bytes32\"},{\"name\":\"r\",\"type\":\"bytes32\"},{\"name\":\"s\",\"type\":\"bytes32\"},{\"name\":\"v\",\"type\":\"uint8\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"addFile\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"fileDesc\",\"type\":\"bytes32[4]\"}],\"name\":\"setFileDesc\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getFileSignDataByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"},{\"name\":\"\",\"type\":\"bytes32\"},{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"delFile\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"userUuid\",\"type\":\"bytes16\"},{\"name\":\"r\",\"type\":\"bytes32\"},{\"name\":\"s\",\"type\":\"bytes32\"},{\"name\":\"v\",\"type\":\"uint8\"}],\"name\":\"addSign\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getSha256Hash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getKeccak256Hash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getFileType\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getFileDesc\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[4]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"sha256Hash\",\"type\":\"bytes32\"}],\"name\":\"getUuidBySha256Hash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getTime\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"easyCnsAddress\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"ownerUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"uploaderUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"fileType\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"fileDesc\",\"type\":\"bytes32[4]\"},{\"indexed\":false,\"name\":\"keccak256Hash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"sha256Hash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"r\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"s\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"v\",\"type\":\"uint8\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onAddFile\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"onDelFile\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"onSetActive\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"ownerUuid\",\"type\":\"bytes16\"}],\"name\":\"onSetOwnerUuid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"uploaderUuid\",\"type\":\"bytes16\"}],\"name\":\"onSetUploaderUuid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"fileType\",\"type\":\"bytes32\"}],\"name\":\"onSetFileType\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"fileDesc\",\"type\":\"bytes32[4]\"}],\"name\":\"onSetFileDesc\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"userUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"r\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"s\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"v\",\"type\":\"uint8\"}],\"name\":\"onAddSign\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onSetTime\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onAddSuper\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onDelSuper\",\"type\":\"event\"}]=======OrgsData.sol:OrgsData=======[{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getNameHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"setActive\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getPublicKey\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[2]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"setOrgAddressAndPublicKey\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"name\":\"nameHash\",\"type\":\"bytes32\"},{\"name\":\"name\",\"type\":\"bytes32[4]\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"addOrg\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"setTime\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getUuidListSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"delOrg\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"nameHash\",\"type\":\"bytes32\"},{\"name\":\"name\",\"type\":\"bytes32[4]\"}],\"name\":\"setNameHashAndName\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"isUuidExist\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getOrgAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"nameHash\",\"type\":\"bytes32\"}],\"name\":\"getUuidByNameHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getName\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[4]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"orgAddress\",\"type\":\"address\"}],\"name\":\"getUuidByOrgAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getTime\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"easyCnsAddress\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"indexed\":false,\"name\":\"nameHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"name\",\"type\":\"bytes32[4]\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onAddOrg\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"onDelOrg\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"onSetActive\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"onSetOrgAddressAndPublicKey\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"nameHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"name\",\"type\":\"bytes32[4]\"}],\"name\":\"onSetNameHashAndName\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onSetTime\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onAddSuper\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onDelSuper\",\"type\":\"event\"}]=======UsersData.sol:UsersData=======[{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"setActive\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"getUuidByIdCartNoHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"setIdCartNoHash\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getPublicKey\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[2]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getUserAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"setTime\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getOrgUuid\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"userAddress\",\"type\":\"address\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"setUserAddressAndPublicKey\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getUuidListSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"userAddress\",\"type\":\"address\"},{\"name\":\"orgUuid\",\"type\":\"bytes16\"},{\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"name\":\"idCartNoHash\",\"type\":\"bytes32\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"addUser\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"isUuidExist\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"getUuidByUserAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"orgUuid\",\"type\":\"bytes16\"}],\"name\":\"setOrgUuid\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getIdCartNoHash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"delUser\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getTime\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"easyCnsAddress\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"userAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"orgUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"},{\"indexed\":false,\"name\":\"idCartNoHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onAddUser\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"onDelUser\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"onSetActive\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"userAddress\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"publicKey\",\"type\":\"bytes32[2]\"}],\"name\":\"onSetUserAddressAndPublicKey\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"orgUuid\",\"type\":\"bytes16\"}],\"name\":\"onSetOrgUuid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"idCartNoHash\",\"type\":\"bytes32\"}],\"name\":\"onSetIdCartNoHash\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onSetTime\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onAddSuper\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onDelSuper\",\"type\":\"event\"}]=======lib/Address.sol:Address=======[]=======lib/Const.sol:Const=======[]=======lib/Super.sol:Super=======[{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onAddSuper\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onDelSuper\",\"type\":\"event\"}]=======lib/ValidateUtil.sol:ValidateUtil=======[]"
+const FilesDataABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getUploaderUuid\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"setActive\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"fileType\",\"type\":\"bytes32\"}],\"name\":\"setFileType\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"ownerUuid\",\"type\":\"bytes16\"}],\"name\":\"setOwnerUuid\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getSuperSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getFileSignerUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"setTime\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getOwnerUuid\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getFileSignerSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"keccak256Hash\",\"type\":\"bytes32\"}],\"name\":\"getUuidByKeccak256Hash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"delSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getUuidListSize\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"uploaderUuid\",\"type\":\"bytes16\"}],\"name\":\"setUploaderUuid\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getUuidByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"ownerUuid\",\"type\":\"bytes16\"},{\"name\":\"uploaderUuid\",\"type\":\"bytes16\"},{\"name\":\"fileType\",\"type\":\"bytes32\"},{\"name\":\"fileDesc\",\"type\":\"bytes32[4]\"},{\"name\":\"keccak256Hash\",\"type\":\"bytes32\"},{\"name\":\"sha256Hash\",\"type\":\"bytes32\"},{\"name\":\"r\",\"type\":\"bytes32\"},{\"name\":\"s\",\"type\":\"bytes32\"},{\"name\":\"v\",\"type\":\"uint8\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"addFile\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"fileDesc\",\"type\":\"bytes32[4]\"}],\"name\":\"setFileDesc\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getFileSignDataByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"},{\"name\":\"\",\"type\":\"bytes32\"},{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getSuperByIndex\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"delFile\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"},{\"name\":\"userUuid\",\"type\":\"bytes16\"},{\"name\":\"r\",\"type\":\"bytes32\"},{\"name\":\"s\",\"type\":\"bytes32\"},{\"name\":\"v\",\"type\":\"uint8\"}],\"name\":\"addSign\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getSha256Hash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getKeccak256Hash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getFileType\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"addSuper\",\"outputs\":[],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getFileDesc\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[4]\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"sha256Hash\",\"type\":\"bytes32\"}],\"name\":\"getUuidBySha256Hash\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes16\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"getTime\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"easyCnsAddress\",\"type\":\"address\"}],\"payable\":false,\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"ownerUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"uploaderUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"fileType\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"fileDesc\",\"type\":\"bytes32[4]\"},{\"indexed\":false,\"name\":\"keccak256Hash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"sha256Hash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"r\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"s\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"v\",\"type\":\"uint8\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onAddFile\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"}],\"name\":\"onDelFile\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"active\",\"type\":\"bool\"}],\"name\":\"onSetActive\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"ownerUuid\",\"type\":\"bytes16\"}],\"name\":\"onSetOwnerUuid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"uploaderUuid\",\"type\":\"bytes16\"}],\"name\":\"onSetUploaderUuid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"fileType\",\"type\":\"bytes32\"}],\"name\":\"onSetFileType\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"fileDesc\",\"type\":\"bytes32[4]\"}],\"name\":\"onSetFileDesc\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"userUuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"r\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"s\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"v\",\"type\":\"uint8\"}],\"name\":\"onAddSign\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"uuid\",\"type\":\"bytes16\"},{\"indexed\":false,\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"onSetTime\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onAddSuper\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"onDelSuper\",\"type\":\"event\"}]"
 
 // FilesDataBin is the compiled bytecode used for deploying new contracts.
-const FilesDataBin = `6060604052341561000c57fe5b5b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b5b6104988061005f6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063693ec85e14610046578063a815ff15146100e0575bfe5b341561004e57fe5b61009e600480803590602001908201803590602001908080601f01602080910402602001604051908101604052809392919081815260200183838082843782019150505050505091905050610159565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100e857fe5b610157600480803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509190803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506101ed565b005b60006001826040518082805190602001908083835b60208310610191578051825260208201915060208101905060208303925061016e565b6001836020036101000a038019825116818451168082178552505050505050905001915050908152602001604051809103902060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561024a5760006000fd5b61025382610400565b151561025f5760006000fd5b6102688161041c565b15156102745760006000fd5b806001836040518082805190602001908083835b602083106102ab5780518252602082019150602081019050602083039250610288565b6001836020036101000a038019825116818451168082178552505050505050905001915050908152602001604051809103902060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507ffb61c28e210c57f5ca20724afa35c1dbda662f286bd8d214606c6cfbdc41f439828260405180806020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281038252848181518152602001915080519060200190808383600083146103c0575b8051825260208311156103c05760208201915060208101905060208303925061039c565b505050905090810190601f1680156103ec5780820380516001836020036101000a031916815260200191505b50935050505060405180910390a15b5b5050565b600061040a610458565b82905060008151141591505b50919050565b6000600060008373ffffffffffffffffffffffffffffffffffffffff16141515156104475760006000fd5b823b90506000811191505b50919050565b6020604051908101604052806000815250905600a165627a7a7230582089d2c5bdccdcbdb13e8d7fc5b63dda6098f514aad5036b6f1efb0b5d7a07b1c70029
-
-======= FilesData.sol:FilesData =======
-606060405234156200000d57fe5b60405160208062004d82833981016040528080519060200190919050505b5b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b6200008d81620000e36401000000000262004668176401000000009004565b15156200009a5760006000fd5b80600360006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b5062000120565b6000600060008373ffffffffffffffffffffffffffffffffffffffff16141515156200010f5760006000fd5b823b90506000811191505b50919050565b614c5280620001306000396000f3006060604052361561015d576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806306e4dffd1461015f57806324716b55146101cc57806328360cdd1461020a5780632f682a601461024a578063343496211461029957806338fc1214146102bf5780633f7a52b6146103355780635b379418146103715780635cbccaea146103de5780635d8de8b31461042557806365f337f5146104835780636b303682146104b95780636c75a331146104df5780637c333c0a1461052e5780638180306214610588578063a06f2e4614610675578063a8ecd649146106d4578063ab013c2614610742578063ab594cf6146107a2578063af1e3afc146107d5578063b21124ef1461084a578063c66a814514610899578063c8c459b9146108e8578063e1e8637b14610937578063eedbe9151461096d578063fa04901f146109ea578063fe07283a14610a48575bfe5b341561016757fe5b61019060048080356fffffffffffffffffffffffffffffffff1916906020019091905050610a8f565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b34156101d457fe5b61020860048080356fffffffffffffffffffffffffffffffff19169060200190919080351515906020019091905050610b4c565b005b341561021257fe5b61024860048080356fffffffffffffffffffffffffffffffff191690602001909190803560001916906020019091905050610c7c565b005b341561025257fe5b61029760048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff1916906020019091905050610e45565b005b34156102a157fe5b6102a961116f565b6040518082815260200191505060405180910390f35b34156102c757fe5b6102f960048080356fffffffffffffffffffffffffffffffff191690602001909190803590602001909190505061117d565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561033d57fe5b61036f60048080356fffffffffffffffffffffffffffffffff1916906020019091908035906020019091905050611282565b005b341561037957fe5b6103a260048080356fffffffffffffffffffffffffffffffff1916906020019091905050611405565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b34156103e657fe5b61040f60048080356fffffffffffffffffffffffffffffffff19169060200190919050506114c2565b6040518082815260200191505060405180910390f35b341561042d57fe5b610447600480803560001916906020019091905050611565565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561048b57fe5b6104b7600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050611636565b005b34156104c157fe5b6104c961186f565b6040518082815260200191505060405180910390f35b34156104e757fe5b61052c60048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff191690602001909190505061187d565b005b341561053657fe5b61054c6004808035906020019091905050611ba7565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561059057fe5b61067360048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff19169060200190919080356000191690602001909190806080019060048060200260405190810160405280929190826004602002808284378201915050505050919080356000191690602001909190803560001916906020019091908035600019169060200190919080356000191690602001909190803560ff16906020019091908035906020019091905050611c17565b005b341561067d57fe5b6106d260048080356fffffffffffffffffffffffffffffffff19169060200190919080608001906004806020026040519081016040528092919082600460200280828437820191505050505091905050612be6565b005b34156106dc57fe5b61070e60048080356fffffffffffffffffffffffffffffffff1916906020019091908035906020019091905050612dd0565b6040518084600019166000191681526020018360001916600019168152602001828152602001935050505060405180910390f35b341561074a57fe5b6107606004808035906020019091905050612f83565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156107aa57fe5b6107d360048080356fffffffffffffffffffffffffffffffff1916906020019091905050612fde565b005b34156107dd57fe5b61084860048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff1916906020019091908035600019169060200190919080356000191690602001909190803560ff16906020019091905050613247565b005b341561085257fe5b61087b60048080356fffffffffffffffffffffffffffffffff1916906020019091905050613a31565b60405180826000191660001916815260200191505060405180910390f35b34156108a157fe5b6108ca60048080356fffffffffffffffffffffffffffffffff1916906020019091905050613ad1565b60405180826000191660001916815260200191505060405180910390f35b34156108f057fe5b61091960048080356fffffffffffffffffffffffffffffffff1916906020019091905050613b71565b60405180826000191660001916815260200191505060405180910390f35b341561093f57fe5b61096b600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050613c11565b005b341561097557fe5b61099e60048080356fffffffffffffffffffffffffffffffff1916906020019091905050613db9565b60405180826004602002808383600083146109d8575b8051825260208311156109d8576020820191506020810190506020830392506109b4565b50505090500191505060405180910390f35b34156109f257fe5b610a0c600480803560001916906020019091905050613e9e565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b3415610a5057fe5b610a7960048080356fffffffffffffffffffffffffffffffff1916906020019091905050613f6f565b6040518082815260200191505060405180910390f35b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610ae85760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060010160009054906101000a90047001000000000000000000000000000000000291505b5b50919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610bad5750610bac3361400f565b5b1515610bb95760006000fd5b8060086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160006101000a81548160ff0219169083151502179055507f713e572bb47b301d3993c6d748aa8f43912b3e2864d1fd701e16e586fbb53905828260405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001821515151581526020019250505060405180910390a15b5b5050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610cdd5750610cdc3361400f565b5b1515610ce95760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610d405760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614158015610d7f57506000600102826000191614155b1515610d8b5760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060020181600019169055507f0f5d2a1fd7e620b5060ef0c66774a0475af737bef138fc169dfa8aca450e3899838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200182600019166000191681526020019250505060405180910390a15b5b505b5050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610ea65750610ea53361400f565b5b1515610eb25760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610f095760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614158015610f675750600070010000000000000000000000000000000002826fffffffffffffffffffffffffffffffff191614155b1515610f735760006000fd5b610f7b614089565b1515610f875760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90836000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b151561104357fe5b6102c65a03f1151561105157fe5b5050506040518051905015156110675760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160016101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507f82e7473892dc1da52c17ad55ae9ce073d7e153c1313b43a75527e983c42f9c66838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019250505060405180910390a15b5b505b5050565b600060018054905090505b90565b60008260086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156111d65760006000fd5b600083101580156111ee57506111eb846114c2565b83105b15156111fa5760006000fd5b60086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600d018381548110151561124357fe5b90600052602060002090600291828204019190066010025b9054906101000a90047001000000000000000000000000000000000291505b5b5092915050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806112e357506112e23361400f565b5b15156112ef5760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156113465760006000fd5b600082141515156113575760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600901819055507f50843b091ea0bec4b6ead7f725b4fcb769671b6948c77b9cd98b25ff2440d84c838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018281526020019250505060405180910390a15b5b505b5050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561145e5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160019054906101000a90047001000000000000000000000000000000000291505b5b50919050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561151b5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600d018054905091505b5b50919050565b60006008600060096000856000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156115f55760006000fd5b60096000836000191660001916815260200190815260200160002060009054906101000a90047001000000000000000000000000000000000290505b919050565b60006000600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156116975760006000fd5b60008373ffffffffffffffffffffffffffffffffffffffff16141515156116be5760006000fd5b6116c78361400f565b15156116d35760006000fd5b60009150600090505b60018054905081101561176f576001818154811015156116f857fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415611761576001915061176f565b5b80806001019150506116dc565b81151561177857fe5b60018181548110151561178757fe5b906000526020600020900160005b6101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600260008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81549060ff02191690557f5561c1cda602083d14af2f0773152f273f6f9bf8feb17ce6265f94aec25bde0083604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b505050565b6000600b8054905090505b90565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806118de57506118dd3361400f565b5b15156118ea5760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156119415760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff19161415801561199f5750600070010000000000000000000000000000000002826fffffffffffffffffffffffffffffffff191614155b15156119ab5760006000fd5b6119b3614089565b15156119bf5760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90836000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b1515611a7b57fe5b6102c65a03f11515611a8957fe5b505050604051805190501515611a9f5760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060010160006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507fd8aaf341152319250a5bbe3f879ed37a1710d2b5dfa9676f68e9bfb98e3de630838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019250505060405180910390a15b5b505b5050565b600060008210158015611bc05750611bbd61186f565b82105b1515611bcc5760006000fd5b600b82815481101515611bdb57fe5b90600052602060002090600291828204019190066010025b9054906101000a90047001000000000000000000000000000000000290505b919050565b611c1f6146e9565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480611c805750611c7f3361400f565b5b1515611c8c5760006000fd5b8b60086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151515611ce45760006000fd5b6000700100000000000000000000000000000000028d6fffffffffffffffffffffffffffffffff191614158015611d4257506000700100000000000000000000000000000000028c6fffffffffffffffffffffffffffffffff191614155b8015611d7557506000700100000000000000000000000000000000028b6fffffffffffffffffffffffffffffffff191614155b8015611d89575060006001028a6000191614155b8015611d9d57506000600102886000191614155b8015611db157506000600102876000191614155b8015611dc557506000600102866000191614155b8015611dd957506000600102856000191614155b8015611de6575060008314155b1515611df25760006000fd5b611dfb8d6142b2565b1515611e075760006000fd5b611e1087614303565b1515611e1c5760006000fd5b611e258861436f565b1515611e315760006000fd5b8760001916876000191614151515611e495760006000fd5b611e51614089565b1515611e5d5760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded908d6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b1515611f1957fe5b6102c65a03f11515611f2757fe5b505050604051805190501515611f3d5760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded908c6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b1515611ff957fe5b6102c65a03f1151561200757fe5b50505060405180519050151561201d5760006000fd5b600070010000000000000000000000000000000002600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663410f66e48d6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156120ee57fe5b6102c65a03f115156120fc57fe5b505050604051805190506fffffffffffffffffffffffffffffffff19161415156122e8576121286143db565b15156121345760006000fd5b600760009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663410f66e48e6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b151561222e57fe5b6102c65a03f1151561223c57fe5b505050604051805190506000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156122c357fe5b6102c65a03f115156122d157fe5b5050506040518051905015156122e75760006000fd5b5b600188858888604051806000526020016040526000604051602001526040518085600019166000191681526020018460ff1660ff16815260200183600019166000191681526020018260001916600019168152602001945050505050602060405160208103908084039060008661646e5a03f1151561236357fe5b50506020604051035173ffffffffffffffffffffffffffffffffffffffff16600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16633d1ef2b78d6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b151561243e57fe5b6102c65a03f1151561244c57fe5b5050506040518051905073ffffffffffffffffffffffffffffffffffffffff161415156124795760006000fd5b60018260000190151590811515815250508b82602001906fffffffffffffffffffffffffffffffff191690816fffffffffffffffffffffffffffffffff1916815250508a82604001906fffffffffffffffffffffffffffffffff191690816fffffffffffffffffffffffffffffffff1916815250508982606001906000191690816000191681525050888260800181905250878260a001906000191690816000191681525050868260c001906000191690816000191681525050828260e001818152505081600860008f6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060008201518160000160006101000a81548160ff02191690831515021790555060208201518160000160016101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555060408201518160010160006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055506060820151816002019060001916905560808201518160030190600461264092919061479d565b5060a0820151816007019060001916905560c0820151816008019060001916905560e0820151816009015561010082015181600a0190805190602001906126889291906147e3565b5061012082015181600b0190805190602001906126a69291906147e3565b5061014082015181600c0190805190602001906126c4929190614836565b5061016082015181600d0190805190602001906126e29291906148dd565b50905050600860008e6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600a01805480600101828161273491906149b3565b916000526020600020900160005b8890919091509060001916905550600860008e6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600b01805480600101828161279e91906149b3565b916000526020600020900160005b8790919091509060001916905550600860008e6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600c01805480600101828161280891906149df565b91600052602060002090602091828204019190065b86909190916101000a81548160ff021916908360ff16021790555050600860008e6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600d0180548060010182816128879190614a19565b91600052602060002090600291828204019190066010025b8d909190916101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550506001600860008f6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600e0160008d6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060006101000a81548160ff0219169083151502179055508c600960008a6000191660001916815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055508c600a6000896000191660001916815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550600b8054806001018281612a239190614a19565b91600052602060002090600291828204019190066010025b8f909190916101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550507fe5db0782a88ef1dd5e05dbcd66036151fdd928c04a041691230dff05e269440a8d8d8d8d8d8d8d8d8d8d8d604051808c6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018b6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018a6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001896000191660001916815260200188600460200280838360008314612b6f575b805182526020831115612b6f57602082019150602081019050602083039250612b4b565b50505090500187600019166000191681526020018660001916600019168152602001856000191660001916815260200184600019166000191681526020018360ff1660ff1681526020018281526020019b50505050505050505050505060405180910390a15b5b505b505050505050505050505050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480612c475750612c463361400f565b5b1515612c535760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515612caa5760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614151515612ce15760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600301906004612d2c929190614a53565b507f62c9cfebd42861a16451b2ce63bf3d3e5bcdb62acbc46482d52d0c48d34eb9b3838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200182600460200280838360008314612db6575b805182526020831115612db657602082019150602081019050602083039250612d92565b5050509050019250505060405180910390a15b5b505b5050565b6000600060008460086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515612e2d5760006000fd5b60008510158015612e455750612e42866114c2565b85105b1515612e515760006000fd5b60086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600a0185815481101515612e9a57fe5b906000526020600020900160005b505460086000886fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600b0186815481101515612ef357fe5b906000526020600020900160005b505460086000896fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600c0187815481101515612f4c57fe5b90600052602060002090602091828204019190065b9054906101000a900460ff168060ff1690509350935093505b5b509250925092565b6000612f8e82614604565b1515612f9a5760006000fd5b600182815481101515612fa957fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16148061303f575061303e3361400f565b5b151561304b5760006000fd5b8060086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156130a25760006000fd5b6009600060086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600701546000191660001916815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff0219169055600a600060086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600801546000191660001916815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff0219169055600060086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160006101000a81548160ff0219169083151502179055507f5084265f9b0b758e57a9c7d957106776471ed835d7267fb54d933927a3481bfd8260405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390a15b5b505b50565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806132a857506132a73361400f565b5b15156132b45760006000fd5b8460086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561330b5760006000fd5b600070010000000000000000000000000000000002866fffffffffffffffffffffffffffffffff1916141580156133695750600070010000000000000000000000000000000002856fffffffffffffffffffffffffffffffff191614155b801561337d57506000600102846000191614155b801561339157506000600102836000191614155b151561339d5760006000fd5b60086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600e016000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060009054906101000a900460ff1615151561342b5760006000fd5b613433614089565b151561343f5760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90866000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156134fb57fe5b6102c65a03f1151561350957fe5b50505060405180519050151561351f5760006000fd5b600160086000886fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060070154838686604051806000526020016040526000604051602001526040518085600019166000191681526020018460ff1660ff16815260200183600019166000191681526020018260001916600019168152602001945050505050602060405160208103908084039060008661646e5a03f115156135d657fe5b50506020604051035173ffffffffffffffffffffffffffffffffffffffff16600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16633d1ef2b7876000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156136b157fe5b6102c65a03f115156136bf57fe5b5050506040518051905073ffffffffffffffffffffffffffffffffffffffff161415156136ec5760006000fd5b60086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600a01805480600101828161373a91906149b3565b916000526020600020900160005b869091909150906000191690555060086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600b0180548060010182816137a491906149b3565b916000526020600020900160005b859091909150906000191690555060086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600c01805480600101828161380e91906149df565b91600052602060002090602091828204019190065b84909190916101000a81548160ff021916908360ff1602179055505060086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600d01805480600101828161388d9190614a19565b91600052602060002090600291828204019190066010025b87909190916101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555050600160086000886fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600e016000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060006101000a81548160ff0219169083151502179055507fb6d8f3f2b7e44359d0f3577f248b9a9b8e6c275f3c9b6752d9c6905a0d18a2ac868686868660405180866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001846000191660001916815260200183600019166000191681526020018260ff1660ff1681526020019550505050505060405180910390a15b5b505b5050505050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613a8a5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206008015491505b5b50919050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613b2a5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206007015491505b5b50919050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613bca5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206002015491505b5b50919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141515613c6e5760006000fd5b60008173ffffffffffffffffffffffffffffffffffffffff1614151515613c955760006000fd5b60018054806001018281613ca99190614a99565b916000526020600020900160005b83909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506001600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055507f920999c03a7fd19172e4c657c22aa62a1bfb5e027a8cf6a2a0ee9daf4c5a347481604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b50565b613dc1614ac5565b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613e185760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600301600480602002604051908101604052809291908260048015613e8f576020028201915b81546000191681526020019060010190808311613e77575b505050505091505b5b50919050565b600060086000600a6000856000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613f2e5760006000fd5b600a6000836000191660001916815260200190815260200160002060009054906101000a90047001000000000000000000000000000000000290505b919050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613fc85760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206009015491505b5b50919050565b600060008273ffffffffffffffffffffffffffffffffffffffff16141580156140815750600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff165b90505b919050565b60006000600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663693ec85e6140d3614623565b6000604051602001526040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018080602001828103825283818151815260200191508051906020019080838360008314614156575b80518252602083111561415657602082019150602081019050602083039250614132565b505050905090810190601f1680156141825780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b151561419d57fe5b6102c65a03f115156141ab57fe5b5050506040518051905090506141c081614668565b15156141cf57600091506142ae565b600460009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415156142a95780600660006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555080600460006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b600191505b5090565b6000600060010260086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060070154600019161490505b919050565b6000600070010000000000000000000000000000000002600a6000846000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19161490505b919050565b600060007001000000000000000000000000000000000260096000846000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19161490505b919050565b60006000600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663693ec85e6144256146a4565b6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180806020018281038252838181518152602001915080519060200190808383600083146144a8575b8051825260208311156144a857602082019150602081019050602083039250614484565b505050905090810190601f1680156144d45780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b15156144ef57fe5b6102c65a03f115156144fd57fe5b50505060405180519050905061451281614668565b15156145215760009150614600565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415156145fb5780600760006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555080600560006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b600191505b5090565b60006000821015801561461b575060018054905082105b90505b919050565b61462b614af1565b604060405190810160405280600981526020017f557365727344617461000000000000000000000000000000000000000000000081525090505b90565b6000600060008373ffffffffffffffffffffffffffffffffffffffff16141515156146935760006000fd5b823b90506000811191505b50919050565b6146ac614af1565b604060405190810160405280600881526020017f4f7267734461746100000000000000000000000000000000000000000000000081525090505b90565b6101e06040519081016040528060001515815260200160006fffffffffffffffffffffffffffffffff1916815260200160006fffffffffffffffffffffffffffffffff191681526020016000600019168152602001614746614b05565b81526020016000600019168152602001600060001916815260200160008152602001614770614b31565b815260200161477d614b31565b815260200161478a614b45565b8152602001614797614b59565b81525090565b82600481019282156147d2579160200282015b828111156147d15782518290600019169055916020019190600101906147b0565b5b5090506147df9190614b6d565b5090565b828054828255906000526020600020908101928215614825579160200282015b82811115614824578251829060001916905591602001919060010190614803565b5b5090506148329190614b6d565b5090565b82805482825590600052602060002090601f016020900481019282156148cc5791602002820160005b8382111561489d57835183826101000a81548160ff021916908360ff160217905550926020019260010160208160000104928301926001030261485f565b80156148ca5782816101000a81549060ff021916905560010160208160000104928301926001030261489d565b505b5090506148d99190614b92565b5090565b828054828255906000526020600020906001016002900481019282156149a25791602002820160005b8382111561496457835183826101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055509260200192601001602081600f01049283019260010302614906565b80156149a05782816101000a8154906fffffffffffffffffffffffffffffffff0219169055601001602081600f01049283019260010302614964565b505b5090506149af9190614bc2565b5090565b8154818355818115116149da578183600052602060002091820191016149d99190614b6d565b5b505050565b815481835581811511614a1457601f016020900481601f01602090048360005260206000209182019101614a139190614c01565b5b505050565b815481835581811511614a4e576001016002900481600101600290048360005260206000209182019101614a4d9190614c01565b5b505050565b8260048101928215614a88579160200282015b82811115614a87578251829060001916905591602001919060010190614a66565b5b509050614a959190614b6d565b5090565b815481835581811511614ac057818360005260206000209182019101614abf9190614c01565b5b505050565b6080604051908101604052806004905b600060001916815260200190600190039081614ad55790505090565b602060405190810160405280600081525090565b6080604051908101604052806004905b600060001916815260200190600190039081614b155790505090565b602060405190810160405280600081525090565b602060405190810160405280600081525090565b602060405190810160405280600081525090565b614b8f91905b80821115614b8b576000816000905550600101614b73565b5090565b90565b614bbf91905b80821115614bbb57600081816101000a81549060ff021916905550600101614b98565b5090565b90565b614bfe91905b80821115614bfa57600081816101000a8154906fffffffffffffffffffffffffffffffff021916905550600101614bc8565b5090565b90565b614c2391905b80821115614c1f576000816000905550600101614c07565b5090565b905600a165627a7a7230582058d39959060b36c6350add037698705af0de44121fad41c4998b533ed9f02ace0029
-
-======= OrgsData.sol:OrgsData =======
-606060405234156200000d57fe5b60405160208062002b24833981016040528080519060200190919050505b5b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b6200008d81620000e3640100000000026200298c176401000000009004565b15156200009a5760006000fd5b80600360006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b5062000120565b6000600060008373ffffffffffffffffffffffffffffffffffffffff16141515156200010f5760006000fd5b823b90506000811191505b50919050565b6129f480620001306000396000f30060606040523615610110576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806312d9fdaf1461011257806324716b55146101615780632e26787e1461019f578063343496211461021c5780633931cc9f14610242578063397d02bb146102c05780633f7a52b61461038057806365f337f5146103bc5780636b303682146103f25780637c333c0a146104185780637f67b908146104725780638a4a2c61146104a55780638eeded90146105115780639d8e91081461055c578063a177cbb4146105cf578063a5d95ad91461062d578063ab013c26146106aa578063c16433281461070a578063e1e8637b1461077a578063fe07283a146107b0575bfe5b341561011a57fe5b61014360048080356fffffffffffffffffffffffffffffffff19169060200190919050506107f7565b60405180826000191660001916815260200191505060405180910390f35b341561016957fe5b61019d60048080356fffffffffffffffffffffffffffffffff19169060200190919080351515906020019091905050610897565b005b34156101a757fe5b6101d060048080356fffffffffffffffffffffffffffffffff19169060200190919050506109c7565b604051808260026020028083836000831461020a575b80518252602083111561020a576020820191506020810190506020830392506101e6565b50505090500191505060405180910390f35b341561022457fe5b61022c610aac565b6040518082815260200191505060405180910390f35b341561024a57fe5b6102be60048080356fffffffffffffffffffffffffffffffff191690602001909190803573ffffffffffffffffffffffffffffffffffffffff169060200190919080604001906002806020026040519081016040528092919082600260200280828437820191505050505091905050610aba565b005b34156102c857fe5b61037e60048080356fffffffffffffffffffffffffffffffff191690602001909190803573ffffffffffffffffffffffffffffffffffffffff169060200190919080604001906002806020026040519081016040528092919082600260200280828437820191505050505091908035600019169060200190919080608001906004806020026040519081016040528092919082600460200280828437820191505050505091908035906020019091905050610e2b565b005b341561038857fe5b6103ba60048080356fffffffffffffffffffffffffffffffff19169060200190919080359060200190919050506113bb565b005b34156103c457fe5b6103f0600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050611571565b005b34156103fa57fe5b6104026117aa565b6040518082815260200191505060405180910390f35b341561042057fe5b61043660048080359060200190919050506117b8565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561047a57fe5b6104a360048080356fffffffffffffffffffffffffffffffff1916906020019091905050611828565b005b34156104ad57fe5b61050f60048080356fffffffffffffffffffffffffffffffff1916906020019091908035600019169060200190919080608001906004806020026040519081016040528092919082600460200280828437820191505050505091905050611ad5565b005b341561051957fe5b61054260048080356fffffffffffffffffffffffffffffffff1916906020019091905050611e55565b604051808215151515815260200191505060405180910390f35b341561056457fe5b61058d60048080356fffffffffffffffffffffffffffffffff1916906020019091905050611eb9565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156105d757fe5b6105f1600480803560001916906020019091905050611f79565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561063557fe5b61065e60048080356fffffffffffffffffffffffffffffffff191690602001909190505061204a565b6040518082600460200280838360008314610698575b80518252602083111561069857602082019150602081019050602083039250610674565b50505090500191505060405180910390f35b34156106b257fe5b6106c8600480803590602001909190505061212f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561071257fe5b61073e600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061218a565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561078257fe5b6107ae600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506122a3565b005b34156107b857fe5b6107e160048080356fffffffffffffffffffffffffffffffff191690602001909190505061244b565b6040518082815260200191505060405180910390f35b60008160046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156108505760006000fd5b60046000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206003015491505b5b50919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806108f857506108f7336124eb565b5b15156109045760006000fd5b8060046000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160006101000a81548160ff0219169083151502179055507f713e572bb47b301d3993c6d748aa8f43912b3e2864d1fd701e16e586fbb53905828260405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001821515151581526020019250505060405180910390a15b5b5050565b6109cf61276c565b8160046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610a265760006000fd5b60046000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600101600280602002604051908101604052809291908260028015610a9d576020028201915b81546000191681526020019060010190808311610a85575b505050505091505b5b50919050565b600060018054905090505b90565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610b1b5750610b1a336124eb565b5b1515610b275760006000fd5b8260046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610b7e5760006000fd5b600070010000000000000000000000000000000002846fffffffffffffffffffffffffffffffff191614158015610bcc575060008373ffffffffffffffffffffffffffffffffffffffff1614155b8015610bdd5750610bdc82612565565b5b1515610be95760006000fd5b610bf2836125b5565b1515610bfe5760006000fd5b610c088383612645565b1515610c145760006000fd5b8260046000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160016101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508160046000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600101906002610cda929190612798565b5083600660008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507fd83647f29e9b03c927a4fa98e046f8931a1fa2f097acca63953dab74e81f8a5584848460405180846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182600260200280838360008314610e0f575b805182526020831115610e0f57602082019150602081019050602083039250610deb565b505050905001935050505060405180910390a15b5b505b505050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610e8c5750610e8b336124eb565b5b1515610e985760006000fd5b8560046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151515610ef05760006000fd5b600070010000000000000000000000000000000002876fffffffffffffffffffffffffffffffff191614158015610f3e575060008673ffffffffffffffffffffffffffffffffffffffff1614155b8015610f4f5750610f4e85612565565b5b8015610f6357506000600102846000191614155b8015610f70575060008214155b1515610f7c5760006000fd5b610f8584612687565b1515610f915760006000fd5b610f9a866125b5565b1515610fa65760006000fd5b610fb08686612645565b1515610fbc5760006000fd5b826040518082600460200280838360008314610ff7575b805182526020831115610ff757602082019150602081019050602083039250610fd3565b505050905001915050604051809103902060001916846000191614151561101e5760006000fd5b60c0604051908101604052806001151581526020018773ffffffffffffffffffffffffffffffffffffffff168152602001868152602001856000191681526020018481526020018381525060046000896fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060008201518160000160006101000a81548160ff02191690831515021790555060208201518160000160016101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506040820151816001019060026111209291906127de565b5060608201518160030190600019169055608082015181600401906004611148929190612824565b5060a082015181600801559050508660056000866000191660001916815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555086600660008873ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555060078054806001018281611236919061286a565b91600052602060002090600291828204019190066010025b89909190916101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550507f72015815f96db3c437b25806f64ca98e0fcf191b8391b37b8f1fa8920989722787878787878760405180876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200185600260200280838360008314611349575b80518252602083111561134957602082019150602081019050602083039250611325565b505050905001846000191660001916815260200183600460200280838360008314611393575b8051825260208311156113935760208201915060208101905060208303925061136f565b505050905001828152602001965050505050505060405180910390a15b5b505b505050505050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16148061141c575061141b336124eb565b5b15156114285760006000fd5b8160046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561147f5760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff1916141580156114b7575060008214155b15156114c35760006000fd5b8160046000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600801819055507f50843b091ea0bec4b6ead7f725b4fcb769671b6948c77b9cd98b25ff2440d84c838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018281526020019250505060405180910390a15b5b505b5050565b60006000600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156115d25760006000fd5b60008373ffffffffffffffffffffffffffffffffffffffff16141515156115f95760006000fd5b611602836124eb565b151561160e5760006000fd5b60009150600090505b6001805490508110156116aa5760018181548110151561163357fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff16141561169c57600191506116aa565b5b8080600101915050611617565b8115156116b357fe5b6001818154811015156116c257fe5b906000526020600020900160005b6101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600260008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81549060ff02191690557f5561c1cda602083d14af2f0773152f273f6f9bf8feb17ce6265f94aec25bde0083604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b505050565b600060078054905090505b90565b6000600082101580156117d157506117ce6117aa565b82105b15156117dd5760006000fd5b6007828154811015156117ec57fe5b90600052602060002090600291828204019190066010025b9054906101000a90047001000000000000000000000000000000000290505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806118895750611888336124eb565b5b15156118955760006000fd5b8060046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156118ec5760006000fd5b6005600060046000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600301546000191660001916815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff02191690556006600060046000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160019054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff0219169055600060046000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160006101000a81548160ff0219169083151502179055507fd534b834b48c1cc340c4ea4cd46a15979d94896dfa8b58062437b765afb2ee4f8260405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390a15b5b505b50565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480611b365750611b35336124eb565b5b1515611b425760006000fd5b8260046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515611b995760006000fd5b600070010000000000000000000000000000000002846fffffffffffffffffffffffffffffffff191614158015611bd857506000600102836000191614155b1515611be45760006000fd5b816040518082600460200280838360008314611c1f575b805182526020831115611c1f57602082019150602081019050602083039250611bfb565b5050509050019150506040518091039020600019168360001916141515611c465760006000fd5b6005600060046000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600301546000191660001916815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff02191690558260046000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060030181600019169055508160046000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600401906004611d4c9291906128a4565b508360056000856000191660001916815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507fafb81b72f45edce9ee21fd3f57e8904776d25048eb0603f40a508b85a62adc4b84848460405180846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001836000191660001916815260200182600460200280838360008314611e39575b805182526020831115611e3957602082019150602081019050602083039250611e15565b505050905001935050505060405180910390a15b5b505b505050565b600060046000836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615611eaf5760019050611eb4565b600090505b919050565b60008160046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515611f125760006000fd5b60046000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160019054906101000a900473ffffffffffffffffffffffffffffffffffffffff1691505b5b50919050565b60006004600060056000856000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156120095760006000fd5b60056000836000191660001916815260200190815260200160002060009054906101000a90047001000000000000000000000000000000000290505b919050565b6120526128ea565b8160046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156120a95760006000fd5b60046000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600401600480602002604051908101604052809291908260048015612120576020028201915b81546000191681526020019060010190808311612108575b505050505091505b5b50919050565b600061213a826126f3565b15156121465760006000fd5b60018281548110151561215557fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690505b919050565b600060046000600660008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561223e5760006000fd5b600660008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a90047001000000000000000000000000000000000290505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156123005760006000fd5b60008173ffffffffffffffffffffffffffffffffffffffff16141515156123275760006000fd5b6001805480600101828161233b9190612916565b916000526020600020900160005b83909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506001600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055507f920999c03a7fd19172e4c657c22aa62a1bfb5e027a8cf6a2a0ee9daf4c5a347481604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b50565b60008160046000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156124a45760006000fd5b60046000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206008015491505b5b50919050565b600060008273ffffffffffffffffffffffffffffffffffffffff161415801561255d5750600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff165b90505b919050565b6000600060010282600060028110151561257b57fe5b602002015160001916141580156125ad575060006001028260016002811015156125a157fe5b60200201516000191614155b90505b919050565b6000600070010000000000000000000000000000000002600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19161490505b919050565b60008273ffffffffffffffffffffffffffffffffffffffff1661266783612712565b73ffffffffffffffffffffffffffffffffffffffff161490505b92915050565b600060007001000000000000000000000000000000000260056000846000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19161490505b919050565b60006000821015801561270a575060018054905082105b90505b919050565b600081604051808260026020028083836000831461274f575b80518252602083111561274f5760208201915060208101905060208303925061272b565b50505090500191505060405180910390206001900490505b919050565b6040604051908101604052806002905b60006000191681526020019060019003908161277c5790505090565b82600281019282156127cd579160200282015b828111156127cc5782518290600019169055916020019190600101906127ab565b5b5090506127da9190612942565b5090565b8260028101928215612813579160200282015b828111156128125782518290600019169055916020019190600101906127f1565b5b5090506128209190612942565b5090565b8260048101928215612859579160200282015b82811115612858578251829060001916905591602001919060010190612837565b5b5090506128669190612942565b5090565b81548183558181151161289f57600101600290048160010160029004836000526020600020918201910161289e9190612967565b5b505050565b82600481019282156128d9579160200282015b828111156128d85782518290600019169055916020019190600101906128b7565b5b5090506128e69190612942565b5090565b6080604051908101604052806004905b6000600019168152602001906001900390816128fa5790505090565b81548183558181151161293d5781836000526020600020918201910161293c9190612967565b5b505050565b61296491905b80821115612960576000816000905550600101612948565b5090565b90565b61298991905b8082111561298557600081600090555060010161296d565b5090565b90565b6000600060008373ffffffffffffffffffffffffffffffffffffffff16141515156129b75760006000fd5b823b90506000811191505b509190505600a165627a7a72305820bd260b61d0c6f3bbd5071e0f51e802c0462e06918a2ed6aa45b0958ec321f21b0029
-
-======= UsersData.sol:UsersData =======
-606060405234156200000d57fe5b60405160208062002f1e833981016040528080519060200190919050505b5b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b6200008d81620000e36401000000000262002c0a176401000000009004565b15156200009a5760006000fd5b80600360006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b5062000120565b6000600060008373ffffffffffffffffffffffffffffffffffffffff16141515156200010f5760006000fd5b823b90506000811191505b50919050565b612dee80620001306000396000f3006060604052361561011b576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806324716b551461011d57806326c172b51461015b5780632a63069e146101b95780632e26787e146101f957806334349621146102765780633d1ef2b71461029c5780633f7a52b61461030f578063410f66e41461034b5780635249f18f146103b857806365f337f5146104365780636b3036821461046c5780637c333c0a1461049257806388fa6b71146104ec5780638eeded901461059c5780639bd027ce146105e7578063ab013c2614610657578063c13c7424146106b7578063e1e8637b14610706578063f0eaa2631461073c578063fc75c96a1461078b578063fe07283a146107be575bfe5b341561012557fe5b61015960048080356fffffffffffffffffffffffffffffffff19169060200190919080351515906020019091905050610805565b005b341561016357fe5b61017d60048080356000191690602001909190505061096c565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b34156101c157fe5b6101f760048080356fffffffffffffffffffffffffffffffff1916906020019091908035600019169060200190919050506109af565b005b341561020157fe5b61022a60048080356fffffffffffffffffffffffffffffffff1916906020019091905050610c57565b6040518082600260200280838360008314610264575b80518252602083111561026457602082019150602081019050602083039250610240565b50505090500191505060405180910390f35b341561027e57fe5b610286610d3c565b6040518082815260200191505060405180910390f35b34156102a457fe5b6102cd60048080356fffffffffffffffffffffffffffffffff1916906020019091905050610d4a565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561031757fe5b61034960048080356fffffffffffffffffffffffffffffffff1916906020019091908035906020019091905050610e0a565b005b341561035357fe5b61037c60048080356fffffffffffffffffffffffffffffffff1916906020019091905050610fc0565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b34156103c057fe5b61043460048080356fffffffffffffffffffffffffffffffff191690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091908060400190600280602002604051908101604052809291908260026020028082843782019150505050509190505061107d565b005b341561043e57fe5b61046a600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506113ee565b005b341561047457fe5b61047c611627565b6040518082815260200191505060405180910390f35b341561049a57fe5b6104b06004808035906020019091905050611635565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b34156104f457fe5b61059a60048080356fffffffffffffffffffffffffffffffff191690602001909190803573ffffffffffffffffffffffffffffffffffffffff169060200190919080356fffffffffffffffffffffffffffffffff1916906020019091908060400190600280602002604051908101604052809291908260026020028082843782019150505050509190803560001916906020019091908035906020019091905050611682565b005b34156105a457fe5b6105cd60048080356fffffffffffffffffffffffffffffffff1916906020019091905050611d01565b604051808215151515815260200191505060405180910390f35b34156105ef57fe5b61061b600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050611d65565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561065f57fe5b6106756004808035906020019091905050611dcc565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156106bf57fe5b61070460048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff1916906020019091905050611e27565b005b341561070e57fe5b61073a600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061214f565b005b341561074457fe5b61076d60048080356fffffffffffffffffffffffffffffffff19169060200190919050506122f7565b60405180826000191660001916815260200191505060405180910390f35b341561079357fe5b6107bc60048080356fffffffffffffffffffffffffffffffff1916906020019091905050612397565b005b34156107c657fe5b6107ef60048080356fffffffffffffffffffffffffffffffff191690602001909190505061267b565b6040518082815260200191505060405180910390f35b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16148061086657506108653361271b565b5b15156108725760006000fd5b600070010000000000000000000000000000000002826fffffffffffffffffffffffffffffffff1916141515156108a95760006000fd5b8060066000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160006101000a81548160ff0219169083151502179055507f713e572bb47b301d3993c6d748aa8f43912b3e2864d1fd701e16e586fbb53905828260405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001821515151581526020019250505060405180910390a15b5b5050565b600060076000836000191660001916815260200190815260200160002060009054906101000a90047001000000000000000000000000000000000290505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610a105750610a0f3361271b565b5b1515610a1c5760006000fd5b8160066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610a735760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614158015610ab257506000600102826000191614155b1515610abe5760006000fd5b610ac782612795565b1515610ad35760006000fd5b6007600060066000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600401546000191660001916815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff02191690558160066000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060040181600019169055508260076000846000191660001916815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507f7811c8a53358a5d74aa42672dd20237aa4f645d7f260bd174b35851fc382ce55838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200182600019166000191681526020019250505060405180910390a15b5b505b5050565b610c5f612c46565b8160066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610cb65760006000fd5b60066000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600201600280602002604051908101604052809291908260028015610d2d576020028201915b81546000191681526020019060010190808311610d15575b505050505091505b5b50919050565b600060018054905090505b90565b60008160066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610da35760006000fd5b60066000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160019054906101000a900473ffffffffffffffffffffffffffffffffffffffff1691505b5b50919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610e6b5750610e6a3361271b565b5b1515610e775760006000fd5b8160066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610ece5760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614158015610f06575060008214155b1515610f125760006000fd5b8160066000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600501819055507f50843b091ea0bec4b6ead7f725b4fcb769671b6948c77b9cd98b25ff2440d84c838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018281526020019250505060405180910390a15b5b505b5050565b60008160066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156110195760006000fd5b60066000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060010160009054906101000a90047001000000000000000000000000000000000291505b5b50919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806110de57506110dd3361271b565b5b15156110ea5760006000fd5b8260066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156111415760006000fd5b600070010000000000000000000000000000000002846fffffffffffffffffffffffffffffffff19161415801561118f575060008373ffffffffffffffffffffffffffffffffffffffff1614155b80156111a0575061119f82612801565b5b15156111ac5760006000fd5b6111b583612851565b15156111c15760006000fd5b6111cb83836128e1565b15156111d75760006000fd5b8260066000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160016101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508160066000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060020190600261129d929190612c72565b5083600860008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507fd64e6361ad680cd08aec52b6c8e50b6dda9a9c07b585c9ccc4375d984a488e0384848460405180846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001826002602002808383600083146113d2575b8051825260208311156113d2576020820191506020810190506020830392506113ae565b505050905001935050505060405180910390a15b5b505b505050565b60006000600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561144f5760006000fd5b60008373ffffffffffffffffffffffffffffffffffffffff16141515156114765760006000fd5b61147f8361271b565b151561148b5760006000fd5b60009150600090505b600180549050811015611527576001818154811015156114b057fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff1614156115195760019150611527565b5b8080600101915050611494565b81151561153057fe5b60018181548110151561153f57fe5b906000526020600020900160005b6101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600260008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81549060ff02191690557f5561c1cda602083d14af2f0773152f273f6f9bf8feb17ce6265f94aec25bde0083604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b505050565b600060098054905090505b90565b600060098281548110151561164657fe5b90600052602060002090600291828204019190066010025b9054906101000a90047001000000000000000000000000000000000290505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806116e357506116e23361271b565b5b15156116ef5760006000fd5b8560066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515156117475760006000fd5b600070010000000000000000000000000000000002876fffffffffffffffffffffffffffffffff191614158015611795575060008673ffffffffffffffffffffffffffffffffffffffff1614155b80156117a657506117a584612801565b5b80156117ba57506000600102836000191614155b80156117c7575060008214155b15156117d35760006000fd5b600070010000000000000000000000000000000002856fffffffffffffffffffffffffffffffff19161415156118f85761180b612923565b15156118175760006000fd5b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90866000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156118d357fe5b6102c65a03f115156118e157fe5b5050506040518051905015156118f75760006000fd5b5b61190183612795565b151561190d5760006000fd5b61191686612851565b15156119225760006000fd5b61192c86856128e1565b15156119385760006000fd5b60c0604051908101604052806001151581526020018773ffffffffffffffffffffffffffffffffffffffff168152602001866fffffffffffffffffffffffffffffffff19168152602001858152602001846000191681526020018381525060066000896fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060008201518160000160006101000a81548160ff02191690831515021790555060208201518160000160016101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160010160006101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550606082015181600201906002611a8e929190612cb8565b506080820151816004019060001916905560a082015181600501559050508660076000856000191660001916815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555086600860008873ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555060098054806001018281611b8c9190612cfe565b91600052602060002090600291828204019190066010025b89909190916101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550507ffc1ca23f6abe5b0a15b609b2202d84994ac33c4913c0a2644bb44f9dee400aa587878787878760405180876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200184600260200280838360008314611ccb575b805182526020831115611ccb57602082019150602081019050602083039250611ca7565b5050509050018360001916600019168152602001828152602001965050505050505060405180910390a15b5b505b505050505050565b600060066000836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615611d5b5760019050611d60565b600090505b919050565b6000600860008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a90047001000000000000000000000000000000000290505b919050565b6000611dd782612b4c565b1515611de35760006000fd5b600182815481101515611df257fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480611e885750611e873361271b565b5b1515611e945760006000fd5b8160066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515611eeb5760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614151515611f225760006000fd5b600070010000000000000000000000000000000002826fffffffffffffffffffffffffffffffff191614151561204757611f5a612923565b1515611f665760006000fd5b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90836000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b151561202257fe5b6102c65a03f1151561203057fe5b5050506040518051905015156120465760006000fd5b5b8160066000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060010160006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507fc3f343d86c0f17b6b536a18799f6c0f89d37202680752b8e438d3f14d48291f2838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019250505060405180910390a15b5b505b5050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156121ac5760006000fd5b60008173ffffffffffffffffffffffffffffffffffffffff16141515156121d35760006000fd5b600180548060010182816121e79190612d38565b916000526020600020900160005b83909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506001600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055507f920999c03a7fd19172e4c657c22aa62a1bfb5e027a8cf6a2a0ee9daf4c5a347481604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b50565b60008160066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156123505760006000fd5b60066000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206004015491505b5b50919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806123f857506123f73361271b565b5b15156124045760006000fd5b8060066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561245b5760006000fd5b600070010000000000000000000000000000000002826fffffffffffffffffffffffffffffffff1916141515156124925760006000fd5b6007600060066000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600401546000191660001916815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff02191690556008600060066000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160019054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff0219169055600060066000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160006101000a81548160ff0219169083151502179055507f7bc4ecd86fa11d1e4eb1e479a0fc84e9e48b8b799ff51ffa6375f7fac922cf158260405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390a15b5b505b50565b60008160066000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156126d45760006000fd5b60066000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206005015491505b5b50919050565b600060008273ffffffffffffffffffffffffffffffffffffffff161415801561278d5750600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff165b90505b919050565b600060007001000000000000000000000000000000000260076000846000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19161490505b919050565b6000600060010282600060028110151561281757fe5b602002015160001916141580156128495750600060010282600160028110151561283d57fe5b60200201516000191614155b90505b919050565b6000600070010000000000000000000000000000000002600860008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19161490505b919050565b60008273ffffffffffffffffffffffffffffffffffffffff1661290383612b6b565b73ffffffffffffffffffffffffffffffffffffffff161490505b92915050565b60006000600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663693ec85e61296d612bc5565b6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180806020018281038252838181518152602001915080519060200190808383600083146129f0575b8051825260208311156129f0576020820191506020810190506020830392506129cc565b505050905090810190601f168015612a1c5780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b1515612a3757fe5b6102c65a03f11515612a4557fe5b505050604051805190509050612a5a81612c0a565b1515612a695760009150612b48565b600460009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515612b435780600560006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555080600460006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b600191505b5090565b600060008210158015612b63575060018054905082105b90505b919050565b6000816040518082600260200280838360008314612ba8575b805182526020831115612ba857602082019150602081019050602083039250612b84565b50505090500191505060405180910390206001900490505b919050565b612bcd612d64565b604060405190810160405280600881526020017f4f7267734461746100000000000000000000000000000000000000000000000081525090505b90565b6000600060008373ffffffffffffffffffffffffffffffffffffffff1614151515612c355760006000fd5b823b90506000811191505b50919050565b6040604051908101604052806002905b600060001916815260200190600190039081612c565790505090565b8260028101928215612ca7579160200282015b82811115612ca6578251829060001916905591602001919060010190612c85565b5b509050612cb49190612d78565b5090565b8260028101928215612ced579160200282015b82811115612cec578251829060001916905591602001919060010190612ccb565b5b509050612cfa9190612d78565b5090565b815481835581811511612d33576001016002900481600101600290048360005260206000209182019101612d329190612d9d565b5b505050565b815481835581811511612d5f57818360005260206000209182019101612d5e9190612d9d565b5b505050565b602060405190810160405280600081525090565b612d9a91905b80821115612d96576000816000905550600101612d7e565b5090565b90565b612dbf91905b80821115612dbb576000816000905550600101612da3565b5090565b905600a165627a7a72305820669d76a9a42f318d72dd51ba9b916fe6ca56079c4e06db59393d695cbfd12dc20029
-
-======= lib/Address.sol:Address =======
-60606040523415600b57fe5b5b60338060196000396000f30060606040525bfe00a165627a7a7230582015766427668fbbef67b6780695ed2b7d8f804affb175a4d668394a08c003edca0029
-
-======= lib/Const.sol:Const =======
-60606040523415600b57fe5b5b60338060196000396000f30060606040525bfe00a165627a7a723058200a34cc705fa4bc7faddd9c03017c52675d1287e8fb451bad008fa002306b05b60029
-
-======= lib/Super.sol:Super =======
-6060604052341561000c57fe5b5b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b5b6106ae8061005f6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063343496211461005c57806365f337f514610082578063ab013c26146100b8578063e1e8637b14610118575bfe5b341561006457fe5b61006c61014e565b6040518082815260200191505060405180910390f35b341561008a57fe5b6100b6600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061015c565b005b34156100c057fe5b6100d66004808035906020019091905050610395565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561012057fe5b61014c600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506103f0565b005b600060018054905090505b90565b60006000600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101bd5760006000fd5b60008373ffffffffffffffffffffffffffffffffffffffff16141515156101e45760006000fd5b6101ed83610598565b15156101f95760006000fd5b60009150600090505b6001805490508110156102955760018181548110151561021e57fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff1614156102875760019150610295565b5b8080600101915050610202565b81151561029e57fe5b6001818154811015156102ad57fe5b906000526020600020900160005b6101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600260008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81549060ff02191690557f5561c1cda602083d14af2f0773152f273f6f9bf8feb17ce6265f94aec25bde0083604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b505050565b60006103a082610612565b15156103ac5760006000fd5b6001828154811015156103bb57fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561044d5760006000fd5b60008173ffffffffffffffffffffffffffffffffffffffff16141515156104745760006000fd5b600180548060010182816104889190610631565b916000526020600020900160005b83909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506001600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055507f920999c03a7fd19172e4c657c22aa62a1bfb5e027a8cf6a2a0ee9daf4c5a347481604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b50565b600060008273ffffffffffffffffffffffffffffffffffffffff161415801561060a5750600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff165b90505b919050565b600060008210158015610629575060018054905082105b90505b919050565b81548183558181151161065857818360005260206000209182019101610657919061065d565b5b505050565b61067f91905b8082111561067b576000816000905550600101610663565b5090565b905600a165627a7a723058206cf1238b7397a82b10727eaf82750938702264fe3c358351d23931b9824ed8310029
-
-======= lib/ValidateUtil.sol:ValidateUtil =======
-60606040523415600b57fe5b5b60338060196000396000f30060606040525bfe00a165627a7a723058202ecab8479f649c886f704fbf6ad9e3ad709eb3006a162495599727a70a37355e0029`
+const FilesDataBin = `606060405234156200000d57fe5b60405160208062004d82833981016040528080519060200190919050505b5b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b6200008d81620000e36401000000000262004668176401000000009004565b15156200009a5760006000fd5b80600360006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b5062000120565b6000600060008373ffffffffffffffffffffffffffffffffffffffff16141515156200010f5760006000fd5b823b90506000811191505b50919050565b614c5280620001306000396000f3006060604052361561015d576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806306e4dffd1461015f57806324716b55146101cc57806328360cdd1461020a5780632f682a601461024a578063343496211461029957806338fc1214146102bf5780633f7a52b6146103355780635b379418146103715780635cbccaea146103de5780635d8de8b31461042557806365f337f5146104835780636b303682146104b95780636c75a331146104df5780637c333c0a1461052e5780638180306214610588578063a06f2e4614610675578063a8ecd649146106d4578063ab013c2614610742578063ab594cf6146107a2578063af1e3afc146107d5578063b21124ef1461084a578063c66a814514610899578063c8c459b9146108e8578063e1e8637b14610937578063eedbe9151461096d578063fa04901f146109ea578063fe07283a14610a48575bfe5b341561016757fe5b61019060048080356fffffffffffffffffffffffffffffffff1916906020019091905050610a8f565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b34156101d457fe5b61020860048080356fffffffffffffffffffffffffffffffff19169060200190919080351515906020019091905050610b4c565b005b341561021257fe5b61024860048080356fffffffffffffffffffffffffffffffff191690602001909190803560001916906020019091905050610c7c565b005b341561025257fe5b61029760048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff1916906020019091905050610e45565b005b34156102a157fe5b6102a961116f565b6040518082815260200191505060405180910390f35b34156102c757fe5b6102f960048080356fffffffffffffffffffffffffffffffff191690602001909190803590602001909190505061117d565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561033d57fe5b61036f60048080356fffffffffffffffffffffffffffffffff1916906020019091908035906020019091905050611282565b005b341561037957fe5b6103a260048080356fffffffffffffffffffffffffffffffff1916906020019091905050611405565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b34156103e657fe5b61040f60048080356fffffffffffffffffffffffffffffffff19169060200190919050506114c2565b6040518082815260200191505060405180910390f35b341561042d57fe5b610447600480803560001916906020019091905050611565565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561048b57fe5b6104b7600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050611636565b005b34156104c157fe5b6104c961186f565b6040518082815260200191505060405180910390f35b34156104e757fe5b61052c60048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff191690602001909190505061187d565b005b341561053657fe5b61054c6004808035906020019091905050611ba7565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b341561059057fe5b61067360048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff19169060200190919080356000191690602001909190806080019060048060200260405190810160405280929190826004602002808284378201915050505050919080356000191690602001909190803560001916906020019091908035600019169060200190919080356000191690602001909190803560ff16906020019091908035906020019091905050611c17565b005b341561067d57fe5b6106d260048080356fffffffffffffffffffffffffffffffff19169060200190919080608001906004806020026040519081016040528092919082600460200280828437820191505050505091905050612be6565b005b34156106dc57fe5b61070e60048080356fffffffffffffffffffffffffffffffff1916906020019091908035906020019091905050612dd0565b6040518084600019166000191681526020018360001916600019168152602001828152602001935050505060405180910390f35b341561074a57fe5b6107606004808035906020019091905050612f83565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156107aa57fe5b6107d360048080356fffffffffffffffffffffffffffffffff1916906020019091905050612fde565b005b34156107dd57fe5b61084860048080356fffffffffffffffffffffffffffffffff19169060200190919080356fffffffffffffffffffffffffffffffff1916906020019091908035600019169060200190919080356000191690602001909190803560ff16906020019091905050613247565b005b341561085257fe5b61087b60048080356fffffffffffffffffffffffffffffffff1916906020019091905050613a31565b60405180826000191660001916815260200191505060405180910390f35b34156108a157fe5b6108ca60048080356fffffffffffffffffffffffffffffffff1916906020019091905050613ad1565b60405180826000191660001916815260200191505060405180910390f35b34156108f057fe5b61091960048080356fffffffffffffffffffffffffffffffff1916906020019091905050613b71565b60405180826000191660001916815260200191505060405180910390f35b341561093f57fe5b61096b600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050613c11565b005b341561097557fe5b61099e60048080356fffffffffffffffffffffffffffffffff1916906020019091905050613db9565b60405180826004602002808383600083146109d8575b8051825260208311156109d8576020820191506020810190506020830392506109b4565b50505090500191505060405180910390f35b34156109f257fe5b610a0c600480803560001916906020019091905050613e9e565b60405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b3415610a5057fe5b610a7960048080356fffffffffffffffffffffffffffffffff1916906020019091905050613f6f565b6040518082815260200191505060405180910390f35b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610ae85760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060010160009054906101000a90047001000000000000000000000000000000000291505b5b50919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610bad5750610bac3361400f565b5b1515610bb95760006000fd5b8060086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160006101000a81548160ff0219169083151502179055507f713e572bb47b301d3993c6d748aa8f43912b3e2864d1fd701e16e586fbb53905828260405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001821515151581526020019250505060405180910390a15b5b5050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610cdd5750610cdc3361400f565b5b1515610ce95760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610d405760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614158015610d7f57506000600102826000191614155b1515610d8b5760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060020181600019169055507f0f5d2a1fd7e620b5060ef0c66774a0475af737bef138fc169dfa8aca450e3899838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200182600019166000191681526020019250505060405180910390a15b5b505b5050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480610ea65750610ea53361400f565b5b1515610eb25760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515610f095760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614158015610f675750600070010000000000000000000000000000000002826fffffffffffffffffffffffffffffffff191614155b1515610f735760006000fd5b610f7b614089565b1515610f875760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90836000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b151561104357fe5b6102c65a03f1151561105157fe5b5050506040518051905015156110675760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160016101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507f82e7473892dc1da52c17ad55ae9ce073d7e153c1313b43a75527e983c42f9c66838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019250505060405180910390a15b5b505b5050565b600060018054905090505b90565b60008260086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156111d65760006000fd5b600083101580156111ee57506111eb846114c2565b83105b15156111fa5760006000fd5b60086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600d018381548110151561124357fe5b90600052602060002090600291828204019190066010025b9054906101000a90047001000000000000000000000000000000000291505b5b5092915050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806112e357506112e23361400f565b5b15156112ef5760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156113465760006000fd5b600082141515156113575760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600901819055507f50843b091ea0bec4b6ead7f725b4fcb769671b6948c77b9cd98b25ff2440d84c838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018281526020019250505060405180910390a15b5b505b5050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561145e5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160019054906101000a90047001000000000000000000000000000000000291505b5b50919050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561151b5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600d018054905091505b5b50919050565b60006008600060096000856000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156115f55760006000fd5b60096000836000191660001916815260200190815260200160002060009054906101000a90047001000000000000000000000000000000000290505b919050565b60006000600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156116975760006000fd5b60008373ffffffffffffffffffffffffffffffffffffffff16141515156116be5760006000fd5b6116c78361400f565b15156116d35760006000fd5b60009150600090505b60018054905081101561176f576001818154811015156116f857fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415611761576001915061176f565b5b80806001019150506116dc565b81151561177857fe5b60018181548110151561178757fe5b906000526020600020900160005b6101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600260008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81549060ff02191690557f5561c1cda602083d14af2f0773152f273f6f9bf8feb17ce6265f94aec25bde0083604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b505050565b6000600b8054905090505b90565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806118de57506118dd3361400f565b5b15156118ea5760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156119415760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff19161415801561199f5750600070010000000000000000000000000000000002826fffffffffffffffffffffffffffffffff191614155b15156119ab5760006000fd5b6119b3614089565b15156119bf5760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90836000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b1515611a7b57fe5b6102c65a03f11515611a8957fe5b505050604051805190501515611a9f5760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060010160006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055507fd8aaf341152319250a5bbe3f879ed37a1710d2b5dfa9676f68e9bfb98e3de630838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019250505060405180910390a15b5b505b5050565b600060008210158015611bc05750611bbd61186f565b82105b1515611bcc5760006000fd5b600b82815481101515611bdb57fe5b90600052602060002090600291828204019190066010025b9054906101000a90047001000000000000000000000000000000000290505b919050565b611c1f6146e9565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480611c805750611c7f3361400f565b5b1515611c8c5760006000fd5b8b60086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151515611ce45760006000fd5b6000700100000000000000000000000000000000028d6fffffffffffffffffffffffffffffffff191614158015611d4257506000700100000000000000000000000000000000028c6fffffffffffffffffffffffffffffffff191614155b8015611d7557506000700100000000000000000000000000000000028b6fffffffffffffffffffffffffffffffff191614155b8015611d89575060006001028a6000191614155b8015611d9d57506000600102886000191614155b8015611db157506000600102876000191614155b8015611dc557506000600102866000191614155b8015611dd957506000600102856000191614155b8015611de6575060008314155b1515611df25760006000fd5b611dfb8d6142b2565b1515611e075760006000fd5b611e1087614303565b1515611e1c5760006000fd5b611e258861436f565b1515611e315760006000fd5b8760001916876000191614151515611e495760006000fd5b611e51614089565b1515611e5d5760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded908d6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b1515611f1957fe5b6102c65a03f11515611f2757fe5b505050604051805190501515611f3d5760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded908c6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b1515611ff957fe5b6102c65a03f1151561200757fe5b50505060405180519050151561201d5760006000fd5b600070010000000000000000000000000000000002600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663410f66e48d6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156120ee57fe5b6102c65a03f115156120fc57fe5b505050604051805190506fffffffffffffffffffffffffffffffff19161415156122e8576121286143db565b15156121345760006000fd5b600760009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663410f66e48e6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b151561222e57fe5b6102c65a03f1151561223c57fe5b505050604051805190506000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156122c357fe5b6102c65a03f115156122d157fe5b5050506040518051905015156122e75760006000fd5b5b600188858888604051806000526020016040526000604051602001526040518085600019166000191681526020018460ff1660ff16815260200183600019166000191681526020018260001916600019168152602001945050505050602060405160208103908084039060008661646e5a03f1151561236357fe5b50506020604051035173ffffffffffffffffffffffffffffffffffffffff16600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16633d1ef2b78d6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b151561243e57fe5b6102c65a03f1151561244c57fe5b5050506040518051905073ffffffffffffffffffffffffffffffffffffffff161415156124795760006000fd5b60018260000190151590811515815250508b82602001906fffffffffffffffffffffffffffffffff191690816fffffffffffffffffffffffffffffffff1916815250508a82604001906fffffffffffffffffffffffffffffffff191690816fffffffffffffffffffffffffffffffff1916815250508982606001906000191690816000191681525050888260800181905250878260a001906000191690816000191681525050868260c001906000191690816000191681525050828260e001818152505081600860008f6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060008201518160000160006101000a81548160ff02191690831515021790555060208201518160000160016101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555060408201518160010160006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055506060820151816002019060001916905560808201518160030190600461264092919061479d565b5060a0820151816007019060001916905560c0820151816008019060001916905560e0820151816009015561010082015181600a0190805190602001906126889291906147e3565b5061012082015181600b0190805190602001906126a69291906147e3565b5061014082015181600c0190805190602001906126c4929190614836565b5061016082015181600d0190805190602001906126e29291906148dd565b50905050600860008e6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600a01805480600101828161273491906149b3565b916000526020600020900160005b8890919091509060001916905550600860008e6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600b01805480600101828161279e91906149b3565b916000526020600020900160005b8790919091509060001916905550600860008e6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600c01805480600101828161280891906149df565b91600052602060002090602091828204019190065b86909190916101000a81548160ff021916908360ff16021790555050600860008e6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600d0180548060010182816128879190614a19565b91600052602060002090600291828204019190066010025b8d909190916101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550506001600860008f6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600e0160008d6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060006101000a81548160ff0219169083151502179055508c600960008a6000191660001916815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055508c600a6000896000191660001916815260200190815260200160002060006101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550600b8054806001018281612a239190614a19565b91600052602060002090600291828204019190066010025b8f909190916101000a8154816fffffffffffffffffffffffffffffffff021916908370010000000000000000000000000000000090040217905550507fe5db0782a88ef1dd5e05dbcd66036151fdd928c04a041691230dff05e269440a8d8d8d8d8d8d8d8d8d8d8d604051808c6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018b6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020018a6fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001896000191660001916815260200188600460200280838360008314612b6f575b805182526020831115612b6f57602082019150602081019050602083039250612b4b565b50505090500187600019166000191681526020018660001916600019168152602001856000191660001916815260200184600019166000191681526020018360ff1660ff1681526020018281526020019b50505050505050505050505060405180910390a15b5b505b505050505050505050505050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161480612c475750612c463361400f565b5b1515612c535760006000fd5b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515612caa5760006000fd5b600070010000000000000000000000000000000002836fffffffffffffffffffffffffffffffff191614151515612ce15760006000fd5b8160086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600301906004612d2c929190614a53565b507f62c9cfebd42861a16451b2ce63bf3d3e5bcdb62acbc46482d52d0c48d34eb9b3838360405180836fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200182600460200280838360008314612db6575b805182526020831115612db657602082019150602081019050602083039250612d92565b5050509050019250505060405180910390a15b5b505b5050565b6000600060008460086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515612e2d5760006000fd5b60008510158015612e455750612e42866114c2565b85105b1515612e515760006000fd5b60086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600a0185815481101515612e9a57fe5b906000526020600020900160005b505460086000886fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600b0186815481101515612ef357fe5b906000526020600020900160005b505460086000896fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600c0187815481101515612f4c57fe5b90600052602060002090602091828204019190065b9054906101000a900460ff168060ff1690509350935093505b5b509250925092565b6000612f8e82614604565b1515612f9a5760006000fd5b600182815481101515612fa957fe5b906000526020600020900160005b9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690505b919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16148061303f575061303e3361400f565b5b151561304b5760006000fd5b8060086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff1615156130a25760006000fd5b6009600060086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600701546000191660001916815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff0219169055600a600060086000856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600801546000191660001916815260200190815260200160002060006101000a8154906fffffffffffffffffffffffffffffffff0219169055600060086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160006101000a81548160ff0219169083151502179055507f5084265f9b0b758e57a9c7d957106776471ed835d7267fb54d933927a3481bfd8260405180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200191505060405180910390a15b5b505b50565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614806132a857506132a73361400f565b5b15156132b45760006000fd5b8460086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff16151561330b5760006000fd5b600070010000000000000000000000000000000002866fffffffffffffffffffffffffffffffff1916141580156133695750600070010000000000000000000000000000000002856fffffffffffffffffffffffffffffffff191614155b801561337d57506000600102846000191614155b801561339157506000600102836000191614155b151561339d5760006000fd5b60086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600e016000866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060009054906101000a900460ff1615151561342b5760006000fd5b613433614089565b151561343f5760006000fd5b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16638eeded90866000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156134fb57fe5b6102c65a03f1151561350957fe5b50505060405180519050151561351f5760006000fd5b600160086000886fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060070154838686604051806000526020016040526000604051602001526040518085600019166000191681526020018460ff1660ff16815260200183600019166000191681526020018260001916600019168152602001945050505050602060405160208103908084039060008661646e5a03f115156135d657fe5b50506020604051035173ffffffffffffffffffffffffffffffffffffffff16600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16633d1ef2b7876000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001915050602060405180830381600087803b15156136b157fe5b6102c65a03f115156136bf57fe5b5050506040518051905073ffffffffffffffffffffffffffffffffffffffff161415156136ec5760006000fd5b60086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600a01805480600101828161373a91906149b3565b916000526020600020900160005b869091909150906000191690555060086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600b0180548060010182816137a491906149b3565b916000526020600020900160005b859091909150906000191690555060086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600c01805480600101828161380e91906149df565b91600052602060002090602091828204019190065b84909190916101000a81548160ff021916908360ff1602179055505060086000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600d01805480600101828161388d9190614a19565b91600052602060002090600291828204019190066010025b87909190916101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555050600160086000886fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600e016000876fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060006101000a81548160ff0219169083151502179055507fb6d8f3f2b7e44359d0f3577f248b9a9b8e6c275f3c9b6752d9c6905a0d18a2ac868686868660405180866fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001856fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001846000191660001916815260200183600019166000191681526020018260ff1660ff1681526020019550505050505060405180910390a15b5b505b5050505050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613a8a5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206008015491505b5b50919050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613b2a5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206007015491505b5b50919050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613bca5760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206002015491505b5b50919050565b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141515613c6e5760006000fd5b60008173ffffffffffffffffffffffffffffffffffffffff1614151515613c955760006000fd5b60018054806001018281613ca99190614a99565b916000526020600020900160005b83909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506001600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055507f920999c03a7fd19172e4c657c22aa62a1bfb5e027a8cf6a2a0ee9daf4c5a347481604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a15b5b50565b613dc1614ac5565b8160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613e185760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff19168152602001908152602001600020600301600480602002604051908101604052809291908260048015613e8f576020028201915b81546000191681526020019060010190808311613e77575b505050505091505b5b50919050565b600060086000600a6000856000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613f2e5760006000fd5b600a6000836000191660001916815260200190815260200160002060009054906101000a90047001000000000000000000000000000000000290505b919050565b60008160086000826fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060000160009054906101000a900460ff161515613fc85760006000fd5b60086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff191681526020019081526020016000206009015491505b5b50919050565b600060008273ffffffffffffffffffffffffffffffffffffffff16141580156140815750600260008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff165b90505b919050565b60006000600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663693ec85e6140d3614623565b6000604051602001526040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018080602001828103825283818151815260200191508051906020019080838360008314614156575b80518252602083111561415657602082019150602081019050602083039250614132565b505050905090810190601f1680156141825780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b151561419d57fe5b6102c65a03f115156141ab57fe5b5050506040518051905090506141c081614668565b15156141cf57600091506142ae565b600460009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415156142a95780600660006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555080600460006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b600191505b5090565b6000600060010260086000846fffffffffffffffffffffffffffffffff19166fffffffffffffffffffffffffffffffff1916815260200190815260200160002060070154600019161490505b919050565b6000600070010000000000000000000000000000000002600a6000846000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19161490505b919050565b600060007001000000000000000000000000000000000260096000846000191660001916815260200190815260200160002060009054906101000a9004700100000000000000000000000000000000026fffffffffffffffffffffffffffffffff19161490505b919050565b60006000600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663693ec85e6144256146a4565b6000604051602001526040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180806020018281038252838181518152602001915080519060200190808383600083146144a8575b8051825260208311156144a857602082019150602081019050602083039250614484565b505050905090810190601f1680156144d45780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b15156144ef57fe5b6102c65a03f115156144fd57fe5b50505060405180519050905061451281614668565b15156145215760009150614600565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415156145fb5780600760006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555080600560006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b600191505b5090565b60006000821015801561461b575060018054905082105b90505b919050565b61462b614af1565b604060405190810160405280600981526020017f557365727344617461000000000000000000000000000000000000000000000081525090505b90565b6000600060008373ffffffffffffffffffffffffffffffffffffffff16141515156146935760006000fd5b823b90506000811191505b50919050565b6146ac614af1565b604060405190810160405280600881526020017f4f7267734461746100000000000000000000000000000000000000000000000081525090505b90565b6101e06040519081016040528060001515815260200160006fffffffffffffffffffffffffffffffff1916815260200160006fffffffffffffffffffffffffffffffff191681526020016000600019168152602001614746614b05565b81526020016000600019168152602001600060001916815260200160008152602001614770614b31565b815260200161477d614b31565b815260200161478a614b45565b8152602001614797614b59565b81525090565b82600481019282156147d2579160200282015b828111156147d15782518290600019169055916020019190600101906147b0565b5b5090506147df9190614b6d565b5090565b828054828255906000526020600020908101928215614825579160200282015b82811115614824578251829060001916905591602001919060010190614803565b5b5090506148329190614b6d565b5090565b82805482825590600052602060002090601f016020900481019282156148cc5791602002820160005b8382111561489d57835183826101000a81548160ff021916908360ff160217905550926020019260010160208160000104928301926001030261485f565b80156148ca5782816101000a81549060ff021916905560010160208160000104928301926001030261489d565b505b5090506148d99190614b92565b5090565b828054828255906000526020600020906001016002900481019282156149a25791602002820160005b8382111561496457835183826101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055509260200192601001602081600f01049283019260010302614906565b80156149a05782816101000a8154906fffffffffffffffffffffffffffffffff0219169055601001602081600f01049283019260010302614964565b505b5090506149af9190614bc2565b5090565b8154818355818115116149da578183600052602060002091820191016149d99190614b6d565b5b505050565b815481835581811511614a1457601f016020900481601f01602090048360005260206000209182019101614a139190614c01565b5b505050565b815481835581811511614a4e576001016002900481600101600290048360005260206000209182019101614a4d9190614c01565b5b505050565b8260048101928215614a88579160200282015b82811115614a87578251829060001916905591602001919060010190614a66565b5b509050614a959190614b6d565b5090565b815481835581811511614ac057818360005260206000209182019101614abf9190614c01565b5b505050565b6080604051908101604052806004905b600060001916815260200190600190039081614ad55790505090565b602060405190810160405280600081525090565b6080604051908101604052806004905b600060001916815260200190600190039081614b155790505090565b602060405190810160405280600081525090565b602060405190810160405280600081525090565b602060405190810160405280600081525090565b614b8f91905b80821115614b8b576000816000905550600101614b73565b5090565b90565b614bbf91905b80821115614bbb57600081816101000a81549060ff021916905550600101614b98565b5090565b90565b614bfe91905b80821115614bfa57600081816101000a8154906fffffffffffffffffffffffffffffffff021916905550600101614bc8565b5090565b90565b614c2391905b80821115614c1f576000816000905550600101614c07565b5090565b905600a165627a7a7230582058d39959060b36c6350add037698705af0de44121fad41c4998b533ed9f02ace0029`
 
 // DeployFilesData deploys a new Ethereum contract, binding an instance of FilesData to it.
-func DeployFilesData(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *FilesData, error) {
+func DeployFilesData(auth *bind.TransactOpts, backend bind.ContractBackend, easyCnsAddress common.Address) (common.Address, *types.Transaction, *FilesData, error) {
 	parsed, err := abi.JSON(strings.NewReader(FilesDataABI))
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
-	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(FilesDataBin), backend)
+	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(FilesDataBin), backend, easyCnsAddress)
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
@@ -196,56 +176,662 @@ func (_FilesData *FilesDataTransactorRaw) Transact(opts *bind.TransactOpts, meth
 	return _FilesData.Contract.contract.Transact(opts, method, params...)
 }
 
-// Get is a free data retrieval call binding the contract method 0x693ec85e.
+// GetFileDesc is a free data retrieval call binding the contract method 0xeedbe915.
 //
-// Solidity: function get(name string) constant returns(address)
-func (_FilesData *FilesDataCaller) Get(opts *bind.CallOpts, name string) (common.Address, error) {
+// Solidity: function getFileDesc(uuid bytes16) constant returns(bytes32[4])
+func (_FilesData *FilesDataCaller) GetFileDesc(opts *bind.CallOpts, uuid [16]byte) ([4][32]byte, error) {
+	var (
+		ret0 = new([4][32]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getFileDesc", uuid)
+	return *ret0, err
+}
+
+// GetFileDesc is a free data retrieval call binding the contract method 0xeedbe915.
+//
+// Solidity: function getFileDesc(uuid bytes16) constant returns(bytes32[4])
+func (_FilesData *FilesDataSession) GetFileDesc(uuid [16]byte) ([4][32]byte, error) {
+	return _FilesData.Contract.GetFileDesc(&_FilesData.CallOpts, uuid)
+}
+
+// GetFileDesc is a free data retrieval call binding the contract method 0xeedbe915.
+//
+// Solidity: function getFileDesc(uuid bytes16) constant returns(bytes32[4])
+func (_FilesData *FilesDataCallerSession) GetFileDesc(uuid [16]byte) ([4][32]byte, error) {
+	return _FilesData.Contract.GetFileDesc(&_FilesData.CallOpts, uuid)
+}
+
+// GetFileSignDataByIndex is a free data retrieval call binding the contract method 0xa8ecd649.
+//
+// Solidity: function getFileSignDataByIndex(uuid bytes16, index uint256) constant returns(bytes32, bytes32, uint256)
+func (_FilesData *FilesDataCaller) GetFileSignDataByIndex(opts *bind.CallOpts, uuid [16]byte, index *big.Int) ([32]byte, [32]byte, *big.Int, error) {
+	var (
+		ret0 = new([32]byte)
+		ret1 = new([32]byte)
+		ret2 = new(*big.Int)
+	)
+	out := &[]interface{}{
+		ret0,
+		ret1,
+		ret2,
+	}
+	err := _FilesData.contract.Call(opts, out, "getFileSignDataByIndex", uuid, index)
+	return *ret0, *ret1, *ret2, err
+}
+
+// GetFileSignDataByIndex is a free data retrieval call binding the contract method 0xa8ecd649.
+//
+// Solidity: function getFileSignDataByIndex(uuid bytes16, index uint256) constant returns(bytes32, bytes32, uint256)
+func (_FilesData *FilesDataSession) GetFileSignDataByIndex(uuid [16]byte, index *big.Int) ([32]byte, [32]byte, *big.Int, error) {
+	return _FilesData.Contract.GetFileSignDataByIndex(&_FilesData.CallOpts, uuid, index)
+}
+
+// GetFileSignDataByIndex is a free data retrieval call binding the contract method 0xa8ecd649.
+//
+// Solidity: function getFileSignDataByIndex(uuid bytes16, index uint256) constant returns(bytes32, bytes32, uint256)
+func (_FilesData *FilesDataCallerSession) GetFileSignDataByIndex(uuid [16]byte, index *big.Int) ([32]byte, [32]byte, *big.Int, error) {
+	return _FilesData.Contract.GetFileSignDataByIndex(&_FilesData.CallOpts, uuid, index)
+}
+
+// GetFileSignerSize is a free data retrieval call binding the contract method 0x5cbccaea.
+//
+// Solidity: function getFileSignerSize(uuid bytes16) constant returns(uint256)
+func (_FilesData *FilesDataCaller) GetFileSignerSize(opts *bind.CallOpts, uuid [16]byte) (*big.Int, error) {
+	var (
+		ret0 = new(*big.Int)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getFileSignerSize", uuid)
+	return *ret0, err
+}
+
+// GetFileSignerSize is a free data retrieval call binding the contract method 0x5cbccaea.
+//
+// Solidity: function getFileSignerSize(uuid bytes16) constant returns(uint256)
+func (_FilesData *FilesDataSession) GetFileSignerSize(uuid [16]byte) (*big.Int, error) {
+	return _FilesData.Contract.GetFileSignerSize(&_FilesData.CallOpts, uuid)
+}
+
+// GetFileSignerSize is a free data retrieval call binding the contract method 0x5cbccaea.
+//
+// Solidity: function getFileSignerSize(uuid bytes16) constant returns(uint256)
+func (_FilesData *FilesDataCallerSession) GetFileSignerSize(uuid [16]byte) (*big.Int, error) {
+	return _FilesData.Contract.GetFileSignerSize(&_FilesData.CallOpts, uuid)
+}
+
+// GetFileSignerUuidByIndex is a free data retrieval call binding the contract method 0x38fc1214.
+//
+// Solidity: function getFileSignerUuidByIndex(uuid bytes16, index uint256) constant returns(bytes16)
+func (_FilesData *FilesDataCaller) GetFileSignerUuidByIndex(opts *bind.CallOpts, uuid [16]byte, index *big.Int) ([16]byte, error) {
+	var (
+		ret0 = new([16]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getFileSignerUuidByIndex", uuid, index)
+	return *ret0, err
+}
+
+// GetFileSignerUuidByIndex is a free data retrieval call binding the contract method 0x38fc1214.
+//
+// Solidity: function getFileSignerUuidByIndex(uuid bytes16, index uint256) constant returns(bytes16)
+func (_FilesData *FilesDataSession) GetFileSignerUuidByIndex(uuid [16]byte, index *big.Int) ([16]byte, error) {
+	return _FilesData.Contract.GetFileSignerUuidByIndex(&_FilesData.CallOpts, uuid, index)
+}
+
+// GetFileSignerUuidByIndex is a free data retrieval call binding the contract method 0x38fc1214.
+//
+// Solidity: function getFileSignerUuidByIndex(uuid bytes16, index uint256) constant returns(bytes16)
+func (_FilesData *FilesDataCallerSession) GetFileSignerUuidByIndex(uuid [16]byte, index *big.Int) ([16]byte, error) {
+	return _FilesData.Contract.GetFileSignerUuidByIndex(&_FilesData.CallOpts, uuid, index)
+}
+
+// GetFileType is a free data retrieval call binding the contract method 0xc8c459b9.
+//
+// Solidity: function getFileType(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataCaller) GetFileType(opts *bind.CallOpts, uuid [16]byte) ([32]byte, error) {
+	var (
+		ret0 = new([32]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getFileType", uuid)
+	return *ret0, err
+}
+
+// GetFileType is a free data retrieval call binding the contract method 0xc8c459b9.
+//
+// Solidity: function getFileType(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataSession) GetFileType(uuid [16]byte) ([32]byte, error) {
+	return _FilesData.Contract.GetFileType(&_FilesData.CallOpts, uuid)
+}
+
+// GetFileType is a free data retrieval call binding the contract method 0xc8c459b9.
+//
+// Solidity: function getFileType(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataCallerSession) GetFileType(uuid [16]byte) ([32]byte, error) {
+	return _FilesData.Contract.GetFileType(&_FilesData.CallOpts, uuid)
+}
+
+// GetKeccak256Hash is a free data retrieval call binding the contract method 0xc66a8145.
+//
+// Solidity: function getKeccak256Hash(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataCaller) GetKeccak256Hash(opts *bind.CallOpts, uuid [16]byte) ([32]byte, error) {
+	var (
+		ret0 = new([32]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getKeccak256Hash", uuid)
+	return *ret0, err
+}
+
+// GetKeccak256Hash is a free data retrieval call binding the contract method 0xc66a8145.
+//
+// Solidity: function getKeccak256Hash(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataSession) GetKeccak256Hash(uuid [16]byte) ([32]byte, error) {
+	return _FilesData.Contract.GetKeccak256Hash(&_FilesData.CallOpts, uuid)
+}
+
+// GetKeccak256Hash is a free data retrieval call binding the contract method 0xc66a8145.
+//
+// Solidity: function getKeccak256Hash(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataCallerSession) GetKeccak256Hash(uuid [16]byte) ([32]byte, error) {
+	return _FilesData.Contract.GetKeccak256Hash(&_FilesData.CallOpts, uuid)
+}
+
+// GetOwnerUuid is a free data retrieval call binding the contract method 0x5b379418.
+//
+// Solidity: function getOwnerUuid(uuid bytes16) constant returns(bytes16)
+func (_FilesData *FilesDataCaller) GetOwnerUuid(opts *bind.CallOpts, uuid [16]byte) ([16]byte, error) {
+	var (
+		ret0 = new([16]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getOwnerUuid", uuid)
+	return *ret0, err
+}
+
+// GetOwnerUuid is a free data retrieval call binding the contract method 0x5b379418.
+//
+// Solidity: function getOwnerUuid(uuid bytes16) constant returns(bytes16)
+func (_FilesData *FilesDataSession) GetOwnerUuid(uuid [16]byte) ([16]byte, error) {
+	return _FilesData.Contract.GetOwnerUuid(&_FilesData.CallOpts, uuid)
+}
+
+// GetOwnerUuid is a free data retrieval call binding the contract method 0x5b379418.
+//
+// Solidity: function getOwnerUuid(uuid bytes16) constant returns(bytes16)
+func (_FilesData *FilesDataCallerSession) GetOwnerUuid(uuid [16]byte) ([16]byte, error) {
+	return _FilesData.Contract.GetOwnerUuid(&_FilesData.CallOpts, uuid)
+}
+
+// GetSha256Hash is a free data retrieval call binding the contract method 0xb21124ef.
+//
+// Solidity: function getSha256Hash(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataCaller) GetSha256Hash(opts *bind.CallOpts, uuid [16]byte) ([32]byte, error) {
+	var (
+		ret0 = new([32]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getSha256Hash", uuid)
+	return *ret0, err
+}
+
+// GetSha256Hash is a free data retrieval call binding the contract method 0xb21124ef.
+//
+// Solidity: function getSha256Hash(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataSession) GetSha256Hash(uuid [16]byte) ([32]byte, error) {
+	return _FilesData.Contract.GetSha256Hash(&_FilesData.CallOpts, uuid)
+}
+
+// GetSha256Hash is a free data retrieval call binding the contract method 0xb21124ef.
+//
+// Solidity: function getSha256Hash(uuid bytes16) constant returns(bytes32)
+func (_FilesData *FilesDataCallerSession) GetSha256Hash(uuid [16]byte) ([32]byte, error) {
+	return _FilesData.Contract.GetSha256Hash(&_FilesData.CallOpts, uuid)
+}
+
+// GetSuperByIndex is a free data retrieval call binding the contract method 0xab013c26.
+//
+// Solidity: function getSuperByIndex(index uint256) constant returns(address)
+func (_FilesData *FilesDataCaller) GetSuperByIndex(opts *bind.CallOpts, index *big.Int) (common.Address, error) {
 	var (
 		ret0 = new(common.Address)
 	)
 	out := ret0
-	err := _FilesData.contract.Call(opts, out, "get", name)
+	err := _FilesData.contract.Call(opts, out, "getSuperByIndex", index)
 	return *ret0, err
 }
 
-// Get is a free data retrieval call binding the contract method 0x693ec85e.
+// GetSuperByIndex is a free data retrieval call binding the contract method 0xab013c26.
 //
-// Solidity: function get(name string) constant returns(address)
-func (_FilesData *FilesDataSession) Get(name string) (common.Address, error) {
-	return _FilesData.Contract.Get(&_FilesData.CallOpts, name)
+// Solidity: function getSuperByIndex(index uint256) constant returns(address)
+func (_FilesData *FilesDataSession) GetSuperByIndex(index *big.Int) (common.Address, error) {
+	return _FilesData.Contract.GetSuperByIndex(&_FilesData.CallOpts, index)
 }
 
-// Get is a free data retrieval call binding the contract method 0x693ec85e.
+// GetSuperByIndex is a free data retrieval call binding the contract method 0xab013c26.
 //
-// Solidity: function get(name string) constant returns(address)
-func (_FilesData *FilesDataCallerSession) Get(name string) (common.Address, error) {
-	return _FilesData.Contract.Get(&_FilesData.CallOpts, name)
+// Solidity: function getSuperByIndex(index uint256) constant returns(address)
+func (_FilesData *FilesDataCallerSession) GetSuperByIndex(index *big.Int) (common.Address, error) {
+	return _FilesData.Contract.GetSuperByIndex(&_FilesData.CallOpts, index)
 }
 
-// Set is a paid mutator transaction binding the contract method 0xa815ff15.
+// GetSuperSize is a free data retrieval call binding the contract method 0x34349621.
 //
-// Solidity: function set(name string, addr address) returns()
-func (_FilesData *FilesDataTransactor) Set(opts *bind.TransactOpts, name string, addr common.Address) (*types.Transaction, error) {
-	return _FilesData.contract.Transact(opts, "set", name, addr)
+// Solidity: function getSuperSize() constant returns(uint256)
+func (_FilesData *FilesDataCaller) GetSuperSize(opts *bind.CallOpts) (*big.Int, error) {
+	var (
+		ret0 = new(*big.Int)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getSuperSize")
+	return *ret0, err
 }
 
-// Set is a paid mutator transaction binding the contract method 0xa815ff15.
+// GetSuperSize is a free data retrieval call binding the contract method 0x34349621.
 //
-// Solidity: function set(name string, addr address) returns()
-func (_FilesData *FilesDataSession) Set(name string, addr common.Address) (*types.Transaction, error) {
-	return _FilesData.Contract.Set(&_FilesData.TransactOpts, name, addr)
+// Solidity: function getSuperSize() constant returns(uint256)
+func (_FilesData *FilesDataSession) GetSuperSize() (*big.Int, error) {
+	return _FilesData.Contract.GetSuperSize(&_FilesData.CallOpts)
 }
 
-// Set is a paid mutator transaction binding the contract method 0xa815ff15.
+// GetSuperSize is a free data retrieval call binding the contract method 0x34349621.
 //
-// Solidity: function set(name string, addr address) returns()
-func (_FilesData *FilesDataTransactorSession) Set(name string, addr common.Address) (*types.Transaction, error) {
-	return _FilesData.Contract.Set(&_FilesData.TransactOpts, name, addr)
+// Solidity: function getSuperSize() constant returns(uint256)
+func (_FilesData *FilesDataCallerSession) GetSuperSize() (*big.Int, error) {
+	return _FilesData.Contract.GetSuperSize(&_FilesData.CallOpts)
 }
 
-// FilesDataOnSetIterator is returned from FilterOnSet and is used to iterate over the raw logs and unpacked data for OnSet events raised by the FilesData contract.
-type FilesDataOnSetIterator struct {
-	Event *FilesDataOnSet // Event containing the contract specifics and raw log
+// GetTime is a free data retrieval call binding the contract method 0xfe07283a.
+//
+// Solidity: function getTime(uuid bytes16) constant returns(uint256)
+func (_FilesData *FilesDataCaller) GetTime(opts *bind.CallOpts, uuid [16]byte) (*big.Int, error) {
+	var (
+		ret0 = new(*big.Int)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getTime", uuid)
+	return *ret0, err
+}
+
+// GetTime is a free data retrieval call binding the contract method 0xfe07283a.
+//
+// Solidity: function getTime(uuid bytes16) constant returns(uint256)
+func (_FilesData *FilesDataSession) GetTime(uuid [16]byte) (*big.Int, error) {
+	return _FilesData.Contract.GetTime(&_FilesData.CallOpts, uuid)
+}
+
+// GetTime is a free data retrieval call binding the contract method 0xfe07283a.
+//
+// Solidity: function getTime(uuid bytes16) constant returns(uint256)
+func (_FilesData *FilesDataCallerSession) GetTime(uuid [16]byte) (*big.Int, error) {
+	return _FilesData.Contract.GetTime(&_FilesData.CallOpts, uuid)
+}
+
+// GetUploaderUuid is a free data retrieval call binding the contract method 0x06e4dffd.
+//
+// Solidity: function getUploaderUuid(uuid bytes16) constant returns(bytes16)
+func (_FilesData *FilesDataCaller) GetUploaderUuid(opts *bind.CallOpts, uuid [16]byte) ([16]byte, error) {
+	var (
+		ret0 = new([16]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getUploaderUuid", uuid)
+	return *ret0, err
+}
+
+// GetUploaderUuid is a free data retrieval call binding the contract method 0x06e4dffd.
+//
+// Solidity: function getUploaderUuid(uuid bytes16) constant returns(bytes16)
+func (_FilesData *FilesDataSession) GetUploaderUuid(uuid [16]byte) ([16]byte, error) {
+	return _FilesData.Contract.GetUploaderUuid(&_FilesData.CallOpts, uuid)
+}
+
+// GetUploaderUuid is a free data retrieval call binding the contract method 0x06e4dffd.
+//
+// Solidity: function getUploaderUuid(uuid bytes16) constant returns(bytes16)
+func (_FilesData *FilesDataCallerSession) GetUploaderUuid(uuid [16]byte) ([16]byte, error) {
+	return _FilesData.Contract.GetUploaderUuid(&_FilesData.CallOpts, uuid)
+}
+
+// GetUuidByIndex is a free data retrieval call binding the contract method 0x7c333c0a.
+//
+// Solidity: function getUuidByIndex(index uint256) constant returns(bytes16)
+func (_FilesData *FilesDataCaller) GetUuidByIndex(opts *bind.CallOpts, index *big.Int) ([16]byte, error) {
+	var (
+		ret0 = new([16]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getUuidByIndex", index)
+	return *ret0, err
+}
+
+// GetUuidByIndex is a free data retrieval call binding the contract method 0x7c333c0a.
+//
+// Solidity: function getUuidByIndex(index uint256) constant returns(bytes16)
+func (_FilesData *FilesDataSession) GetUuidByIndex(index *big.Int) ([16]byte, error) {
+	return _FilesData.Contract.GetUuidByIndex(&_FilesData.CallOpts, index)
+}
+
+// GetUuidByIndex is a free data retrieval call binding the contract method 0x7c333c0a.
+//
+// Solidity: function getUuidByIndex(index uint256) constant returns(bytes16)
+func (_FilesData *FilesDataCallerSession) GetUuidByIndex(index *big.Int) ([16]byte, error) {
+	return _FilesData.Contract.GetUuidByIndex(&_FilesData.CallOpts, index)
+}
+
+// GetUuidByKeccak256Hash is a free data retrieval call binding the contract method 0x5d8de8b3.
+//
+// Solidity: function getUuidByKeccak256Hash(keccak256Hash bytes32) constant returns(bytes16)
+func (_FilesData *FilesDataCaller) GetUuidByKeccak256Hash(opts *bind.CallOpts, keccak256Hash [32]byte) ([16]byte, error) {
+	var (
+		ret0 = new([16]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getUuidByKeccak256Hash", keccak256Hash)
+	return *ret0, err
+}
+
+// GetUuidByKeccak256Hash is a free data retrieval call binding the contract method 0x5d8de8b3.
+//
+// Solidity: function getUuidByKeccak256Hash(keccak256Hash bytes32) constant returns(bytes16)
+func (_FilesData *FilesDataSession) GetUuidByKeccak256Hash(keccak256Hash [32]byte) ([16]byte, error) {
+	return _FilesData.Contract.GetUuidByKeccak256Hash(&_FilesData.CallOpts, keccak256Hash)
+}
+
+// GetUuidByKeccak256Hash is a free data retrieval call binding the contract method 0x5d8de8b3.
+//
+// Solidity: function getUuidByKeccak256Hash(keccak256Hash bytes32) constant returns(bytes16)
+func (_FilesData *FilesDataCallerSession) GetUuidByKeccak256Hash(keccak256Hash [32]byte) ([16]byte, error) {
+	return _FilesData.Contract.GetUuidByKeccak256Hash(&_FilesData.CallOpts, keccak256Hash)
+}
+
+// GetUuidBySha256Hash is a free data retrieval call binding the contract method 0xfa04901f.
+//
+// Solidity: function getUuidBySha256Hash(sha256Hash bytes32) constant returns(bytes16)
+func (_FilesData *FilesDataCaller) GetUuidBySha256Hash(opts *bind.CallOpts, sha256Hash [32]byte) ([16]byte, error) {
+	var (
+		ret0 = new([16]byte)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getUuidBySha256Hash", sha256Hash)
+	return *ret0, err
+}
+
+// GetUuidBySha256Hash is a free data retrieval call binding the contract method 0xfa04901f.
+//
+// Solidity: function getUuidBySha256Hash(sha256Hash bytes32) constant returns(bytes16)
+func (_FilesData *FilesDataSession) GetUuidBySha256Hash(sha256Hash [32]byte) ([16]byte, error) {
+	return _FilesData.Contract.GetUuidBySha256Hash(&_FilesData.CallOpts, sha256Hash)
+}
+
+// GetUuidBySha256Hash is a free data retrieval call binding the contract method 0xfa04901f.
+//
+// Solidity: function getUuidBySha256Hash(sha256Hash bytes32) constant returns(bytes16)
+func (_FilesData *FilesDataCallerSession) GetUuidBySha256Hash(sha256Hash [32]byte) ([16]byte, error) {
+	return _FilesData.Contract.GetUuidBySha256Hash(&_FilesData.CallOpts, sha256Hash)
+}
+
+// GetUuidListSize is a free data retrieval call binding the contract method 0x6b303682.
+//
+// Solidity: function getUuidListSize() constant returns(uint256)
+func (_FilesData *FilesDataCaller) GetUuidListSize(opts *bind.CallOpts) (*big.Int, error) {
+	var (
+		ret0 = new(*big.Int)
+	)
+	out := ret0
+	err := _FilesData.contract.Call(opts, out, "getUuidListSize")
+	return *ret0, err
+}
+
+// GetUuidListSize is a free data retrieval call binding the contract method 0x6b303682.
+//
+// Solidity: function getUuidListSize() constant returns(uint256)
+func (_FilesData *FilesDataSession) GetUuidListSize() (*big.Int, error) {
+	return _FilesData.Contract.GetUuidListSize(&_FilesData.CallOpts)
+}
+
+// GetUuidListSize is a free data retrieval call binding the contract method 0x6b303682.
+//
+// Solidity: function getUuidListSize() constant returns(uint256)
+func (_FilesData *FilesDataCallerSession) GetUuidListSize() (*big.Int, error) {
+	return _FilesData.Contract.GetUuidListSize(&_FilesData.CallOpts)
+}
+
+// AddFile is a paid mutator transaction binding the contract method 0x81803062.
+//
+// Solidity: function addFile(uuid bytes16, ownerUuid bytes16, uploaderUuid bytes16, fileType bytes32, fileDesc bytes32[4], keccak256Hash bytes32, sha256Hash bytes32, r bytes32, s bytes32, v uint8, time uint256) returns()
+func (_FilesData *FilesDataTransactor) AddFile(opts *bind.TransactOpts, uuid [16]byte, ownerUuid [16]byte, uploaderUuid [16]byte, fileType [32]byte, fileDesc [4][32]byte, keccak256Hash [32]byte, sha256Hash [32]byte, r [32]byte, s [32]byte, v uint8, time *big.Int) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "addFile", uuid, ownerUuid, uploaderUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, time)
+}
+
+// AddFile is a paid mutator transaction binding the contract method 0x81803062.
+//
+// Solidity: function addFile(uuid bytes16, ownerUuid bytes16, uploaderUuid bytes16, fileType bytes32, fileDesc bytes32[4], keccak256Hash bytes32, sha256Hash bytes32, r bytes32, s bytes32, v uint8, time uint256) returns()
+func (_FilesData *FilesDataSession) AddFile(uuid [16]byte, ownerUuid [16]byte, uploaderUuid [16]byte, fileType [32]byte, fileDesc [4][32]byte, keccak256Hash [32]byte, sha256Hash [32]byte, r [32]byte, s [32]byte, v uint8, time *big.Int) (*types.Transaction, error) {
+	return _FilesData.Contract.AddFile(&_FilesData.TransactOpts, uuid, ownerUuid, uploaderUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, time)
+}
+
+// AddFile is a paid mutator transaction binding the contract method 0x81803062.
+//
+// Solidity: function addFile(uuid bytes16, ownerUuid bytes16, uploaderUuid bytes16, fileType bytes32, fileDesc bytes32[4], keccak256Hash bytes32, sha256Hash bytes32, r bytes32, s bytes32, v uint8, time uint256) returns()
+func (_FilesData *FilesDataTransactorSession) AddFile(uuid [16]byte, ownerUuid [16]byte, uploaderUuid [16]byte, fileType [32]byte, fileDesc [4][32]byte, keccak256Hash [32]byte, sha256Hash [32]byte, r [32]byte, s [32]byte, v uint8, time *big.Int) (*types.Transaction, error) {
+	return _FilesData.Contract.AddFile(&_FilesData.TransactOpts, uuid, ownerUuid, uploaderUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, time)
+}
+
+// AddSign is a paid mutator transaction binding the contract method 0xaf1e3afc.
+//
+// Solidity: function addSign(uuid bytes16, userUuid bytes16, r bytes32, s bytes32, v uint8) returns()
+func (_FilesData *FilesDataTransactor) AddSign(opts *bind.TransactOpts, uuid [16]byte, userUuid [16]byte, r [32]byte, s [32]byte, v uint8) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "addSign", uuid, userUuid, r, s, v)
+}
+
+// AddSign is a paid mutator transaction binding the contract method 0xaf1e3afc.
+//
+// Solidity: function addSign(uuid bytes16, userUuid bytes16, r bytes32, s bytes32, v uint8) returns()
+func (_FilesData *FilesDataSession) AddSign(uuid [16]byte, userUuid [16]byte, r [32]byte, s [32]byte, v uint8) (*types.Transaction, error) {
+	return _FilesData.Contract.AddSign(&_FilesData.TransactOpts, uuid, userUuid, r, s, v)
+}
+
+// AddSign is a paid mutator transaction binding the contract method 0xaf1e3afc.
+//
+// Solidity: function addSign(uuid bytes16, userUuid bytes16, r bytes32, s bytes32, v uint8) returns()
+func (_FilesData *FilesDataTransactorSession) AddSign(uuid [16]byte, userUuid [16]byte, r [32]byte, s [32]byte, v uint8) (*types.Transaction, error) {
+	return _FilesData.Contract.AddSign(&_FilesData.TransactOpts, uuid, userUuid, r, s, v)
+}
+
+// AddSuper is a paid mutator transaction binding the contract method 0xe1e8637b.
+//
+// Solidity: function addSuper(addr address) returns()
+func (_FilesData *FilesDataTransactor) AddSuper(opts *bind.TransactOpts, addr common.Address) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "addSuper", addr)
+}
+
+// AddSuper is a paid mutator transaction binding the contract method 0xe1e8637b.
+//
+// Solidity: function addSuper(addr address) returns()
+func (_FilesData *FilesDataSession) AddSuper(addr common.Address) (*types.Transaction, error) {
+	return _FilesData.Contract.AddSuper(&_FilesData.TransactOpts, addr)
+}
+
+// AddSuper is a paid mutator transaction binding the contract method 0xe1e8637b.
+//
+// Solidity: function addSuper(addr address) returns()
+func (_FilesData *FilesDataTransactorSession) AddSuper(addr common.Address) (*types.Transaction, error) {
+	return _FilesData.Contract.AddSuper(&_FilesData.TransactOpts, addr)
+}
+
+// DelFile is a paid mutator transaction binding the contract method 0xab594cf6.
+//
+// Solidity: function delFile(uuid bytes16) returns()
+func (_FilesData *FilesDataTransactor) DelFile(opts *bind.TransactOpts, uuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "delFile", uuid)
+}
+
+// DelFile is a paid mutator transaction binding the contract method 0xab594cf6.
+//
+// Solidity: function delFile(uuid bytes16) returns()
+func (_FilesData *FilesDataSession) DelFile(uuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.DelFile(&_FilesData.TransactOpts, uuid)
+}
+
+// DelFile is a paid mutator transaction binding the contract method 0xab594cf6.
+//
+// Solidity: function delFile(uuid bytes16) returns()
+func (_FilesData *FilesDataTransactorSession) DelFile(uuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.DelFile(&_FilesData.TransactOpts, uuid)
+}
+
+// DelSuper is a paid mutator transaction binding the contract method 0x65f337f5.
+//
+// Solidity: function delSuper(addr address) returns()
+func (_FilesData *FilesDataTransactor) DelSuper(opts *bind.TransactOpts, addr common.Address) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "delSuper", addr)
+}
+
+// DelSuper is a paid mutator transaction binding the contract method 0x65f337f5.
+//
+// Solidity: function delSuper(addr address) returns()
+func (_FilesData *FilesDataSession) DelSuper(addr common.Address) (*types.Transaction, error) {
+	return _FilesData.Contract.DelSuper(&_FilesData.TransactOpts, addr)
+}
+
+// DelSuper is a paid mutator transaction binding the contract method 0x65f337f5.
+//
+// Solidity: function delSuper(addr address) returns()
+func (_FilesData *FilesDataTransactorSession) DelSuper(addr common.Address) (*types.Transaction, error) {
+	return _FilesData.Contract.DelSuper(&_FilesData.TransactOpts, addr)
+}
+
+// SetActive is a paid mutator transaction binding the contract method 0x24716b55.
+//
+// Solidity: function setActive(uuid bytes16, active bool) returns()
+func (_FilesData *FilesDataTransactor) SetActive(opts *bind.TransactOpts, uuid [16]byte, active bool) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "setActive", uuid, active)
+}
+
+// SetActive is a paid mutator transaction binding the contract method 0x24716b55.
+//
+// Solidity: function setActive(uuid bytes16, active bool) returns()
+func (_FilesData *FilesDataSession) SetActive(uuid [16]byte, active bool) (*types.Transaction, error) {
+	return _FilesData.Contract.SetActive(&_FilesData.TransactOpts, uuid, active)
+}
+
+// SetActive is a paid mutator transaction binding the contract method 0x24716b55.
+//
+// Solidity: function setActive(uuid bytes16, active bool) returns()
+func (_FilesData *FilesDataTransactorSession) SetActive(uuid [16]byte, active bool) (*types.Transaction, error) {
+	return _FilesData.Contract.SetActive(&_FilesData.TransactOpts, uuid, active)
+}
+
+// SetFileDesc is a paid mutator transaction binding the contract method 0xa06f2e46.
+//
+// Solidity: function setFileDesc(uuid bytes16, fileDesc bytes32[4]) returns()
+func (_FilesData *FilesDataTransactor) SetFileDesc(opts *bind.TransactOpts, uuid [16]byte, fileDesc [4][32]byte) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "setFileDesc", uuid, fileDesc)
+}
+
+// SetFileDesc is a paid mutator transaction binding the contract method 0xa06f2e46.
+//
+// Solidity: function setFileDesc(uuid bytes16, fileDesc bytes32[4]) returns()
+func (_FilesData *FilesDataSession) SetFileDesc(uuid [16]byte, fileDesc [4][32]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.SetFileDesc(&_FilesData.TransactOpts, uuid, fileDesc)
+}
+
+// SetFileDesc is a paid mutator transaction binding the contract method 0xa06f2e46.
+//
+// Solidity: function setFileDesc(uuid bytes16, fileDesc bytes32[4]) returns()
+func (_FilesData *FilesDataTransactorSession) SetFileDesc(uuid [16]byte, fileDesc [4][32]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.SetFileDesc(&_FilesData.TransactOpts, uuid, fileDesc)
+}
+
+// SetFileType is a paid mutator transaction binding the contract method 0x28360cdd.
+//
+// Solidity: function setFileType(uuid bytes16, fileType bytes32) returns()
+func (_FilesData *FilesDataTransactor) SetFileType(opts *bind.TransactOpts, uuid [16]byte, fileType [32]byte) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "setFileType", uuid, fileType)
+}
+
+// SetFileType is a paid mutator transaction binding the contract method 0x28360cdd.
+//
+// Solidity: function setFileType(uuid bytes16, fileType bytes32) returns()
+func (_FilesData *FilesDataSession) SetFileType(uuid [16]byte, fileType [32]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.SetFileType(&_FilesData.TransactOpts, uuid, fileType)
+}
+
+// SetFileType is a paid mutator transaction binding the contract method 0x28360cdd.
+//
+// Solidity: function setFileType(uuid bytes16, fileType bytes32) returns()
+func (_FilesData *FilesDataTransactorSession) SetFileType(uuid [16]byte, fileType [32]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.SetFileType(&_FilesData.TransactOpts, uuid, fileType)
+}
+
+// SetOwnerUuid is a paid mutator transaction binding the contract method 0x2f682a60.
+//
+// Solidity: function setOwnerUuid(uuid bytes16, ownerUuid bytes16) returns()
+func (_FilesData *FilesDataTransactor) SetOwnerUuid(opts *bind.TransactOpts, uuid [16]byte, ownerUuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "setOwnerUuid", uuid, ownerUuid)
+}
+
+// SetOwnerUuid is a paid mutator transaction binding the contract method 0x2f682a60.
+//
+// Solidity: function setOwnerUuid(uuid bytes16, ownerUuid bytes16) returns()
+func (_FilesData *FilesDataSession) SetOwnerUuid(uuid [16]byte, ownerUuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.SetOwnerUuid(&_FilesData.TransactOpts, uuid, ownerUuid)
+}
+
+// SetOwnerUuid is a paid mutator transaction binding the contract method 0x2f682a60.
+//
+// Solidity: function setOwnerUuid(uuid bytes16, ownerUuid bytes16) returns()
+func (_FilesData *FilesDataTransactorSession) SetOwnerUuid(uuid [16]byte, ownerUuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.SetOwnerUuid(&_FilesData.TransactOpts, uuid, ownerUuid)
+}
+
+// SetTime is a paid mutator transaction binding the contract method 0x3f7a52b6.
+//
+// Solidity: function setTime(uuid bytes16, time uint256) returns()
+func (_FilesData *FilesDataTransactor) SetTime(opts *bind.TransactOpts, uuid [16]byte, time *big.Int) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "setTime", uuid, time)
+}
+
+// SetTime is a paid mutator transaction binding the contract method 0x3f7a52b6.
+//
+// Solidity: function setTime(uuid bytes16, time uint256) returns()
+func (_FilesData *FilesDataSession) SetTime(uuid [16]byte, time *big.Int) (*types.Transaction, error) {
+	return _FilesData.Contract.SetTime(&_FilesData.TransactOpts, uuid, time)
+}
+
+// SetTime is a paid mutator transaction binding the contract method 0x3f7a52b6.
+//
+// Solidity: function setTime(uuid bytes16, time uint256) returns()
+func (_FilesData *FilesDataTransactorSession) SetTime(uuid [16]byte, time *big.Int) (*types.Transaction, error) {
+	return _FilesData.Contract.SetTime(&_FilesData.TransactOpts, uuid, time)
+}
+
+// SetUploaderUuid is a paid mutator transaction binding the contract method 0x6c75a331.
+//
+// Solidity: function setUploaderUuid(uuid bytes16, uploaderUuid bytes16) returns()
+func (_FilesData *FilesDataTransactor) SetUploaderUuid(opts *bind.TransactOpts, uuid [16]byte, uploaderUuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.contract.Transact(opts, "setUploaderUuid", uuid, uploaderUuid)
+}
+
+// SetUploaderUuid is a paid mutator transaction binding the contract method 0x6c75a331.
+//
+// Solidity: function setUploaderUuid(uuid bytes16, uploaderUuid bytes16) returns()
+func (_FilesData *FilesDataSession) SetUploaderUuid(uuid [16]byte, uploaderUuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.SetUploaderUuid(&_FilesData.TransactOpts, uuid, uploaderUuid)
+}
+
+// SetUploaderUuid is a paid mutator transaction binding the contract method 0x6c75a331.
+//
+// Solidity: function setUploaderUuid(uuid bytes16, uploaderUuid bytes16) returns()
+func (_FilesData *FilesDataTransactorSession) SetUploaderUuid(uuid [16]byte, uploaderUuid [16]byte) (*types.Transaction, error) {
+	return _FilesData.Contract.SetUploaderUuid(&_FilesData.TransactOpts, uuid, uploaderUuid)
+}
+
+// FilesDataOnAddFileIterator is returned from FilterOnAddFile and is used to iterate over the raw logs and unpacked data for OnAddFile events raised by the FilesData contract.
+type FilesDataOnAddFileIterator struct {
+	Event *FilesDataOnAddFile // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -259,7 +845,7 @@ type FilesDataOnSetIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *FilesDataOnSetIterator) Next() bool {
+func (it *FilesDataOnAddFileIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -268,7 +854,7 @@ func (it *FilesDataOnSetIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(FilesDataOnSet)
+			it.Event = new(FilesDataOnAddFile)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -283,7 +869,7 @@ func (it *FilesDataOnSetIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(FilesDataOnSet)
+		it.Event = new(FilesDataOnAddFile)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -299,42 +885,51 @@ func (it *FilesDataOnSetIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *FilesDataOnSetIterator) Error() error {
+func (it *FilesDataOnAddFileIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *FilesDataOnSetIterator) Close() error {
+func (it *FilesDataOnAddFileIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// FilesDataOnSet represents a OnSet event raised by the FilesData contract.
-type FilesDataOnSet struct {
-	Name string
-	Addr common.Address
-	Raw  types.Log // Blockchain specific contextual infos
+// FilesDataOnAddFile represents a OnAddFile event raised by the FilesData contract.
+type FilesDataOnAddFile struct {
+	Uuid          [16]byte
+	OwnerUuid     [16]byte
+	UploaderUuid  [16]byte
+	FileType      [32]byte
+	FileDesc      [4][32]byte
+	Keccak256Hash [32]byte
+	Sha256Hash    [32]byte
+	R             [32]byte
+	S             [32]byte
+	V             uint8
+	Time          *big.Int
+	Raw           types.Log // Blockchain specific contextual infos
 }
 
-// FilterOnSet is a free log retrieval operation binding the contract event 0xfb61c28e210c57f5ca20724afa35c1dbda662f286bd8d214606c6cfbdc41f439.
+// FilterOnAddFile is a free log retrieval operation binding the contract event 0xe5db0782a88ef1dd5e05dbcd66036151fdd928c04a041691230dff05e269440a.
 //
-// Solidity: e onSet(name string, addr address)
-func (_FilesData *FilesDataFilterer) FilterOnSet(opts *bind.FilterOpts) (*FilesDataOnSetIterator, error) {
+// Solidity: e onAddFile(uuid bytes16, ownerUuid bytes16, uploaderUuid bytes16, fileType bytes32, fileDesc bytes32[4], keccak256Hash bytes32, sha256Hash bytes32, r bytes32, s bytes32, v uint8, time uint256)
+func (_FilesData *FilesDataFilterer) FilterOnAddFile(opts *bind.FilterOpts) (*FilesDataOnAddFileIterator, error) {
 
-	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onSet")
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onAddFile")
 	if err != nil {
 		return nil, err
 	}
-	return &FilesDataOnSetIterator{contract: _FilesData.contract, event: "onSet", logs: logs, sub: sub}, nil
+	return &FilesDataOnAddFileIterator{contract: _FilesData.contract, event: "onAddFile", logs: logs, sub: sub}, nil
 }
 
-// WatchOnSet is a free log subscription operation binding the contract event 0xfb61c28e210c57f5ca20724afa35c1dbda662f286bd8d214606c6cfbdc41f439.
+// WatchOnAddFile is a free log subscription operation binding the contract event 0xe5db0782a88ef1dd5e05dbcd66036151fdd928c04a041691230dff05e269440a.
 //
-// Solidity: e onSet(name string, addr address)
-func (_FilesData *FilesDataFilterer) WatchOnSet(opts *bind.WatchOpts, sink chan<- *FilesDataOnSet) (event.Subscription, error) {
+// Solidity: e onAddFile(uuid bytes16, ownerUuid bytes16, uploaderUuid bytes16, fileType bytes32, fileDesc bytes32[4], keccak256Hash bytes32, sha256Hash bytes32, r bytes32, s bytes32, v uint8, time uint256)
+func (_FilesData *FilesDataFilterer) WatchOnAddFile(opts *bind.WatchOpts, sink chan<- *FilesDataOnAddFile) (event.Subscription, error) {
 
-	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onSet")
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onAddFile")
 	if err != nil {
 		return nil, err
 	}
@@ -344,8 +939,1238 @@ func (_FilesData *FilesDataFilterer) WatchOnSet(opts *bind.WatchOpts, sink chan<
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(FilesDataOnSet)
-				if err := _FilesData.contract.UnpackLog(event, "onSet", log); err != nil {
+				event := new(FilesDataOnAddFile)
+				if err := _FilesData.contract.UnpackLog(event, "onAddFile", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnAddSignIterator is returned from FilterOnAddSign and is used to iterate over the raw logs and unpacked data for OnAddSign events raised by the FilesData contract.
+type FilesDataOnAddSignIterator struct {
+	Event *FilesDataOnAddSign // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnAddSignIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnAddSign)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnAddSign)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnAddSignIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnAddSignIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnAddSign represents a OnAddSign event raised by the FilesData contract.
+type FilesDataOnAddSign struct {
+	Uuid     [16]byte
+	UserUuid [16]byte
+	R        [32]byte
+	S        [32]byte
+	V        uint8
+	Raw      types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnAddSign is a free log retrieval operation binding the contract event 0xb6d8f3f2b7e44359d0f3577f248b9a9b8e6c275f3c9b6752d9c6905a0d18a2ac.
+//
+// Solidity: e onAddSign(uuid bytes16, userUuid bytes16, r bytes32, s bytes32, v uint8)
+func (_FilesData *FilesDataFilterer) FilterOnAddSign(opts *bind.FilterOpts) (*FilesDataOnAddSignIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onAddSign")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnAddSignIterator{contract: _FilesData.contract, event: "onAddSign", logs: logs, sub: sub}, nil
+}
+
+// WatchOnAddSign is a free log subscription operation binding the contract event 0xb6d8f3f2b7e44359d0f3577f248b9a9b8e6c275f3c9b6752d9c6905a0d18a2ac.
+//
+// Solidity: e onAddSign(uuid bytes16, userUuid bytes16, r bytes32, s bytes32, v uint8)
+func (_FilesData *FilesDataFilterer) WatchOnAddSign(opts *bind.WatchOpts, sink chan<- *FilesDataOnAddSign) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onAddSign")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnAddSign)
+				if err := _FilesData.contract.UnpackLog(event, "onAddSign", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnAddSuperIterator is returned from FilterOnAddSuper and is used to iterate over the raw logs and unpacked data for OnAddSuper events raised by the FilesData contract.
+type FilesDataOnAddSuperIterator struct {
+	Event *FilesDataOnAddSuper // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnAddSuperIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnAddSuper)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnAddSuper)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnAddSuperIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnAddSuperIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnAddSuper represents a OnAddSuper event raised by the FilesData contract.
+type FilesDataOnAddSuper struct {
+	Addr common.Address
+	Raw  types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnAddSuper is a free log retrieval operation binding the contract event 0x920999c03a7fd19172e4c657c22aa62a1bfb5e027a8cf6a2a0ee9daf4c5a3474.
+//
+// Solidity: e onAddSuper(addr address)
+func (_FilesData *FilesDataFilterer) FilterOnAddSuper(opts *bind.FilterOpts) (*FilesDataOnAddSuperIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onAddSuper")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnAddSuperIterator{contract: _FilesData.contract, event: "onAddSuper", logs: logs, sub: sub}, nil
+}
+
+// WatchOnAddSuper is a free log subscription operation binding the contract event 0x920999c03a7fd19172e4c657c22aa62a1bfb5e027a8cf6a2a0ee9daf4c5a3474.
+//
+// Solidity: e onAddSuper(addr address)
+func (_FilesData *FilesDataFilterer) WatchOnAddSuper(opts *bind.WatchOpts, sink chan<- *FilesDataOnAddSuper) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onAddSuper")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnAddSuper)
+				if err := _FilesData.contract.UnpackLog(event, "onAddSuper", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnDelFileIterator is returned from FilterOnDelFile and is used to iterate over the raw logs and unpacked data for OnDelFile events raised by the FilesData contract.
+type FilesDataOnDelFileIterator struct {
+	Event *FilesDataOnDelFile // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnDelFileIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnDelFile)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnDelFile)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnDelFileIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnDelFileIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnDelFile represents a OnDelFile event raised by the FilesData contract.
+type FilesDataOnDelFile struct {
+	Uuid [16]byte
+	Raw  types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnDelFile is a free log retrieval operation binding the contract event 0x5084265f9b0b758e57a9c7d957106776471ed835d7267fb54d933927a3481bfd.
+//
+// Solidity: e onDelFile(uuid bytes16)
+func (_FilesData *FilesDataFilterer) FilterOnDelFile(opts *bind.FilterOpts) (*FilesDataOnDelFileIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onDelFile")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnDelFileIterator{contract: _FilesData.contract, event: "onDelFile", logs: logs, sub: sub}, nil
+}
+
+// WatchOnDelFile is a free log subscription operation binding the contract event 0x5084265f9b0b758e57a9c7d957106776471ed835d7267fb54d933927a3481bfd.
+//
+// Solidity: e onDelFile(uuid bytes16)
+func (_FilesData *FilesDataFilterer) WatchOnDelFile(opts *bind.WatchOpts, sink chan<- *FilesDataOnDelFile) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onDelFile")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnDelFile)
+				if err := _FilesData.contract.UnpackLog(event, "onDelFile", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnDelSuperIterator is returned from FilterOnDelSuper and is used to iterate over the raw logs and unpacked data for OnDelSuper events raised by the FilesData contract.
+type FilesDataOnDelSuperIterator struct {
+	Event *FilesDataOnDelSuper // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnDelSuperIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnDelSuper)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnDelSuper)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnDelSuperIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnDelSuperIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnDelSuper represents a OnDelSuper event raised by the FilesData contract.
+type FilesDataOnDelSuper struct {
+	Addr common.Address
+	Raw  types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnDelSuper is a free log retrieval operation binding the contract event 0x5561c1cda602083d14af2f0773152f273f6f9bf8feb17ce6265f94aec25bde00.
+//
+// Solidity: e onDelSuper(addr address)
+func (_FilesData *FilesDataFilterer) FilterOnDelSuper(opts *bind.FilterOpts) (*FilesDataOnDelSuperIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onDelSuper")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnDelSuperIterator{contract: _FilesData.contract, event: "onDelSuper", logs: logs, sub: sub}, nil
+}
+
+// WatchOnDelSuper is a free log subscription operation binding the contract event 0x5561c1cda602083d14af2f0773152f273f6f9bf8feb17ce6265f94aec25bde00.
+//
+// Solidity: e onDelSuper(addr address)
+func (_FilesData *FilesDataFilterer) WatchOnDelSuper(opts *bind.WatchOpts, sink chan<- *FilesDataOnDelSuper) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onDelSuper")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnDelSuper)
+				if err := _FilesData.contract.UnpackLog(event, "onDelSuper", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnSetActiveIterator is returned from FilterOnSetActive and is used to iterate over the raw logs and unpacked data for OnSetActive events raised by the FilesData contract.
+type FilesDataOnSetActiveIterator struct {
+	Event *FilesDataOnSetActive // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnSetActiveIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnSetActive)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnSetActive)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnSetActiveIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnSetActiveIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnSetActive represents a OnSetActive event raised by the FilesData contract.
+type FilesDataOnSetActive struct {
+	Uuid   [16]byte
+	Active bool
+	Raw    types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnSetActive is a free log retrieval operation binding the contract event 0x713e572bb47b301d3993c6d748aa8f43912b3e2864d1fd701e16e586fbb53905.
+//
+// Solidity: e onSetActive(uuid bytes16, active bool)
+func (_FilesData *FilesDataFilterer) FilterOnSetActive(opts *bind.FilterOpts) (*FilesDataOnSetActiveIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onSetActive")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnSetActiveIterator{contract: _FilesData.contract, event: "onSetActive", logs: logs, sub: sub}, nil
+}
+
+// WatchOnSetActive is a free log subscription operation binding the contract event 0x713e572bb47b301d3993c6d748aa8f43912b3e2864d1fd701e16e586fbb53905.
+//
+// Solidity: e onSetActive(uuid bytes16, active bool)
+func (_FilesData *FilesDataFilterer) WatchOnSetActive(opts *bind.WatchOpts, sink chan<- *FilesDataOnSetActive) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onSetActive")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnSetActive)
+				if err := _FilesData.contract.UnpackLog(event, "onSetActive", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnSetFileDescIterator is returned from FilterOnSetFileDesc and is used to iterate over the raw logs and unpacked data for OnSetFileDesc events raised by the FilesData contract.
+type FilesDataOnSetFileDescIterator struct {
+	Event *FilesDataOnSetFileDesc // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnSetFileDescIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnSetFileDesc)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnSetFileDesc)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnSetFileDescIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnSetFileDescIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnSetFileDesc represents a OnSetFileDesc event raised by the FilesData contract.
+type FilesDataOnSetFileDesc struct {
+	Uuid     [16]byte
+	FileDesc [4][32]byte
+	Raw      types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnSetFileDesc is a free log retrieval operation binding the contract event 0x62c9cfebd42861a16451b2ce63bf3d3e5bcdb62acbc46482d52d0c48d34eb9b3.
+//
+// Solidity: e onSetFileDesc(uuid bytes16, fileDesc bytes32[4])
+func (_FilesData *FilesDataFilterer) FilterOnSetFileDesc(opts *bind.FilterOpts) (*FilesDataOnSetFileDescIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onSetFileDesc")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnSetFileDescIterator{contract: _FilesData.contract, event: "onSetFileDesc", logs: logs, sub: sub}, nil
+}
+
+// WatchOnSetFileDesc is a free log subscription operation binding the contract event 0x62c9cfebd42861a16451b2ce63bf3d3e5bcdb62acbc46482d52d0c48d34eb9b3.
+//
+// Solidity: e onSetFileDesc(uuid bytes16, fileDesc bytes32[4])
+func (_FilesData *FilesDataFilterer) WatchOnSetFileDesc(opts *bind.WatchOpts, sink chan<- *FilesDataOnSetFileDesc) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onSetFileDesc")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnSetFileDesc)
+				if err := _FilesData.contract.UnpackLog(event, "onSetFileDesc", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnSetFileTypeIterator is returned from FilterOnSetFileType and is used to iterate over the raw logs and unpacked data for OnSetFileType events raised by the FilesData contract.
+type FilesDataOnSetFileTypeIterator struct {
+	Event *FilesDataOnSetFileType // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnSetFileTypeIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnSetFileType)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnSetFileType)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnSetFileTypeIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnSetFileTypeIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnSetFileType represents a OnSetFileType event raised by the FilesData contract.
+type FilesDataOnSetFileType struct {
+	Uuid     [16]byte
+	FileType [32]byte
+	Raw      types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnSetFileType is a free log retrieval operation binding the contract event 0x0f5d2a1fd7e620b5060ef0c66774a0475af737bef138fc169dfa8aca450e3899.
+//
+// Solidity: e onSetFileType(uuid bytes16, fileType bytes32)
+func (_FilesData *FilesDataFilterer) FilterOnSetFileType(opts *bind.FilterOpts) (*FilesDataOnSetFileTypeIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onSetFileType")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnSetFileTypeIterator{contract: _FilesData.contract, event: "onSetFileType", logs: logs, sub: sub}, nil
+}
+
+// WatchOnSetFileType is a free log subscription operation binding the contract event 0x0f5d2a1fd7e620b5060ef0c66774a0475af737bef138fc169dfa8aca450e3899.
+//
+// Solidity: e onSetFileType(uuid bytes16, fileType bytes32)
+func (_FilesData *FilesDataFilterer) WatchOnSetFileType(opts *bind.WatchOpts, sink chan<- *FilesDataOnSetFileType) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onSetFileType")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnSetFileType)
+				if err := _FilesData.contract.UnpackLog(event, "onSetFileType", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnSetOwnerUuidIterator is returned from FilterOnSetOwnerUuid and is used to iterate over the raw logs and unpacked data for OnSetOwnerUuid events raised by the FilesData contract.
+type FilesDataOnSetOwnerUuidIterator struct {
+	Event *FilesDataOnSetOwnerUuid // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnSetOwnerUuidIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnSetOwnerUuid)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnSetOwnerUuid)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnSetOwnerUuidIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnSetOwnerUuidIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnSetOwnerUuid represents a OnSetOwnerUuid event raised by the FilesData contract.
+type FilesDataOnSetOwnerUuid struct {
+	Uuid      [16]byte
+	OwnerUuid [16]byte
+	Raw       types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnSetOwnerUuid is a free log retrieval operation binding the contract event 0x82e7473892dc1da52c17ad55ae9ce073d7e153c1313b43a75527e983c42f9c66.
+//
+// Solidity: e onSetOwnerUuid(uuid bytes16, ownerUuid bytes16)
+func (_FilesData *FilesDataFilterer) FilterOnSetOwnerUuid(opts *bind.FilterOpts) (*FilesDataOnSetOwnerUuidIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onSetOwnerUuid")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnSetOwnerUuidIterator{contract: _FilesData.contract, event: "onSetOwnerUuid", logs: logs, sub: sub}, nil
+}
+
+// WatchOnSetOwnerUuid is a free log subscription operation binding the contract event 0x82e7473892dc1da52c17ad55ae9ce073d7e153c1313b43a75527e983c42f9c66.
+//
+// Solidity: e onSetOwnerUuid(uuid bytes16, ownerUuid bytes16)
+func (_FilesData *FilesDataFilterer) WatchOnSetOwnerUuid(opts *bind.WatchOpts, sink chan<- *FilesDataOnSetOwnerUuid) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onSetOwnerUuid")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnSetOwnerUuid)
+				if err := _FilesData.contract.UnpackLog(event, "onSetOwnerUuid", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnSetTimeIterator is returned from FilterOnSetTime and is used to iterate over the raw logs and unpacked data for OnSetTime events raised by the FilesData contract.
+type FilesDataOnSetTimeIterator struct {
+	Event *FilesDataOnSetTime // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnSetTimeIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnSetTime)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnSetTime)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnSetTimeIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnSetTimeIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnSetTime represents a OnSetTime event raised by the FilesData contract.
+type FilesDataOnSetTime struct {
+	Uuid [16]byte
+	Time *big.Int
+	Raw  types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnSetTime is a free log retrieval operation binding the contract event 0x50843b091ea0bec4b6ead7f725b4fcb769671b6948c77b9cd98b25ff2440d84c.
+//
+// Solidity: e onSetTime(uuid bytes16, time uint256)
+func (_FilesData *FilesDataFilterer) FilterOnSetTime(opts *bind.FilterOpts) (*FilesDataOnSetTimeIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onSetTime")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnSetTimeIterator{contract: _FilesData.contract, event: "onSetTime", logs: logs, sub: sub}, nil
+}
+
+// WatchOnSetTime is a free log subscription operation binding the contract event 0x50843b091ea0bec4b6ead7f725b4fcb769671b6948c77b9cd98b25ff2440d84c.
+//
+// Solidity: e onSetTime(uuid bytes16, time uint256)
+func (_FilesData *FilesDataFilterer) WatchOnSetTime(opts *bind.WatchOpts, sink chan<- *FilesDataOnSetTime) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onSetTime")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnSetTime)
+				if err := _FilesData.contract.UnpackLog(event, "onSetTime", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// FilesDataOnSetUploaderUuidIterator is returned from FilterOnSetUploaderUuid and is used to iterate over the raw logs and unpacked data for OnSetUploaderUuid events raised by the FilesData contract.
+type FilesDataOnSetUploaderUuidIterator struct {
+	Event *FilesDataOnSetUploaderUuid // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *FilesDataOnSetUploaderUuidIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(FilesDataOnSetUploaderUuid)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(FilesDataOnSetUploaderUuid)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *FilesDataOnSetUploaderUuidIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *FilesDataOnSetUploaderUuidIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// FilesDataOnSetUploaderUuid represents a OnSetUploaderUuid event raised by the FilesData contract.
+type FilesDataOnSetUploaderUuid struct {
+	Uuid         [16]byte
+	UploaderUuid [16]byte
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterOnSetUploaderUuid is a free log retrieval operation binding the contract event 0xd8aaf341152319250a5bbe3f879ed37a1710d2b5dfa9676f68e9bfb98e3de630.
+//
+// Solidity: e onSetUploaderUuid(uuid bytes16, uploaderUuid bytes16)
+func (_FilesData *FilesDataFilterer) FilterOnSetUploaderUuid(opts *bind.FilterOpts) (*FilesDataOnSetUploaderUuidIterator, error) {
+
+	logs, sub, err := _FilesData.contract.FilterLogs(opts, "onSetUploaderUuid")
+	if err != nil {
+		return nil, err
+	}
+	return &FilesDataOnSetUploaderUuidIterator{contract: _FilesData.contract, event: "onSetUploaderUuid", logs: logs, sub: sub}, nil
+}
+
+// WatchOnSetUploaderUuid is a free log subscription operation binding the contract event 0xd8aaf341152319250a5bbe3f879ed37a1710d2b5dfa9676f68e9bfb98e3de630.
+//
+// Solidity: e onSetUploaderUuid(uuid bytes16, uploaderUuid bytes16)
+func (_FilesData *FilesDataFilterer) WatchOnSetUploaderUuid(opts *bind.WatchOpts, sink chan<- *FilesDataOnSetUploaderUuid) (event.Subscription, error) {
+
+	logs, sub, err := _FilesData.contract.WatchLogs(opts, "onSetUploaderUuid")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(FilesDataOnSetUploaderUuid)
+				if err := _FilesData.contract.UnpackLog(event, "onSetUploaderUuid", log); err != nil {
 					return err
 				}
 				event.Raw = log

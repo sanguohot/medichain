@@ -1,15 +1,10 @@
-fisco-solc --abi EasyCns.sol | awk '/JSON ABI/{x=1;next}x' > EasyCns.abi;
-fisco-solc --bin EasyCns.sol | awk '/Binary:/{x=1;next}x' > EasyCns.bin;
-abigen --solc fisco-solc --bin=EasyCns.bin --abi=EasyCns.abi --pkg=medi --type=EasyCns --out=EasyCns.go;
-fisco-solc --abi UsersData.sol | awk '/JSON ABI/{x=1;next}x' > UsersData.abi;
-fisco-solc --bin UsersData.sol | awk '/Binary:/{x=1;next}x' > UsersData.bin;
-abigen --solc fisco-solc --bin=UsersData.bin --abi=UsersData.abi --pkg=medi --type=UsersData --out=UsersData.go;
-fisco-solc --abi OrgsData.sol | awk '/JSON ABI/{x=1;next}x' > OrgsData.abi;
-fisco-solc --bin OrgsData.sol | awk '/Binary:/{x=1;next}x' > OrgsData.bin;
-abigen --solc fisco-solc --bin=OrgsData.bin --abi=OrgsData.abi --pkg=medi --type=OrgsData --out=OrgsData.go;
-fisco-solc --abi FilesData.sol | awk '/JSON ABI/{x=1;next}x' > FilesData.abi;
-fisco-solc --bin FilesData.sol | awk '/Binary:/{x=1;next}x' > FilesData.bin;
-abigen --solc fisco-solc --bin=FilesData.bin --abi=FilesData.abi --pkg=medi --type=FilesData --out=FilesData.go;
-fisco-solc --abi Controller.sol | awk '/JSON ABI/{x=1;next}x' > Controller.abi;
-fisco-solc --bin Controller.sol | awk '/Binary:/{x=1;next}x' > Controller.bin;
-abigen --solc fisco-solc --bin=Controller.bin --abi=Controller.abi --pkg=medi --type=Controller --out=Controller.go;
+array=(EasyCns OrgsData UsersData FilesData Controller)
+for data in ${array[@]}  
+do  
+    echo "generate ${data} ..."
+	fisco-solc --overwrite --abi ${data}.sol -o build
+	fisco-solc --overwrite --bin ${data}.sol -o build
+	abigen --solc fisco-solc --bin=build/${data}.bin --abi=build/${data}.abi --pkg=medi --type=${data} --out=${data}.go	
+done
+tree ./
+echo "generate all file successfully!"
