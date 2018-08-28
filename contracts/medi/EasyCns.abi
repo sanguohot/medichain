@@ -1,7 +1,0 @@
-[{"constant":true,"inputs":[{"name":"name","type":"string"}],"name":"get","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"addr","type":"address"}],"name":"set","outputs":[],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"},{"indexed":false,"name":"addr","type":"address"}],"name":"onSet","type":"event"}]
-
-======= lib/Address.sol:Address =======
-[]
-
-======= lib/ValidateUtil.sol:ValidateUtil =======
-[]
