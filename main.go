@@ -1,11 +1,8 @@
 package main
 
 import (
-	//"medichain/server"
-	"medichain/util"
+	_ "medichain/etc"
 )
 
 func main() {
-	util.InitConfig()
-	//server.InitServer()
 }

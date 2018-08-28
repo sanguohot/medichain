@@ -4,13 +4,13 @@ import (
 	"log"
 	"fmt"
 	"medichain/deploy"
-	"medichain/util"
+	"medichain/etc"
 	"github.com/ethereum/go-ethereum/common"
 )
 
 func main() {
-	util.InitConfig("")
-	cnsAddress := common.HexToAddress(util.Config.GetString("bcos.easy_cns.address"))
+	etc.InitConfig("")
+	cnsAddress := common.HexToAddress(etc.GetBcosEasyCnsAddress())
 	err, address, hash := deploy.DeployContract(&cnsAddress, deploy.ContractOrgsData)
 	if err != nil {
 		log.Fatal(err)

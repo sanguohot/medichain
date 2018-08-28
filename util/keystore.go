@@ -6,12 +6,15 @@ import (
 	"math/rand"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"bytes"
+	//"bytes"
 	"math/big"
+	"medichain/etc"
+	"time"
+	"bytes"
 )
 
 func GetKeyJsonFromStore(address common.Address, password string) ([]byte, error) {
-	store := keystore.NewKeyStore(Config.GetString("bcos.keystore"), keystore.LightScryptN, keystore.StandardScryptP)
+	store := keystore.NewKeyStore(etc.GetBcosKeystore(), keystore.LightScryptN, keystore.StandardScryptP)
 	account, err := store.Find(accounts.Account{Address: address})
 	if err != nil {
 		return nil, err
@@ -24,6 +27,7 @@ func GetKeyJsonFromStore(address common.Address, password string) ([]byte, error
 }
 
 func GetTransactOptsFromStore(address common.Address, password string, nonce uint64) (*bind.TransactOpts, error) {
+	rand.Seed(time.Now().Unix())
 	keyBytes, err := GetKeyJsonFromStore(address, password)
 	if err != nil {
 		return nil, err
@@ -41,5 +45,6 @@ func GetTransactOptsFromStore(address common.Address, password string, nonce uin
 	}
 	auth.GasPrice = nil
 	auth.From = address
+	auth.BlockLimit = uint64(750)
 	return  auth, nil
 }
