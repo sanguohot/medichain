@@ -37,8 +37,8 @@
 		},
 		"keystore": "/keystore",
 		"easy_cns": {
-			"address": "0x5c249bd450Ce5f7f61bf9e98877394792DFd589E",
-			"tx": "0xf69113b2f59d3a5cda68088d6dfeb9520f0414656f9d719659e34553c7047cc4"
+			"address": "0x580c58b4678753187BfdBB378d62663cfE493067",
+			"tx": "0x7918bc4e39ed09c7fecb9999afcc64656a138d21950757365c628a244adf55ed"
 		}
     }
 }
