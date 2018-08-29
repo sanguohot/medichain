@@ -10,6 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/accounts"
 	"medichain/chain"
+	"medichain/etc"
 )
 
 type User struct {
@@ -62,7 +63,7 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *User,
 	if !ok {
 		return util.ErrPublicKeyTransform, nil, nil
 	}
-	store := keystore.NewKeyStore("./keystore", keystore.LightScryptN, keystore.StandardScryptP)
+	store := keystore.NewKeyStore(etc.GetBcosKeystore(), keystore.LightScryptN, keystore.StandardScryptP)
 	account, err := store.ImportECDSA(privateKey, password)
 	if err != nil {
 		return err, nil, nil
