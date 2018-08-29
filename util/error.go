@@ -13,5 +13,6 @@ var (
 	ErrPwdRequire = errors.New("密码不能为空")
 	ErrPublicKeyTransform = errors.New("公钥格式转换失败")
 	ErrUserExist = errors.New("用户已注册")
+	ErrOrgExist = errors.New("机构已注册")
 	ErrOrgNotExist = errors.New("机构不存在")
 )

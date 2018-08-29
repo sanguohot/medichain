@@ -4,6 +4,8 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"crypto"
 	"github.com/google/uuid"
+	"medichain/util"
+	"medichain/chain"
 )
 
 type Org struct {
@@ -11,20 +13,38 @@ type Org struct {
 	Address common.Address
 	PublicKey crypto.PublicKey
 	nameHash common.Hash
+	txHash common.Hash
 }
 
-func AddOrg(orgUuid uuid.UUID, idCartNo string) (error, *Org, *common.Hash) {
-	return nil, nil, nil
-}
-
-func GetOrgByUuid(uuid uuid.UUID) (error, *Org) {
-	return nil, nil
-}
-
-func GetOrgByName(name string) (error, *Org) {
-	return nil, nil
-}
-
-func GetOrgByAddress(address common.Address) (error, *Org) {
-	return nil, nil
+func AddOrg(name string, password string) (error, *Org) {
+	bytes32_4, err := util.StringToBytes32_4(name)
+	if err != nil {
+		return err, nil
+	}
+	hash := util.Bytes32_4Hash(*bytes32_4)
+	orgUuid, err := chain.OrgsDataGetUuidByNameHash(hash)
+	if err != nil {
+		return err, nil
+	}
+	isExist, err := chain.OrgsDataIsUuidExist(*orgUuid)
+	if err != nil {
+		return err, nil
+	}
+	if isExist {
+		return util.ErrOrgExist, nil
+	}
+	orgUuidNew := uuid.New()
+	_, publicKeyECDSA, address, err := util.NewWallet(password)
+	err, txHash := chain.ControllerAddOrg(orgUuidNew, *bytes32_4, *address, password)
+	if err != nil {
+		return err, nil
+	}
+	org := Org{
+		Address: *address,
+		Uuid: orgUuidNew,
+		PublicKey: *publicKeyECDSA,
+		nameHash: hash,
+		txHash: *txHash,
+	}
+	return nil, &org
 }

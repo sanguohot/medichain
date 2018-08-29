@@ -97,3 +97,25 @@ func GetPublicKeyBytes32_2FromStore(address common.Address, password string) (*[
 	}
 	return BytesToBytes32_2(pub[1:])
 }
+
+func NewWallet(password string) (*ecdsa.PrivateKey, *ecdsa.PublicKey, *common.Address, error) {
+	if password == "" {
+		return nil, nil, nil, ErrPwdRequire
+	}
+	privateKey, err := crypto.GenerateKey()
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	publicKey := privateKey.Public()
+	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	if !ok {
+		return nil, nil, nil, ErrPublicKeyTransform
+	}
+	store := keystore.NewKeyStore(etc.GetBcosKeystore(), keystore.LightScryptN, keystore.StandardScryptP)
+	account, err := store.ImportECDSA(privateKey, password)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	return privateKey, publicKeyECDSA, &account.Address, nil
+}
