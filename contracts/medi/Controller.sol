@@ -79,7 +79,7 @@ contract Controller {
         filesData.addSign(uuid, usersData.getUuidByUserAddress(msg.sender), r, s, v);
     }
     // 链上的所有信息都是共享的，只要没有被删除都可以返回
-    function getUserByUuid(bytes16 uuid) public returns (address, bytes16, bytes32[2], bytes32, uint) {
+    function getUserByUuid(bytes16 uuid) public constant returns (address, bytes16, bytes32[2], bytes32, uint) {
         require(checkUsersDataOk());
         return (
         usersData.getUserAddress(uuid),
@@ -89,7 +89,7 @@ contract Controller {
         usersData.getTime(uuid)
         );
     }
-    function getOrgByUuid(bytes16 uuid) public returns (address, bytes32[2], bytes32, bytes32[4], uint) {
+    function getOrgByUuid(bytes16 uuid) public constant returns (address, bytes32[2], bytes32, bytes32[4], uint) {
         require(checkOrgsDataOk());
         return (
         orgsData.getOrgAddress(uuid),
@@ -99,7 +99,7 @@ contract Controller {
         orgsData.getTime(uuid)
         );
     }
-    function getFileByUuid(bytes16 uuid) public returns (bytes16, bytes16, bytes32, bytes32[4], bytes32, bytes32, uint) {
+    function getFileByUuid(bytes16 uuid) public constant returns (bytes16, bytes16, bytes32, bytes32[4], bytes32, bytes32, uint) {
         require(checkFilesDataOk());
         return (
         filesData.getOwnerUuid(uuid),
@@ -116,7 +116,7 @@ contract Controller {
         uint256 startAddLimit = SafeMath.add(start, limit);
         return (size < startAddLimit) ? size : startAddLimit;
     }
-    function getFileSignersAndDataByUuid(bytes16 uuid, uint256 start, uint256 limit) public returns (bytes16[], bytes32[], bytes32[], uint[]) {
+    function getFileSignersAndDataByUuid(bytes16 uuid, uint256 start, uint256 limit) public constant returns (bytes16[], bytes32[], bytes32[], uint[]) {
         require(start>=0 && limit>0 && limit<=MAX_LIMIT);
         require(checkFilesDataOk());
         uint256 max = getMax(filesData.getFileSignerSize(uuid), start, limit);
