@@ -13,25 +13,25 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 
-func GetOrgsDataInstance() (error, *medi.OrgsData) {
+func GetUsersDataInstance() (error, *medi.UsersData) {
 	url := fmt.Sprintf("http://%s:%d", etc.GetBcosHostAddress(), etc.GetBcosHostRpcPort())
 	client, err := ethclient.Dial(url)
 	if err != nil {
 		return err, nil
 	}
-	err, address := GetAddressFromCns(etc.ContractOrgsData)
+	err, address := GetAddressFromCns(etc.ContractUsersData)
 	if err != nil {
 		return err, nil
 	}
-	instance, err := medi.NewOrgsData(*address, client)
+	instance, err := medi.NewUsersData(*address, client)
 	if err != nil {
 		return err, nil
 	}
 	return nil, instance
 }
 
-func GetOrgsDataInstanceAndAuth() (error, *medi.OrgsData,*bind.TransactOpts) {
-	err, instance := GetOrgsDataInstance()
+func GetUsersDataInstanceAndAuth() (error, *medi.UsersData,*bind.TransactOpts) {
+	err, instance := GetUsersDataInstance()
 	if err != nil {
 		return err, nil, nil
 	}
@@ -42,8 +42,8 @@ func GetOrgsDataInstanceAndAuth() (error, *medi.OrgsData,*bind.TransactOpts) {
 	return nil, instance, auth
 }
 
-func OrgsDataAddSuper(address common.Address) (error, *common.Hash) {
-	err, instance, auth := GetOrgsDataInstanceAndAuth()
+func UsersDataAddSuper(address common.Address) (error, *common.Hash) {
+	err, instance, auth := GetUsersDataInstanceAndAuth()
 	if err != nil {
 		return err, nil
 	}
@@ -55,13 +55,12 @@ func OrgsDataAddSuper(address common.Address) (error, *common.Hash) {
 	return nil, &hash
 }
 
-func OrgsDataAddOrg(uuid [16]byte, orgAddress common.Address, publicKey [2][32]byte, name [4][32]byte) (error, *common.Hash) {
-	err, instance, auth := GetOrgsDataInstanceAndAuth()
+func UsersDataAddUser(uuid [16]byte, orgUuid [16]byte, userAddress common.Address, publicKey [2][32]byte, idCartNoHash common.Hash) (error, *common.Hash) {
+	err, instance, auth := GetUsersDataInstanceAndAuth()
 	if err != nil {
 		return err, nil
 	}
-	nameHash := util.Bytes32_4Hash(name)
-	tx, err := instance.AddOrg(auth, uuid, orgAddress, publicKey, nameHash, name, big.NewInt(time.Now().Unix()))
+	tx, err := instance.AddUser(auth, uuid, userAddress, orgUuid, publicKey, idCartNoHash, big.NewInt(time.Now().Unix()))
 	if err != nil {
 		return err, nil
 	}
@@ -69,20 +68,20 @@ func OrgsDataAddOrg(uuid [16]byte, orgAddress common.Address, publicKey [2][32]b
 	return nil, &hash
 }
 
-func OrgsDataDelOrg(uuid [16]byte) (error, *common.Hash) {
-	err, instance, auth := GetOrgsDataInstanceAndAuth()
+func UsersDataDelUser(uuid [16]byte) (error, *common.Hash) {
+	err, instance, auth := GetUsersDataInstanceAndAuth()
 	if err != nil {
 		return err, nil
 	}
-	tx, err := instance.DelOrg(auth, uuid)
+	tx, err := instance.DelUser(auth, uuid)
 	if err != nil {
 		return err, nil
 	}
 	hash := tx.Hash()
 	return nil, &hash
 }
-func OrgsDataIsUuidExist(uuid uuid.UUID) (bool, error) {
-	err, instance := GetOrgsDataInstance()
+func UsersDataIsUuidExist(uuid uuid.UUID) (bool, error) {
+	err, instance := GetUsersDataInstance()
 	if err != nil {
 		return false, nil
 	}

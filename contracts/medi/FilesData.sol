@@ -274,4 +274,11 @@ contract FilesData is Super {
         require(index>=0 && index<getFileSignerSize(uuid));
         return (uuidToFileMap[uuid].r[index], uuidToFileMap[uuid].s[index], uuidToFileMap[uuid].v[index]);
     }
+    function isUuidExist(bytes16 uuid)
+    public constant returns (bool) {
+        if (uuidToFileMap[uuid].active){
+            return true;
+        }
+        return false;
+    }
 }
