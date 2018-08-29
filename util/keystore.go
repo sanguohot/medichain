@@ -88,8 +88,12 @@ func GetPublicKeyBytesFromStore(address common.Address, password string) ([]byte
 
 func GetPublicKeyBytes32_2FromStore(address common.Address, password string) (*[2][32]byte, error) {
 	pub, err := GetPublicKeyBytesFromStore(address, password)
+	// 64字节公钥加上固定首字节
+	if len(pub) != 65 {
+		return nil, ErrPublicKeyShouldEqualTo64Bytes
+	}
 	if err != nil {
 		return nil, err
 	}
-	return BytesToBytes32_2(pub)
+	return BytesToBytes32_2(pub[1:])
 }

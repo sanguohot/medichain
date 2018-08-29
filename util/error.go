@@ -9,4 +9,5 @@ var (
 	ErrParamShouldNotNil = errors.New("参数不能为空")
 	ErrParamShouldNotMoreThan128Bytes = errors.New("参数不能大于128字节")
 	ErrParamShouldNotMoreThan64Bytes = errors.New("参数不能大于64字节")
+	ErrPublicKeyShouldEqualTo64Bytes = errors.New("公钥必须为64字节")
 )
