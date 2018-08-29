@@ -5,10 +5,9 @@ import (
 	"medichain/server/middle"
 	"time"
 	"net/http"
-	"medichain/util"
 	"medichain/service"
 	"fmt"
-	"github.com/google/uuid"
+	"medichain/etc"
 )
 
 func InitServer() {
@@ -29,7 +28,9 @@ func InitServer() {
 		})
 		v1.POST("/user", func(c *gin.Context) {
 			idCartNo := c.PostForm("idCartNo")
-			err, user, _ := service.AddUser(uuid.UUID{}, idCartNo)
+			orgUuidStr := c.PostForm("orgUuid")
+			password := c.PostForm("password")
+			err, user, _ := service.AddUser(orgUuidStr, idCartNo, password)
 			if err != nil {
 				c.String(http.StatusOK, err.Error())
 			}
@@ -37,7 +38,7 @@ func InitServer() {
 		})
 	}
 	s := &http.Server{
-		Addr:           fmt.Sprintf("%s:%s", util.Config.GetString("server.host.address"), util.Config.GetInt("server.host.port")),
+		Addr:           fmt.Sprintf("%s:%s", etc.GetServerHostAddress(), etc.GetServerHostPort()),
 		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,

@@ -84,7 +84,7 @@ func FilesDataDelFile(uuid [16]byte) (error, *common.Hash) {
 func FilesDataIsUuidExist(uuid uuid.UUID) (bool, error) {
 	err, instance := GetFilesDataInstance()
 	if err != nil {
-		return false, nil
+		return false, err
 	}
 	return instance.IsUuidExist(nil, uuid)
 }

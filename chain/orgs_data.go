@@ -84,7 +84,16 @@ func OrgsDataDelOrg(uuid [16]byte) (error, *common.Hash) {
 func OrgsDataIsUuidExist(uuid uuid.UUID) (bool, error) {
 	err, instance := GetOrgsDataInstance()
 	if err != nil {
-		return false, nil
+		return false, err
 	}
 	return instance.IsUuidExist(nil, uuid)
+}
+func OrgsDataGetUuidByNameHash(hash common.Hash) (*uuid.UUID, error) {
+	err, instance := GetOrgsDataInstance()
+	if err != nil {
+		return nil, nil
+	}
+	bytes16, err := instance.GetUuidByNameHash(nil, hash)
+	orgUuid := uuid.UUID(bytes16)
+	return &orgUuid, nil
 }

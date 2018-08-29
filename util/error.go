@@ -10,4 +10,8 @@ var (
 	ErrParamShouldNotMoreThan128Bytes = errors.New("参数不能大于128字节")
 	ErrParamShouldNotMoreThan64Bytes = errors.New("参数不能大于64字节")
 	ErrPublicKeyShouldEqualTo64Bytes = errors.New("公钥必须为64字节")
+	ErrPwdRequire = errors.New("密码不能为空")
+	ErrPublicKeyTransform = errors.New("公钥格式转换失败")
+	ErrUserExist = errors.New("用户已注册")
+	ErrOrgNotExist = errors.New("机构不存在")
 )

@@ -61,3 +61,9 @@ func GetBcosEasyCnsAddress() string {
 func GetServerDir() string {
 	return GetConfig().GetString("server.dir")
 }
+func GetServerHostAddress() string {
+	return GetConfig().GetString("server.host.address")
+}
+func GetServerHostPort() int {
+	return GetConfig().GetInt("bcos.host.port")
+}

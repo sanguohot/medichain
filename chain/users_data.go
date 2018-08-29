@@ -83,7 +83,16 @@ func UsersDataDelUser(uuid [16]byte) (error, *common.Hash) {
 func UsersDataIsUuidExist(uuid uuid.UUID) (bool, error) {
 	err, instance := GetUsersDataInstance()
 	if err != nil {
-		return false, nil
+		return false, err
 	}
 	return instance.IsUuidExist(nil, uuid)
+}
+func UsersDataGetUuidByIdCartNoHash(hash common.Hash) (*uuid.UUID, error) {
+	err, instance := GetUsersDataInstance()
+	if err != nil {
+		return nil, nil
+	}
+	bytes16, err := instance.GetUuidByIdCartNoHash(nil, hash)
+	userUuid := uuid.UUID(bytes16)
+	return &userUuid, nil
 }
