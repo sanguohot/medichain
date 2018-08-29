@@ -55,6 +55,18 @@ func AddFileHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, fileAction)
 }
 
+func AddFileSignHandler(c *gin.Context) {
+	addressStr := c.PostForm("address")
+	password := c.PostForm("password")
+	fileUuidStr := c.Param("fileUuid")
+	keccak256Hash := c.PostForm("keccak256Hash")
+	err, hash := service.AddFileSign(fileUuidStr, addressStr, password, keccak256Hash)
+	if err != nil {
+		c.String(http.StatusOK, err.Error())
+	}
+	c.String(http.StatusOK, hash.Hex())
+}
+
 func GetFileHandler(c *gin.Context) {
 	fileUuidStr := c.Param("fileUuid")
 	err, file := service.GetFile(fileUuidStr)

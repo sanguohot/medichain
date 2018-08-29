@@ -21,6 +21,7 @@ func InitServer() {
 		v1.POST("/user", AddUserHandler)
 		v1.POST("/org", AddOrgHandler)
 		v1.POST("/file", AddFileHandler)
+		v1.POST("/file/:fileUuid/signature", AddFileSignHandler)
 		v1.GET("/file/:fileUuid", GetFileHandler)
 	}
 	s := &http.Server{

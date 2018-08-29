@@ -93,3 +93,21 @@ func ControllerAddFile(uuid, ownerUuid [16]byte, fileType common.Hash, fileDesc 
 	hash := tx.Hash()
 	return nil, &hash
 }
+
+func ControllerAddSign(fileUuid [16]byte, keccak256Hash common.Hash, address common.Address, password string) (error, *common.Hash) {
+	err, instance, auth := GetControllerInstanceAndAuth(address, password)
+	if err != nil {
+		return err, nil
+	}
+	signBytes, err := util.SignWithHash(keccak256Hash, address, password)
+	if err != nil {
+		return err, nil
+	}
+	r, s, v := util.SigRSV(signBytes)
+	tx, err := instance.AddSign(auth, fileUuid, r, s, v)
+	if err != nil {
+		return err, nil
+	}
+	hash := tx.Hash()
+	return nil, &hash
+}

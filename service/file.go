@@ -102,6 +102,41 @@ func AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc string, file
 	return nil, &fileAction
 }
 
+func AddFileSign(fileUuidStr, addressStr, password, keccak256HashStr string) (error, *common.Hash) {
+	fileUuid, err := uuid.Parse(fileUuidStr)
+	if err != nil {
+		return err, nil
+	}
+	isExist, err := chain.FilesDataIsUuidExist(fileUuid)
+	if err != nil {
+		return err, nil
+	}
+	if !isExist {
+		return util.ErrFileNotExist, nil
+	}
+	if !common.IsHexAddress(addressStr) {
+		return util.ErrInvalidAddress, nil
+	}
+	address := common.HexToAddress(addressStr)
+	keccak256HashFromChain, err := chain.FilesDataGetKeccak256Hash(fileUuid)
+	if err != nil {
+		return err, nil
+	}
+	keccak256Hash := common.HexToHash(keccak256HashStr)
+	if *keccak256HashFromChain != keccak256Hash {
+		return util.ErrFileHashNotMatch, nil
+	}
+	err = checkKeccak256Hash(keccak256Hash)
+	if err != nil {
+		return err, nil
+	}
+	err, txHash := chain.ControllerAddSign(fileUuid, keccak256Hash, address, password)
+	if err != nil {
+		return err, nil
+	}
+	return nil, txHash
+}
+
 func GetFile(fileUuidStr string) (error, []byte) {
 	fileUuid, err := uuid.Parse(fileUuidStr)
 	if err != nil {

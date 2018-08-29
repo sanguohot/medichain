@@ -115,3 +115,12 @@ func FilesDataGetSha256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
 	hash := common.Hash(bytes32)
 	return &hash, nil
 }
+func FilesDataGetKeccak256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, nil
+	}
+	bytes32, err := instance.GetKeccak256Hash(nil, fileUuid)
+	hash := common.Hash(bytes32)
+	return &hash, nil
+}
