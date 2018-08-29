@@ -14,16 +14,16 @@ import (
 
 
 func main() {
-	privateKey, err := crypto.HexToECDSA("7aaf3e2786ff4b38f4aceb6f86ff4a3670206376087d4bd0f041f91e61412e66")
+	privateKey, err := crypto.HexToECDSA("c2b0f36af224863875901b21df43fdaf45743cbfb398ed36f4d70aed809df168")
 	if err != nil {
 		log.Fatal(err)
 	}
 	store := keystore.NewKeyStore("./keystore", keystore.LightScryptN, keystore.StandardScryptP)
 	fmt.Println(store)
 	pass := "123456"
-	account, err := store.Find(accounts.Account{Address: common.HexToAddress("0x1d306aDe962d9f20590be45e68DB6246da73811D")})
+	account, err := store.Find(accounts.Account{Address: common.HexToAddress("0x646829bFA80580b07767b796B4055DB9BDf148b5")})
 	if err != nil {
-		log.Fatalln(err)
+		//log.Fatalln(err)
 	}
 	fmt.Println("store.Find ===>", account)
 	account, err = store.ImportECDSA(privateKey, pass)

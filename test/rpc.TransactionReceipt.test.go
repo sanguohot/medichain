@@ -14,13 +14,13 @@ import (
 )
 
 func main() {
-	client, err := ethclient.Dial("http://10.6.250.56:8545")
+	client, err := ethclient.Dial("http://10.6.250.55:8546")
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	receipt, err := client.TransactionReceipt(context.Background(), common.HexToHash("0x91f2b940396b446d3e542031b55f1bd3944dc397c78ba4f788f640ec8612b6dc"))
+	receipt, err := client.TransactionReceipt(context.Background(), common.HexToHash("0x7216b989e25643c258327a7f5e336258ffb347aabf1dcdc97992b262a7265ea9"))
 	if err != nil {
 		log.Fatal(err)
 		return

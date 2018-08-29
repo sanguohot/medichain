@@ -34,12 +34,12 @@ contract Super {
     // this should be done first if it is called by other contracts.
     function addSuper(address addr) public onlyOwner {
         require(addr != 0x0);
+        require(!isSuper(addr));
         supers.push(addr);
         superm[addr] = true;
         onAddSuper(addr);
     }
     function delSuper(address addr) public onlyOwner {
-        require(addr != 0x0);
         require(isSuper(addr));
         bool found = false;
         for (uint i=0; i<supers.length; i++) {

@@ -17,28 +17,22 @@ func GetControllerInstance() (error, *medi.Controller) {
 	if err != nil {
 		return err, nil
 	}
-	err, controllerAddress := GetAddressFromCns(etc.ContractController)
+	err, address := GetAddressFromCns(etc.ContractController)
 	if err != nil {
 		return err, nil
 	}
-	instance, err := medi.NewController(*controllerAddress, client)
+	instance, err := medi.NewController(*address, client)
 	if err != nil {
 		return err, nil
 	}
 	return nil, instance
 }
 
-func AddOrgToCns(uuid [16]byte, publicKey [2][32]byte, name [4][32]byte) (error, *common.Hash) {
+func ControllerAddOrg(uuid [16]byte, fromAddress common.Address, publicKey [2][32]byte, name [4][32]byte, password string) (error, *common.Hash) {
 	err, instance := GetControllerInstance()
 	if err != nil {
 		return err, nil
 	}
-	fromAddressStr := etc.GetBcosOwnerAddress()
-	if fromAddressStr == "" {
-		return util.ErrConfigItemRequire, nil
-	}
-	fromAddress := common.HexToAddress(fromAddressStr)
-	password := etc.GetBcosOwnerPassword()
 	auth, err := util.GetTransactOptsFromStore(fromAddress, password, 0)
 	if err != nil {
 		return err, nil
@@ -50,4 +44,8 @@ func AddOrgToCns(uuid [16]byte, publicKey [2][32]byte, name [4][32]byte) (error,
 	}
 	hash := tx.Hash()
 	return nil, &hash
+}
+
+func ControllerGetOrg()  {
+
 }

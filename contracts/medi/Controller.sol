@@ -32,7 +32,7 @@ contract Controller {
         return true;
     }
     function checkOrgsDataOk() private returns (bool) {
-        address addr = easyCns.get(Const.getUsersDataName());
+        address addr = easyCns.get(Const.getOrgsDataName());
         if(!Address.isContract(addr)){
             return false;
         }
