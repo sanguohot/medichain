@@ -10,14 +10,15 @@ import (
 	"medichain/util"
 	"io"
 	"encoding/json"
+	"medichain/etc"
 )
 
 var (
 	// 10.0.253.8:9998
 	// 172.16.194.2:9998
-	serverAddr string = fmt.Sprintf("%s:%s", util.Config.GetString("big_data.host.address"), util.Config.GetInt("big_data.host.port"))
+	serverAddr string = fmt.Sprintf("%s:%s", etc.GetBigDataHostAddress(), etc.GetBigDataHostPort())
 	uploadPath string = "/ylyx/upload_single"
-	downloadPath string = "/ylyx/downloadByMd5"
+	downloadPath string = "/ylyx/downloadBySha"
 	createFolderPath string = "/ylyx/createFolder"
 	getFilesPath string = "/ylyx/getFolder"
 	codeSucc uint8 = 1
@@ -36,7 +37,7 @@ type BigDataItem struct {
 	Size  uint64    `json:"size,omitempty"`
 	CreateTime  util.JsonTime   `json:"createTime,omitempty"`
 	FileCode  string    `json:"fileCode,omitempty"`
-	FileMd5  []byte  `json:"fileMd5,omitempty"`
+	FileSha  []byte  `json:"fileSha,omitempty"`
 }
 
 type BigDataResponse struct {
@@ -82,8 +83,8 @@ func doReq(req *http.Request, isJsonRes bool) (*BigDataResponse, []byte, error) 
 func UploadToBigDataCenter(fileBytes []byte) error {
 	buf := new(bytes.Buffer)
 	w := multipart.NewWriter(buf)
-	md5Hex := util.Md5(fileBytes)
-	fw, err := w.CreateFormFile("file", md5Hex)
+	sha256Hex := util.Sha256Hash(fileBytes).Hex()
+	fw, err := w.CreateFormFile("file", sha256Hex)
 	if err != nil {
 		return err
 	}
@@ -91,7 +92,7 @@ func UploadToBigDataCenter(fileBytes []byte) error {
 	if err != nil {
 		return err
 	}
-	if err := w.WriteField("md5", md5Hex); err != nil {
+	if err := w.WriteField("sha", sha256Hex); err != nil {
 		return err
 	}
 	w.Close()
@@ -108,11 +109,11 @@ func UploadToBigDataCenter(fileBytes []byte) error {
 	return nil
 }
 
-func DownloadFromBigDataCenter(md5Code string) ([]byte, error) {
-	if md5Code == "" {
-		return nil, errors.New("md5Code不能为空")
+func DownloadFromBigDataCenter(sha256Code string) ([]byte, error) {
+	if sha256Code == "" {
+		return nil, util.ErrParamShouldNotNil
 	}
-	url := fmt.Sprintf("http://%s%s?md5=%s", serverAddr, downloadPath, md5Code)
+	url := fmt.Sprintf("http://%s%s?sha=%s", serverAddr, downloadPath, sha256Code)
 	fmt.Println("DownloadFromBigDataCenter ===>", url)
 	req, err := getReqWrapper("GET", url, nil)
 	var body []byte
@@ -124,7 +125,7 @@ func DownloadFromBigDataCenter(md5Code string) ([]byte, error) {
 
 func CreateFolderInBigDataCenter(folderName string) (string, error) {
 	if folderName == "" {
-		return "", errors.New("folderName不能为空")
+		return "", util.ErrParamShouldNotNil
 	}
 	url := fmt.Sprintf("http://%s%s?name=%s", serverAddr, createFolderPath, folderName)
 	fmt.Println("DownloadFromBigDataCenter ===>", url)

@@ -5,7 +5,6 @@ import (
 	"medichain/server/middle"
 	"time"
 	"net/http"
-	"medichain/service"
 	"fmt"
 	"medichain/etc"
 )
@@ -13,29 +12,16 @@ import (
 func InitServer() {
 	// 默认中间件包含logger和recover
 	r := gin.Default()
+	r.MaxMultipartMemory = 100 << 20 // 100 MiBr
 	r.Use(middle.UserAuthHandler)
 	r.Use(middle.FileAuthHandler)
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	r.GET("/ping", PongHandler)
 	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/user/:name", func(c *gin.Context) {
-			name := c.Param("name")
-			c.String(http.StatusOK, "Hello %s", name)
-		})
-		v1.POST("/user", func(c *gin.Context) {
-			idCartNo := c.PostForm("idCartNo")
-			orgUuidStr := c.PostForm("orgUuid")
-			password := c.PostForm("password")
-			err, user, _ := service.AddUser(orgUuidStr, idCartNo, password)
-			if err != nil {
-				c.String(http.StatusOK, err.Error())
-			}
-			c.JSON(http.StatusOK, user)
-		})
+		v1.POST("/user", AddUserHandler)
+		v1.POST("/org", AddOrgHandler)
+		v1.POST("/file", AddFileHandler)
+		v1.GET("/file/:fileUuid", GetFileHandler)
 	}
 	s := &http.Server{
 		Addr:           fmt.Sprintf("%s:%s", etc.GetServerHostAddress(), etc.GetServerHostPort()),

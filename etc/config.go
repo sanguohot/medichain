@@ -67,3 +67,9 @@ func GetServerHostAddress() string {
 func GetServerHostPort() int {
 	return GetConfig().GetInt("bcos.host.port")
 }
+func GetBigDataHostAddress() string {
+	return GetConfig().GetString("big_data.host.address")
+}
+func GetBigDataHostPort() int {
+	return GetConfig().GetInt("big_data.host.port")
+}

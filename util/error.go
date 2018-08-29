@@ -14,5 +14,8 @@ var (
 	ErrPublicKeyTransform = errors.New("公钥格式转换失败")
 	ErrUserExist = errors.New("用户已注册")
 	ErrOrgExist = errors.New("机构已注册")
+	ErrFileExist = errors.New("文件已存在")
 	ErrOrgNotExist = errors.New("机构不存在")
+	ErrInvalidAddress = errors.New("非法以太坊地址")
+	ErrFileUploadNotComplete = errors.New("文件上传不完整")
 )

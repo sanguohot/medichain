@@ -76,12 +76,16 @@ func ControllerAddUser(uuid [16]byte, orgUuid [16]byte, idCartNoHash common.Hash
 	return nil, &hash
 }
 
-func ControllerAddFile(uuid [16]byte, ownerUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash common.Hash,
-	sha256Hash common.Hash, r [32]byte, s [32]byte, v uint8, address common.Address, password string) (error, *common.Hash) {
+func ControllerAddFile(uuid, ownerUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash, sha256Hash common.Hash, address common.Address, password string) (error, *common.Hash) {
 	err, instance, auth := GetControllerInstanceAndAuth(address, password)
 	if err != nil {
 		return err, nil
 	}
+	signBytes, err := util.SignWithHash(keccak256Hash, address, password)
+	if err != nil {
+		return err, nil
+	}
+	r, s, v := util.SigRSV(signBytes)
 	tx, err := instance.AddFile(auth, uuid, ownerUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, big.NewInt(time.Now().Unix()))
 	if err != nil {
 		return err, nil

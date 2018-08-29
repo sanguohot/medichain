@@ -88,3 +88,30 @@ func FilesDataIsUuidExist(uuid uuid.UUID) (bool, error) {
 	}
 	return instance.IsUuidExist(nil, uuid)
 }
+func FilesDataGetUuidByKeccak256Hash(hash common.Hash) (*uuid.UUID, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, nil
+	}
+	bytes16, err := instance.GetUuidByKeccak256Hash(nil, hash)
+	fileUuid := uuid.UUID(bytes16)
+	return &fileUuid, nil
+}
+func FilesDataGetUuidBySha256Hash(hash common.Hash) (*uuid.UUID, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, nil
+	}
+	bytes16, err := instance.GetUuidBySha256Hash(nil, hash)
+	fileUuid := uuid.UUID(bytes16)
+	return &fileUuid, nil
+}
+func FilesDataGetSha256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, nil
+	}
+	bytes32, err := instance.GetSha256Hash(nil, fileUuid)
+	hash := common.Hash(bytes32)
+	return &hash, nil
+}

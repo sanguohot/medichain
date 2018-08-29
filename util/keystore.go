@@ -13,6 +13,8 @@ import (
 	"bytes"
 	"crypto/ecdsa"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"encoding/hex"
 )
 
 func GetKeyJsonFromStore(address common.Address, password string) ([]byte, error) {
@@ -118,4 +120,23 @@ func NewWallet(password string) (*ecdsa.PrivateKey, *ecdsa.PublicKey, *common.Ad
 	}
 
 	return privateKey, publicKeyECDSA, &account.Address, nil
+}
+
+func Keccak256SignWithContent(content []byte, address common.Address, password string) ([]byte, error) {
+	return SignWithHash(crypto.Keccak256Hash(content), address, password)
+}
+func Sha256SignWithContent(content []byte, address common.Address, password string) ([]byte, error) {
+	return SignWithHash(Sha256Hash(content), address, password)
+}
+func SignWithHash(hash common.Hash, address common.Address, password string) ([]byte, error) {
+	store := keystore.NewKeyStore(etc.GetBcosKeystore(), keystore.LightScryptN, keystore.StandardScryptP)
+	account, err := store.Find(accounts.Account{Address: address})
+	if err != nil {
+		return nil, err
+	}
+	signature, err := store.SignHashWithPassphrase(account, password, hash.Bytes())
+	if err != nil {
+		return nil, err
+	}
+	return hex.DecodeString(hexutil.Encode(signature)[2:])
 }
