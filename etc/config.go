@@ -2,7 +2,7 @@ package etc
 
 import (
 	"github.com/spf13/viper"
-	"fmt"
+	"log"
 	"path"
 )
 
@@ -15,6 +15,8 @@ var (
 	ContractController = "Controller"
 	ContractEasyCns = "EasyCns"
 	ContractMap = map[string]bool{ContractUsersData:true, ContractFilesData:true, ContractOrgsData:true, ContractController:true, ContractEasyCns:true}
+	TEST_OK = "ok"
+	TEST_FAIL = "fail"
 )
 
 func init()  {
@@ -30,9 +32,9 @@ func InitConfig(filePath string) {
 
 	err := Config.ReadInConfig()
 	if err != nil {
-		// do not exit
-		//log.Fatal(err)
-		fmt.Println("error ===>", err.Error())
+		if filePath != defaultFilePath {
+			log.Fatal(err)
+		}
 	}
 }
 func GetConfig() *viper.Viper {

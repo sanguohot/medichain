@@ -9,6 +9,7 @@ import (
 	"medichain/contracts/medi"
 	"time"
 	"math/big"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 
 func GetControllerInstance() (error, *medi.Controller) {
@@ -28,12 +29,20 @@ func GetControllerInstance() (error, *medi.Controller) {
 	return nil, instance
 }
 
-func ControllerAddOrg(uuid [16]byte, name [4][32]byte, address common.Address, password string) (error, *common.Hash) {
+func GetControllerInstanceAndAuth(address common.Address, password string) (error, *medi.Controller, *bind.TransactOpts) {
 	err, instance := GetControllerInstance()
 	if err != nil {
-		return err, nil
+		return err, nil, nil
 	}
 	auth, err := util.GetTransactOptsFromStore(address, password, 0)
+	if err != nil {
+		return err, nil, nil
+	}
+	return nil, instance, auth
+}
+
+func ControllerAddOrg(uuid [16]byte, name [4][32]byte, address common.Address, password string) (error, *common.Hash) {
+	err, instance, auth := GetControllerInstanceAndAuth(address, password)
 	if err != nil {
 		return err, nil
 	}
@@ -51,11 +60,7 @@ func ControllerAddOrg(uuid [16]byte, name [4][32]byte, address common.Address, p
 }
 
 func ControllerAddUser(uuid [16]byte, orgUuid [16]byte, idCartNoHash common.Hash, address common.Address, password string) (error, *common.Hash) {
-	err, instance := GetControllerInstance()
-	if err != nil {
-		return err, nil
-	}
-	auth, err := util.GetTransactOptsFromStore(address, password, 0)
+	err, instance, auth := GetControllerInstanceAndAuth(address, password)
 	if err != nil {
 		return err, nil
 	}
@@ -73,11 +78,7 @@ func ControllerAddUser(uuid [16]byte, orgUuid [16]byte, idCartNoHash common.Hash
 
 func ControllerAddFile(uuid [16]byte, ownerUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash common.Hash,
 	sha256Hash common.Hash, r [32]byte, s [32]byte, v uint8, address common.Address, password string) (error, *common.Hash) {
-	err, instance := GetControllerInstance()
-	if err != nil {
-		return err, nil
-	}
-	auth, err := util.GetTransactOptsFromStore(address, password, 0)
+	err, instance, auth := GetControllerInstanceAndAuth(address, password)
 	if err != nil {
 		return err, nil
 	}
@@ -87,8 +88,4 @@ func ControllerAddFile(uuid [16]byte, ownerUuid [16]byte, fileType common.Hash, 
 	}
 	hash := tx.Hash()
 	return nil, &hash
-}
-
-func ControllerGetOrg()  {
-
 }

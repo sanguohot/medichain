@@ -30,7 +30,7 @@ func GetOrgsDataInstance() (error, *medi.OrgsData) {
 	return nil, instance
 }
 
-func GetOrgsDataInstanceAndAuth() (error, *medi.OrgsData,*bind.TransactOpts) {
+func GetOrgsDataInstanceAndAuth() (error, *medi.OrgsData, *bind.TransactOpts) {
 	err, instance := GetOrgsDataInstance()
 	if err != nil {
 		return err, nil, nil

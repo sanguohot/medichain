@@ -30,7 +30,7 @@ func GetFilesDataInstance() (error, *medi.FilesData) {
 	return nil, instance
 }
 
-func GetFilesDataInstanceAndAuth() (error, *medi.FilesData,*bind.TransactOpts) {
+func GetFilesDataInstanceAndAuth() (error, *medi.FilesData, *bind.TransactOpts) {
 	err, instance := GetFilesDataInstance()
 	if err != nil {
 		return err, nil, nil

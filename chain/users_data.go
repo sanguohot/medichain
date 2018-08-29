@@ -30,7 +30,7 @@ func GetUsersDataInstance() (error, *medi.UsersData) {
 	return nil, instance
 }
 
-func GetUsersDataInstanceAndAuth() (error, *medi.UsersData,*bind.TransactOpts) {
+func GetUsersDataInstanceAndAuth() (error, *medi.UsersData, *bind.TransactOpts) {
 	err, instance := GetUsersDataInstance()
 	if err != nil {
 		return err, nil, nil
