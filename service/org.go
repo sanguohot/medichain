@@ -8,7 +8,7 @@ import (
 	"medichain/chain"
 )
 
-type Org struct {
+type OrgAction struct {
 	Uuid uuid.UUID
 	Address common.Address
 	PublicKey crypto.PublicKey
@@ -16,7 +16,7 @@ type Org struct {
 	txHash common.Hash
 }
 
-func AddOrg(name string, password string) (error, *Org) {
+func AddOrg(name string, password string) (error, *OrgAction) {
 	bytes32_4, err := util.StringToBytes32_4(name)
 	if err != nil {
 		return err, nil
@@ -39,7 +39,7 @@ func AddOrg(name string, password string) (error, *Org) {
 	if err != nil {
 		return err, nil
 	}
-	org := Org{
+	org := OrgAction{
 		Address: *address,
 		Uuid: orgUuidNew,
 		PublicKey: *publicKeyECDSA,

@@ -10,7 +10,7 @@ import (
 	"medichain/chain"
 )
 
-type User struct {
+type UserAction struct {
 	Uuid uuid.UUID
 	Address common.Address
 	PublicKey ecdsa.PublicKey
@@ -18,7 +18,7 @@ type User struct {
 	txHash common.Hash
 }
 
-func AddUser(orgUuidStr string, idCartNo string, password string) (error, *User) {
+func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserAction) {
 	if ok, err := idvalidator.Validate(idCartNo); !ok {
 		return err, nil
 	}
@@ -57,7 +57,7 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *User)
 	if err != nil {
 		return err, nil
 	}
-	user := User{
+	user := UserAction{
 		Address: *address,
 		Uuid: userUuidNew,
 		PublicKey: *publicKeyECDSA,
