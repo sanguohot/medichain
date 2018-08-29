@@ -33,13 +33,7 @@ func OrgsDataAddSuper(address common.Address) (error, *common.Hash) {
 	if err != nil {
 		return err, nil
 	}
-	fromAddressStr := etc.GetBcosOwnerAddress()
-	if fromAddressStr == "" {
-		return util.ErrConfigItemRequire, nil
-	}
-	fromAddress := common.HexToAddress(fromAddressStr)
-	password := etc.GetBcosOwnerPassword()
-	auth, err := util.GetTransactOptsFromStore(fromAddress, password, 0)
+	auth, err := util.GetDefaultTransactOptsFromStore()
 	if err != nil {
 		return err, nil
 	}
@@ -56,13 +50,7 @@ func OrgsDataAddOrg(uuid [16]byte, orgAddress common.Address, publicKey [2][32]b
 	if err != nil {
 		return err, nil
 	}
-	fromAddressStr := etc.GetBcosOwnerAddress()
-	if fromAddressStr == "" {
-		return util.ErrConfigItemRequire, nil
-	}
-	fromAddress := common.HexToAddress(fromAddressStr)
-	password := etc.GetBcosOwnerPassword()
-	auth, err := util.GetTransactOptsFromStore(fromAddress, password, 0)
+	auth, err := util.GetDefaultTransactOptsFromStore()
 	if err != nil {
 		return err, nil
 	}
@@ -80,13 +68,7 @@ func OrgsDataDelOrg(uuid [16]byte) (error, *common.Hash) {
 	if err != nil {
 		return err, nil
 	}
-	fromAddressStr := etc.GetBcosOwnerAddress()
-	if fromAddressStr == "" {
-		return util.ErrConfigItemRequire, nil
-	}
-	fromAddress := common.HexToAddress(fromAddressStr)
-	password := etc.GetBcosOwnerPassword()
-	auth, err := util.GetTransactOptsFromStore(fromAddress, password, 0)
+	auth, err := util.GetDefaultTransactOptsFromStore()
 	if err != nil {
 		return err, nil
 	}

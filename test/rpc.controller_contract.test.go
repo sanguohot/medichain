@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err, hash := chain.ControllerAddOrg(orgUuid, address, publicKey, *nameBytes32_4, password)
+	err, hash := chain.ControllerAddOrg(orgUuid, *nameBytes32_4, address, password)
 	if err != nil {
 		log.Fatal(err)
 	}

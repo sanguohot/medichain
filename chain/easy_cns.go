@@ -27,13 +27,7 @@ func SetAddressToCns(name string, address common.Address) (error, *common.Hash) 
 	if err != nil {
 		return err, nil
 	}
-	fromAddressStr := etc.GetBcosOwnerAddress()
-	if fromAddressStr == "" {
-		return util.ErrConfigItemRequire, nil
-	}
-	fromAddress := common.HexToAddress(fromAddressStr)
-	password := etc.GetBcosOwnerPassword()
-	auth, err := util.GetTransactOptsFromStore(fromAddress, password, 0)
+	auth, err := util.GetDefaultTransactOptsFromStore()
 	if err != nil {
 		return err, nil
 	}

@@ -11,6 +11,8 @@ import (
 	"medichain/etc"
 	"time"
 	"bytes"
+	"crypto/ecdsa"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
 func GetKeyJsonFromStore(address common.Address, password string) ([]byte, error) {
@@ -47,4 +49,47 @@ func GetTransactOptsFromStore(address common.Address, password string, nonce uin
 	auth.From = address
 	auth.BlockLimit = uint64(750)
 	return  auth, nil
+}
+
+func GetDefaultTransactOptsFromStore() (*bind.TransactOpts, error) {
+	fromAddressStr := etc.GetBcosOwnerAddress()
+	if fromAddressStr == "" {
+		return nil, ErrConfigItemRequire
+	}
+	fromAddress := common.HexToAddress(fromAddressStr)
+	password := etc.GetBcosOwnerPassword()
+	return GetTransactOptsFromStore(fromAddress, password, 0)
+}
+
+func GetPublicKeyFromStore(address common.Address, password string) (*ecdsa.PublicKey, error) {
+	keyBytes, err := GetKeyJsonFromStore(address, password)
+	if err != nil {
+		return nil, err
+	}
+	key, err := keystore.DecryptKey(keyBytes, password)
+	if err != nil {
+		return nil, err
+	}
+	publicKey := key.PrivateKey.Public()
+	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	if !ok {
+		return nil, err
+	}
+	return publicKeyECDSA, nil
+}
+
+func GetPublicKeyBytesFromStore(address common.Address, password string) ([]byte, error) {
+	pub, err := GetPublicKeyFromStore(address, password)
+	if err != nil {
+		return nil, err
+	}
+	return crypto.FromECDSAPub(pub), nil
+}
+
+func GetPublicKeyBytes32_2FromStore(address common.Address, password string) (*[2][32]byte, error) {
+	pub, err := GetPublicKeyBytesFromStore(address, password)
+	if err != nil {
+		return nil, err
+	}
+	return BytesToBytes32_2(pub)
 }

@@ -28,17 +28,60 @@ func GetControllerInstance() (error, *medi.Controller) {
 	return nil, instance
 }
 
-func ControllerAddOrg(uuid [16]byte, fromAddress common.Address, publicKey [2][32]byte, name [4][32]byte, password string) (error, *common.Hash) {
+func ControllerAddOrg(uuid [16]byte, name [4][32]byte, address common.Address, password string) (error, *common.Hash) {
 	err, instance := GetControllerInstance()
 	if err != nil {
 		return err, nil
 	}
-	auth, err := util.GetTransactOptsFromStore(fromAddress, password, 0)
+	auth, err := util.GetTransactOptsFromStore(address, password, 0)
 	if err != nil {
 		return err, nil
 	}
 	nameHash := util.Bytes32_4Hash(name)
-	tx, err := instance.AddOrg(auth, uuid, publicKey, nameHash, name, big.NewInt(time.Now().Unix()))
+	publicKey, err := util.GetPublicKeyBytes32_2FromStore(address, password)
+	if err != nil {
+		return err, nil
+	}
+	tx, err := instance.AddOrg(auth, uuid, *publicKey, nameHash, name, big.NewInt(time.Now().Unix()))
+	if err != nil {
+		return err, nil
+	}
+	hash := tx.Hash()
+	return nil, &hash
+}
+
+func ControllerAddUser(uuid [16]byte, orgUuid [16]byte, idCartNoHash common.Hash, address common.Address, password string) (error, *common.Hash) {
+	err, instance := GetControllerInstance()
+	if err != nil {
+		return err, nil
+	}
+	auth, err := util.GetTransactOptsFromStore(address, password, 0)
+	if err != nil {
+		return err, nil
+	}
+	publicKey, err := util.GetPublicKeyBytes32_2FromStore(address, password)
+	if err != nil {
+		return err, nil
+	}
+	tx, err := instance.AddUser(auth, uuid, orgUuid, *publicKey, idCartNoHash, big.NewInt(time.Now().Unix()))
+	if err != nil {
+		return err, nil
+	}
+	hash := tx.Hash()
+	return nil, &hash
+}
+
+func ControllerAddFile(uuid [16]byte, ownerUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash common.Hash,
+	sha256Hash common.Hash, r [32]byte, s [32]byte, v uint8, address common.Address, password string) (error, *common.Hash) {
+	err, instance := GetControllerInstance()
+	if err != nil {
+		return err, nil
+	}
+	auth, err := util.GetTransactOptsFromStore(address, password, 0)
+	if err != nil {
+		return err, nil
+	}
+	tx, err := instance.AddFile(auth, uuid, ownerUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, big.NewInt(time.Now().Unix()))
 	if err != nil {
 		return err, nil
 	}
