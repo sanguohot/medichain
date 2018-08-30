@@ -1,7 +1,7 @@
 package main
 
 import (
-	"medichain/data"
+	"medichain/datacenter"
 	"fmt"
 	"medichain/util"
 	"io/ioutil"
@@ -11,9 +11,9 @@ import (
 
 func main() {
 	var err error
-	bigDataItemList, err := data.GetFilesInFolder(data.FolderCode)
+	bigDataItemList, err := datacenter.GetFilesInFolder(datacenter.FolderCode)
 	if err != nil {
-		_, err2 := data.CreateFolderInBigDataCenter(data.FolderName)
+		_, err2 := datacenter.CreateFolderInBigDataCenter(datacenter.FolderName)
 		if err2 != nil {
 			log.Fatal(err2)
 		}
@@ -29,12 +29,12 @@ func main() {
 	}
 	sha256Hash := util.Sha256Hash(fileBytesUp)
 	fmt.Println("begin upload ===>", fileName, sha256Hash.Hex())
-	err = data.UploadToBigDataCenter(fileBytesUp)
+	err = datacenter.UploadToBigDataCenter(fileBytesUp)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("upload success ===>", fileName, sha256Hash.Hex())
-	fileBytesDown, err := data.DownloadFromBigDataCenter(sha256Hash)
+	fileBytesDown, err := datacenter.DownloadFromBigDataCenter(sha256Hash)
 	if err != nil {
 		fmt.Println(err)
 		return

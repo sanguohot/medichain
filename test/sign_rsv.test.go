@@ -20,4 +20,8 @@ func main() {
 	fmt.Println("r =>", hexutil.Encode(r[:])[:])
 	fmt.Println("s =>",hexutil.Encode(s[:])[:])
 	fmt.Println("v =>", v)
+	signBytes2 := util.RSVtoSig(r, s, v)
+	fmt.Println(signHex)
+	fmt.Println(hexutil.Encode(signBytes2)[2:])
+	fmt.Println(hexutil.Encode(signBytes2)[2:] == signHex)
 }

@@ -25,6 +25,9 @@
 			"name": "medichain"
 		}
 	},
+	"sqlite": {
+		"file_name": "medichain.db"
+	},
 	"bcos": {
 		"host": {
 			"address": "10.6.250.56",

@@ -87,3 +87,14 @@ func GetFileSignerAndDataListHandler(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, list)
 }
+
+func GetFileAddLogListHandler(c *gin.Context) {
+	startStr := c.Query("start")
+	limitStr := c.Query("limit")
+	idCartNo := c.Query("idCartNo")
+	err, list := service.GetFileAddLogList(idCartNo, startStr, limitStr)
+	if err != nil {
+		c.String(http.StatusOK, err.Error())
+	}
+	c.JSON(http.StatusOK, list)
+}

@@ -153,3 +153,6 @@ func GetBigDataRootFolderCode() string {
 func GetBigDataRootFolderName() string {
 	return GetViperConfig().GetString("big_data.root_folder.name")
 }
+func GetSqliteFilePath() string {
+	return path.Join(GetServerDir(), "databases", GetViperConfig().GetString("sqlite.file_name"))
+}

@@ -6,7 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"medichain/util"
 	"medichain/chain"
-	"medichain/data"
+	"medichain/datacenter"
 )
 
 type FileAction struct {
@@ -97,7 +97,7 @@ func AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc string, file
 		return err, nil
 	}
 	// 上传到大数据库
-	err = data.UploadToBigDataCenter(file)
+	err = datacenter.UploadToBigDataCenter(file)
 	if err != nil {
 		return err, nil
 	}
@@ -167,7 +167,7 @@ func GetFile(fileUuidStr string) (error, []byte) {
 	if err != nil {
 		return err, nil
 	}
-	file, err := data.DownloadFromBigDataCenter(*hash)
+	file, err := datacenter.DownloadFromBigDataCenter(*hash)
 	if err != nil {
 		return err, nil
 	}

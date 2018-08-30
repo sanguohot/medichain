@@ -112,3 +112,14 @@ func SigRSV(isig interface{}) ([32]byte, [32]byte, uint8) {
 
 	return R, S, V
 }
+
+func RSVtoSig(r [32]byte, s [32]byte, v uint8) []byte {
+	var sig []byte
+	sig = make([]byte, 65)
+	copy(sig[0:32], r[:])
+	copy(sig[32:64], s[:])
+	v = v - 27
+	vStrByte := []byte{v}
+	copy(sig[64:65], vStrByte[:])
+	return sig
+}

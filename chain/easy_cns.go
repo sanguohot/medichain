@@ -2,16 +2,13 @@ package chain
 
 import (
 	"github.com/ethereum/go-ethereum/common"
-	"fmt"
 	"medichain/etc"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"medichain/util"
 	"medichain/contracts/medi"
 )
 
 func GetCnsInstance() (error, *medi.EasyCns) {
-	url := fmt.Sprintf("http://%s:%d", etc.GetBcosHostAddress(), etc.GetBcosHostRpcPort())
-	client, err := ethclient.Dial(url)
+	client, err := GetEthDialClient()
 	if err != nil {
 		return err, nil
 	}
