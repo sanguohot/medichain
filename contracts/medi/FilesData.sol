@@ -270,7 +270,7 @@ contract FilesData is Super {
         require(index>=0 && index<getFileSignerSize(uuid));
         return uuidToFileMap[uuid].signerUuidList[index];
     }
-    function getFileSignDataByIndex(bytes16 uuid, uint256 index) public onlyActive(uuid) constant returns (bytes32, bytes32, uint) {
+    function getFileSignDataByIndex(bytes16 uuid, uint256 index) public onlyActive(uuid) constant returns (bytes32, bytes32, uint8) {
         require(index>=0 && index<getFileSignerSize(uuid));
         return (uuidToFileMap[uuid].r[index], uuidToFileMap[uuid].s[index], uuidToFileMap[uuid].v[index]);
     }

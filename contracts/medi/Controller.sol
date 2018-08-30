@@ -116,14 +116,14 @@ contract Controller {
         uint256 startAddLimit = SafeMath.add(start, limit);
         return (size < startAddLimit) ? size : startAddLimit;
     }
-    function getFileSignersAndDataByUuid(bytes16 uuid, uint256 start, uint256 limit) public constant returns (bytes16[], bytes32[], bytes32[], uint[]) {
+    function getFileSignersAndDataByUuid(bytes16 uuid, uint256 start, uint256 limit) public constant returns (bytes16[], bytes32[], bytes32[], uint8[]) {
         require(start>=0 && limit>0 && limit<=MAX_LIMIT);
         require(checkFilesDataOk());
         uint256 max = getMax(filesData.getFileSignerSize(uuid), start, limit);
         bytes16[] memory uuidl = new bytes16[](max);
         bytes32[] memory rl = new bytes32[](max);
         bytes32[] memory sl = new bytes32[](max);
-        uint[] memory vl = new uint[](max);
+        uint8[] memory vl = new uint8[](max);
         for(uint256 i=start; i<max; i++){
             uuidl[i] = filesData.getFileSignerUuidByIndex(uuid, i);
             (rl[i], sl[i], vl[i]) = filesData.getFileSignDataByIndex(uuid, i);
