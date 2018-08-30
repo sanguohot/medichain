@@ -147,3 +147,9 @@ func GetBigDataHostAddress() string {
 func GetBigDataHostPort() int {
 	return GetViperConfig().GetInt("big_data.host.port")
 }
+func GetBigDataRootFolderCode() string {
+	return GetViperConfig().GetString("big_data.root_folder.code")
+}
+func GetBigDataRootFolderName() string {
+	return GetViperConfig().GetString("big_data.root_folder.name")
+}

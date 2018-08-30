@@ -19,6 +19,10 @@
 		"host": {
 			"address": "172.16.194.2",
 			"port": 9998
+		},
+		"root_folder": {
+			"code": "8038a5728000002fdir00000ffb9ccc4",
+			"name": "medichain"
 		}
 	},
 	"bcos": {

@@ -167,7 +167,7 @@ func GetFile(fileUuidStr string) (error, []byte) {
 	if err != nil {
 		return err, nil
 	}
-	file, err := data.DownloadFromBigDataCenter(hash.Hex()[2:])
+	file, err := data.DownloadFromBigDataCenter(*hash)
 	if err != nil {
 		return err, nil
 	}

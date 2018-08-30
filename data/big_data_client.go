@@ -11,20 +11,21 @@ import (
 	"io"
 	"encoding/json"
 	"medichain/etc"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 var (
 	// 10.0.253.8:9998
 	// 172.16.194.2:9998
-	serverAddr string = fmt.Sprintf("%s:%s", etc.GetBigDataHostAddress(), etc.GetBigDataHostPort())
-	uploadPath string = "/ylyx/upload_single"
+	serverAddr string = fmt.Sprintf("%s:%d", etc.GetBigDataHostAddress(), etc.GetBigDataHostPort())
+	uploadPath string = "/ylyx/uploadSingle"
 	downloadPath string = "/ylyx/downloadBySha"
 	createFolderPath string = "/ylyx/createFolder"
 	getFilesPath string = "/ylyx/getFolder"
 	codeSucc uint8 = 1
 	codeFail uint8 = 0
-	FolderName string = "medichain"
-	FolderCode string = "77bb6e0977bb6e09dir0000000000000"
+	FolderName string = etc.GetBigDataRootFolderName()
+	FolderCode string = etc.GetBigDataRootFolderCode()
 )
 
 type BigDataInfoMap struct {
@@ -83,7 +84,8 @@ func doReq(req *http.Request, isJsonRes bool) (*BigDataResponse, []byte, error) 
 func UploadToBigDataCenter(fileBytes []byte) error {
 	buf := new(bytes.Buffer)
 	w := multipart.NewWriter(buf)
-	sha256Hex := util.Sha256Hash(fileBytes).Hex()
+	// do not set 0x
+	sha256Hex := util.Sha256Hash(fileBytes).Hex()[2:]
 	fw, err := w.CreateFormFile("file", sha256Hex)
 	if err != nil {
 		return err
@@ -93,6 +95,9 @@ func UploadToBigDataCenter(fileBytes []byte) error {
 		return err
 	}
 	if err := w.WriteField("sha", sha256Hex); err != nil {
+		return err
+	}
+	if err := w.WriteField("folderCode", FolderCode); err != nil {
 		return err
 	}
 	w.Close()
@@ -109,11 +114,8 @@ func UploadToBigDataCenter(fileBytes []byte) error {
 	return nil
 }
 
-func DownloadFromBigDataCenter(sha256Code string) ([]byte, error) {
-	if sha256Code == "" {
-		return nil, util.ErrParamShouldNotNil
-	}
-	url := fmt.Sprintf("http://%s%s?sha=%s", serverAddr, downloadPath, sha256Code)
+func DownloadFromBigDataCenter(sha256Hash common.Hash) ([]byte, error) {
+	url := fmt.Sprintf("http://%s%s?sha=%s", serverAddr, downloadPath, sha256Hash.Hex()[2:])
 	fmt.Println("DownloadFromBigDataCenter ===>", url)
 	req, err := getReqWrapper("GET", url, nil)
 	var body []byte
