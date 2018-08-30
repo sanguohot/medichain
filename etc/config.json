@@ -5,10 +5,14 @@
 			"address": "0.0.0.0",
 			"port": 8080
 		},
+		"tls" : {
+			"enable": true,
+			"verify_peer": false
+		},
 		"pki": {
-			"key": "/key/sdk.key",
-			"cert": "/key/sdk.crt",
-			"ca": "/key/ca.crt"
+			"key": "/key/privkey.pem",
+			"cert": "/key/fullchain.pem",
+			"ca": "/key/chain.pem"
 		}
     },
 	"big_data": {
@@ -25,9 +29,9 @@
 			"channel_port": 30304
 		},
 		"pki": {
-			"key": "/key/sdk.key",
-			"cert": "/key/sdk.crt",
-			"ca": "/key/ca.crt"
+			"key": "/key/privkey.pem",
+			"cert": "/key/fullchain.pem",
+			"ca": "/key/chain.pem"
 		},
 		"owner": {
 			"private_key": "7aaf3e2786ff4b38f4aceb6f86ff4a3670206376087d4bd0f041f91e61412e66",

@@ -65,7 +65,22 @@ func GetServerHostAddress() string {
 	return GetConfig().GetString("server.host.address")
 }
 func GetServerHostPort() int {
-	return GetConfig().GetInt("bcos.host.port")
+	return GetConfig().GetInt("server.host.port")
+}
+func GetServerPkiKey() string {
+	return path.Join(GetServerDir(), GetConfig().GetString("server.pki.key"))
+}
+func GetServerPkiCert() string {
+	return path.Join(GetServerDir(), GetConfig().GetString("server.pki.cert"))
+}
+func GetServerTlsVerifyPeer() bool {
+	return GetConfig().GetBool("server.tls.verify_peer")
+}
+func GetServerTlsEnable() bool {
+	return GetConfig().GetBool("server.tls.enable")
+}
+func GetServerPkiCa() string {
+	return path.Join(GetServerDir(), GetConfig().GetString("server.pki.ca"))
 }
 func GetBigDataHostAddress() string {
 	return GetConfig().GetString("big_data.host.address")

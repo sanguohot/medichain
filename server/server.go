@@ -7,12 +7,19 @@ import (
 	"net/http"
 	"fmt"
 	"medichain/etc"
+	"crypto/x509"
+	"io/ioutil"
+	"log"
+	"crypto/tls"
 )
 
+func init()  {
+	InitServer()
+}
+
 func InitServer() {
-	// 默认中间件包含logger和recover
 	r := gin.Default()
-	r.MaxMultipartMemory = 100 << 20 // 100 MiBr
+	r.MaxMultipartMemory = 100 << 20 // 100 MB
 	r.Use(middle.UserAuthHandler)
 	r.Use(middle.FileAuthHandler)
 	r.GET("/ping", PongHandler)
@@ -25,11 +32,32 @@ func InitServer() {
 		v1.GET("/file/:fileUuid", GetFileHandler)
 	}
 	s := &http.Server{
-		Addr:           fmt.Sprintf("%s:%s", etc.GetServerHostAddress(), etc.GetServerHostPort()),
+		Addr:           fmt.Sprintf("%s:%d", etc.GetServerHostAddress(), etc.GetServerHostPort()),
 		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
+		MaxHeaderBytes: 1 << 20, // 1 MB
 	}
-	s.ListenAndServe()
+	if etc.GetServerTlsEnable() {
+		pool := x509.NewCertPool()
+		caCertPath := etc.GetServerPkiCa()
+		caCrt, err := ioutil.ReadFile(caCertPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pool.AppendCertsFromPEM(caCrt)
+		tlsConfig := &tls.Config{
+			ClientCAs:  pool,
+		}
+		if etc.GetServerTlsVerifyPeer() {
+			tlsConfig.ClientAuth = tls.RequireAndVerifyClientCert
+		}
+		if err := s.ListenAndServeTLS(etc.GetServerPkiCert(), etc.GetServerPkiKey()); err != nil {
+			log.Fatal(err)
+		}
+	}else {
+		if err := s.ListenAndServe(); err != nil {
+			log.Fatal(err)
+		}
+	}
 }
