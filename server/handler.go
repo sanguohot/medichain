@@ -76,3 +76,14 @@ func GetFileHandler(c *gin.Context) {
 	c.Header("content-disposition", `attachment; filename=` + fileUuidStr)
 	c.Data(http.StatusOK, http.DetectContentType(file), file)
 }
+
+func GetFileSignerAndDataListHandler(c *gin.Context) {
+	fileUuidStr := c.Param("fileUuid")
+	startStr := c.Query("start")
+	limitStr := c.Query("limit")
+	err, list := service.GetFileSignerAndDataList(fileUuidStr, startStr, limitStr)
+	if err != nil {
+		c.String(http.StatusOK, err.Error())
+	}
+	c.JSON(http.StatusOK, list)
+}

@@ -16,18 +16,25 @@ type FileAction struct {
 	txHash common.Hash
 }
 
-func checkKeccak256Hash(hash common.Hash) (error) {
+type FileSignerAndDataAction struct {
+	idl []uuid.UUID
+	rl []common.Hash
+	sl []common.Hash
+	vl []uint8
+}
+
+func requireKeccak256HashNotExist(hash common.Hash) (error) {
 	fileUuid, err := chain.FilesDataGetUuidByKeccak256Hash(hash)
 	if err != nil {
 		return err
 	}
-	err = checkFileUuid(*fileUuid)
+	err = requireFileUuidNotExist(*fileUuid)
 	if err != nil {
 		return err
 	}
 	return nil
 }
-func checkFileUuid(fileUuid uuid.UUID) error {
+func requireFileUuidNotExist(fileUuid uuid.UUID) error {
 	isExist, err := chain.FilesDataIsUuidExist(fileUuid)
 	if err != nil {
 		return err
@@ -37,23 +44,33 @@ func checkFileUuid(fileUuid uuid.UUID) error {
 	}
 	return nil
 }
-func checkSha256Hash(hash common.Hash) (error) {
+func requireFileUuidExist(fileUuid uuid.UUID) error {
+	isExist, err := chain.FilesDataIsUuidExist(fileUuid)
+	if err != nil {
+		return err
+	}
+	if !isExist {
+		return util.ErrFileNotExist
+	}
+	return nil
+}
+func requireSha256HashNotExist(hash common.Hash) (error) {
 	fileUuid, err := chain.FilesDataGetUuidBySha256Hash(hash)
 	if err != nil {
 		return err
 	}
-	err = checkFileUuid(*fileUuid)
+	err = requireFileUuidNotExist(*fileUuid)
 	if err != nil {
 		return err
 	}
 	return nil
 }
-func checkHash(keccak256Hash, sha256Hash common.Hash) error {
-	err := checkKeccak256Hash(keccak256Hash)
+func requireHashNotExist(keccak256Hash, sha256Hash common.Hash) error {
+	err := requireKeccak256HashNotExist(keccak256Hash)
 	if err != nil {
 		return err
 	}
-	err = checkSha256Hash(sha256Hash)
+	err = requireSha256HashNotExist(sha256Hash)
 	if err != nil {
 		return err
 	}
@@ -75,7 +92,7 @@ func AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc string, file
 	// define them and check file type
 	fileTypeHash := crypto.Keccak256Hash([]byte(fileType))
 	keccak256Hash := crypto.Keccak256Hash(file)
-	err = checkHash(keccak256Hash, sha256Hash)
+	err = requireHashNotExist(keccak256Hash, sha256Hash)
 	if err != nil {
 		return err, nil
 	}
@@ -126,7 +143,7 @@ func AddFileSign(fileUuidStr, addressStr, password, keccak256HashStr string) (er
 	if *keccak256HashFromChain != keccak256Hash {
 		return util.ErrFileHashNotMatch, nil
 	}
-	err = checkKeccak256Hash(keccak256Hash)
+	err = requireKeccak256HashNotExist(keccak256Hash)
 	if err != nil {
 		return err, nil
 	}
@@ -142,7 +159,7 @@ func GetFile(fileUuidStr string) (error, []byte) {
 	if err != nil {
 		return err, nil
 	}
-	err = checkFileUuid(fileUuid)
+	err = requireFileUuidExist(fileUuid)
 	if err != nil {
 		return err, nil
 	}
@@ -155,4 +172,47 @@ func GetFile(fileUuidStr string) (error, []byte) {
 		return err, nil
 	}
 	return nil, file
+}
+
+func GetFileSignerAndDataList(fileUuidStr string, startStr string, limitStr string) (error, *FileSignerAndDataAction) {
+	fileUuid, err := uuid.Parse(fileUuidStr)
+	if err != nil {
+		return err, nil
+	}
+	err = requireFileUuidExist(fileUuid)
+	if err != nil {
+		return err, nil
+	}
+	size, err := chain.FilesDataGetFileSignerSize(fileUuid)
+	if err != nil {
+		return err, nil
+	}
+	err, startBig, limitBig := TransformPagingParamFromStringToBigInt(startStr, limitStr)
+	if size.Cmp(startBig) != 1 {
+		return util.ErrFileSignListOutOfIndex, nil
+	}
+	err, idl, rl, sl, vl := chain.ControllerGetFileSignersAndDataByUuid(fileUuid, startBig, limitBig)
+	if err != nil {
+		return err, nil
+	}
+	return nil, getFileSignerAndDataActionByChainData(idl, rl, sl, vl)
+}
+
+func getFileSignerAndDataActionByChainData(idl [][16]byte, rl [][32]byte, sl [][32]byte, vl []uint8) *FileSignerAndDataAction {
+	var (
+		idlNew []uuid.UUID
+		rlNew []common.Hash
+		slNew []common.Hash
+	)
+	for i := 0; i < len(idl); i++ {
+		idlNew[i] = uuid.UUID(idl[i])
+		rlNew[i] = common.Hash(rl[i])
+		slNew[i] = common.Hash(sl[i])
+	}
+	return &FileSignerAndDataAction{
+		idl: idlNew,
+		rl: rlNew,
+		sl: slNew,
+		vl: vl,
+	}
 }

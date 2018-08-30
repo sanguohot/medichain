@@ -20,4 +20,6 @@ var (
 	ErrInvalidAddress = errors.New("非法以太坊地址")
 	ErrFileUploadNotComplete = errors.New("文件上传不完整")
 	ErrFileHashNotMatch = errors.New("文件哈希不匹配")
+	ErrFileSignListOutOfIndex = errors.New("查询签名列表超出最大索引")
+	ErrParamPagingInvalid = errors.New("分页参数非法")
 )
