@@ -111,3 +111,51 @@ func ControllerAddSign(fileUuid [16]byte, keccak256Hash common.Hash, address com
 	hash := tx.Hash()
 	return nil, &hash
 }
+
+func ControllerGetFileSignersAndDataByUuid(fileUuid [16]byte, start *big.Int, limit *big.Int) (error, [][16]byte, [][32]byte, [][32]byte, []uint8) {
+	err, instance := GetControllerInstance()
+	if err != nil {
+		return err, nil, nil, nil, nil
+	}
+	idl, rl, sl, vl, err := instance.GetFileSignersAndDataByUuid(nil, fileUuid, start, limit)
+	if err != nil {
+		return err, nil, nil, nil, nil
+	}
+	return nil, idl, rl, sl, vl
+}
+
+func ControllerGetOrgByUuid(orgUuid [16]byte) (error, common.Address, [2][32]byte, [32]byte, [4][32]byte, *big.Int) {
+	err, instance := GetControllerInstance()
+	if err != nil {
+		return err, common.Address{}, [2][32]byte{}, [32]byte{}, [4][32]byte{}, nil
+	}
+	address, publicKey, nameHash, name, time, err := instance.GetOrgByUuid(nil, orgUuid)
+	if err != nil {
+		return err, common.Address{}, [2][32]byte{}, [32]byte{}, [4][32]byte{}, nil
+	}
+	return nil, address, publicKey, nameHash, name, time
+}
+
+func ControllerGetUserByUuid(userUuid [16]byte) (error, common.Address, [16]byte, [2][32]byte, [32]byte, *big.Int) {
+	err, instance := GetControllerInstance()
+	if err != nil {
+		return err, common.Address{}, [16]byte{}, [2][32]byte{}, [32]byte{}, nil
+	}
+	address, orgUuid, publicKey, idCartNoHash, time, err := instance.GetUserByUuid(nil, userUuid)
+	if err != nil {
+		return err, common.Address{}, [16]byte{}, [2][32]byte{}, [32]byte{}, nil
+	}
+	return nil, address, orgUuid, publicKey, idCartNoHash, time
+}
+
+func ControllerGetFileByUuid(fileUuid [16]byte) (error, [16]byte, [16]byte, [32]byte, [4][32]byte, [32]byte, [32]byte, *big.Int) {
+	err, instance := GetControllerInstance()
+	if err != nil {
+		return err, [16]byte{}, [16]byte{}, [32]byte{}, [4][32]byte{}, [32]byte{}, [32]byte{}, nil
+	}
+	ownerUuid, uploaderUuid, fileType, fileDesc, sha256Hash, keccak256Hash, time, err := instance.GetFileByUuid(nil, fileUuid)
+	if err != nil {
+		return err, [16]byte{}, [16]byte{}, [32]byte{}, [4][32]byte{}, [32]byte{}, [32]byte{}, nil
+	}
+	return nil, ownerUuid, uploaderUuid, fileType, fileDesc, sha256Hash, keccak256Hash, time
+}

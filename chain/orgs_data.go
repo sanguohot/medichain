@@ -94,6 +94,9 @@ func OrgsDataGetUuidByNameHash(hash common.Hash) (*uuid.UUID, error) {
 		return nil, nil
 	}
 	bytes16, err := instance.GetUuidByNameHash(nil, hash)
+	if err != nil {
+		return nil, nil
+	}
 	orgUuid := uuid.UUID(bytes16)
 	return &orgUuid, nil
 }

@@ -94,6 +94,9 @@ func FilesDataGetUuidByKeccak256Hash(hash common.Hash) (*uuid.UUID, error) {
 		return nil, nil
 	}
 	bytes16, err := instance.GetUuidByKeccak256Hash(nil, hash)
+	if err != nil {
+		return nil, nil
+	}
 	fileUuid := uuid.UUID(bytes16)
 	return &fileUuid, nil
 }
@@ -103,6 +106,9 @@ func FilesDataGetUuidBySha256Hash(hash common.Hash) (*uuid.UUID, error) {
 		return nil, nil
 	}
 	bytes16, err := instance.GetUuidBySha256Hash(nil, hash)
+	if err != nil {
+		return nil, nil
+	}
 	fileUuid := uuid.UUID(bytes16)
 	return &fileUuid, nil
 }
@@ -112,6 +118,9 @@ func FilesDataGetSha256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
 		return nil, nil
 	}
 	bytes32, err := instance.GetSha256Hash(nil, fileUuid)
+	if err != nil {
+		return nil, nil
+	}
 	hash := common.Hash(bytes32)
 	return &hash, nil
 }
@@ -121,6 +130,20 @@ func FilesDataGetKeccak256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
 		return nil, nil
 	}
 	bytes32, err := instance.GetKeccak256Hash(nil, fileUuid)
+	if err != nil {
+		return nil, nil
+	}
 	hash := common.Hash(bytes32)
 	return &hash, nil
+}
+func FilesDataGetFileSignerSize(fileUuid uuid.UUID) (*big.Int, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, nil
+	}
+	size, err := instance.GetFileSignerSize(nil, fileUuid)
+	if err != nil {
+		return nil, nil
+	}
+	return size, nil
 }

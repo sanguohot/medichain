@@ -93,6 +93,9 @@ func UsersDataGetUuidByIdCartNoHash(hash common.Hash) (*uuid.UUID, error) {
 		return nil, nil
 	}
 	bytes16, err := instance.GetUuidByIdCartNoHash(nil, hash)
+	if err != nil {
+		return nil, nil
+	}
 	userUuid := uuid.UUID(bytes16)
 	return &userUuid, nil
 }
