@@ -5,10 +5,62 @@ import (
 	"log"
 	"path"
 )
+// auto generate struct
+// https://mholt.github.io/json-to-go/
+// use mapstructure to replace json for '_' key words, e.g. rpc_port,big_data
+type ConfigStruct struct {
+	Server struct {
+		Dir  string `json:"dir"`
+		Host struct {
+			Address string `json:"address"`
+			Port    int    `json:"port"`
+		} `mapstructure:"host"`
+		TLS struct {
+			Enable     bool `json:"enable"`
+			VerifyPeer bool `json:"verify_peer"`
+		} `mapstructure:"tls"`
+		Pki struct {
+			Key  string `json:"key"`
+			Cert string `json:"cert"`
+			Ca   string `json:"ca"`
+		} `mapstructure:"pki"`
+	} `mapstructure:"server"`
+	BigData struct {
+		Host struct {
+			Address string `json:"address"`
+			Port    int    `json:"port"`
+		} `json:"host"`
+	} `mapstructure:"big_data"`
+	Bcos struct {
+		Host struct {
+			Address     string `json:"address"`
+			RPCPort     int    `mapstructure:"rpc_port"`
+			P2PPort     int    `mapstructure:"p2p_port"`
+			ChannelPort int    `mapstructure:"channel_port"`
+		} `mapstructure:"host"`
+		Pki struct {
+			Key  string `json:"key"`
+			Cert string `json:"cert"`
+			Ca   string `json:"ca"`
+		} `mapstructure:"pki"`
+		Owner struct {
+			PrivateKey string `json:"private_key"`
+			PublicKey  string `json:"public_key"`
+			Address    string `json:"address"`
+			Password   string `json:"password"`
+		} `mapstructure:"owner"`
+		Keystore string `json:"keystore"`
+		EasyCns  struct {
+			Address string `json:"address"`
+			Tx      string `json:"tx"`
+		} `mapstructure:"easy_cns"`
+	} `mapstructure:"bcos"`
+}
 
 var (
 	defaultFilePath  = "./etc/config.json"
-	Config *viper.Viper
+	ViperConfig *viper.Viper
+	Config *ConfigStruct
 	ContractUsersData = "UsersData"
 	ContractFilesData = "FilesData"
 	ContractOrgsData = "OrgsData"
@@ -23,68 +75,75 @@ func init()  {
 	InitConfig(defaultFilePath)
 }
 func InitConfig(filePath string) {
-	Config = viper.New()
+	ViperConfig = viper.New()
 	if filePath == "" {
-		Config.SetConfigFile(defaultFilePath)
+		ViperConfig.SetConfigFile(defaultFilePath)
 	}else {
-		Config.SetConfigFile(filePath)
+		ViperConfig.SetConfigFile(filePath)
 	}
 
-	err := Config.ReadInConfig()
+	err := ViperConfig.ReadInConfig()
 	if err != nil {
 		if filePath != defaultFilePath {
 			log.Fatal(err)
 		}
 	}
+	err = ViperConfig.Unmarshal(&Config)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
-func GetConfig() *viper.Viper {
+func GetConfig() *ConfigStruct {
 	return Config
 }
+func GetViperConfig() *viper.Viper {
+	return ViperConfig
+}
 func GetBcosOwnerAddress() string {
-	return GetConfig().GetString("bcos.owner.address")
+	return GetViperConfig().GetString("bcos.owner.address")
 }
 func GetBcosOwnerPassword() string {
-	return GetConfig().GetString("bcos.owner.password")
+	return GetViperConfig().GetString("bcos.owner.password")
 }
 func GetBcosHostAddress() string {
-	return GetConfig().GetString("bcos.host.address")
+	return GetViperConfig().GetString("bcos.host.address")
 }
 func GetBcosHostRpcPort() int {
-	return GetConfig().GetInt("bcos.host.rpc_port")
+	return GetViperConfig().GetInt("bcos.host.rpc_port")
 }
 func GetBcosKeystore() string {
-	return path.Join(GetServerDir(), GetConfig().GetString("bcos.keystore"))
+	return path.Join(GetServerDir(), GetViperConfig().GetString("bcos.keystore"))
 }
 func GetBcosEasyCnsAddress() string {
-	return GetConfig().GetString("bcos.easy_cns.address")
+	return GetViperConfig().GetString("bcos.easy_cns.address")
 }
 func GetServerDir() string {
-	return GetConfig().GetString("server.dir")
+	return GetViperConfig().GetString("server.dir")
 }
 func GetServerHostAddress() string {
-	return GetConfig().GetString("server.host.address")
+	return GetViperConfig().GetString("server.host.address")
 }
 func GetServerHostPort() int {
-	return GetConfig().GetInt("server.host.port")
+	return GetViperConfig().GetInt("server.host.port")
 }
 func GetServerPkiKey() string {
-	return path.Join(GetServerDir(), GetConfig().GetString("server.pki.key"))
+	return path.Join(GetServerDir(), GetViperConfig().GetString("server.pki.key"))
 }
 func GetServerPkiCert() string {
-	return path.Join(GetServerDir(), GetConfig().GetString("server.pki.cert"))
+	return path.Join(GetServerDir(), GetViperConfig().GetString("server.pki.cert"))
 }
 func GetServerTlsVerifyPeer() bool {
-	return GetConfig().GetBool("server.tls.verify_peer")
+	return GetViperConfig().GetBool("server.tls.verify_peer")
 }
 func GetServerTlsEnable() bool {
-	return GetConfig().GetBool("server.tls.enable")
+	return GetViperConfig().GetBool("server.tls.enable")
 }
 func GetServerPkiCa() string {
-	return path.Join(GetServerDir(), GetConfig().GetString("server.pki.ca"))
+	return path.Join(GetServerDir(), GetViperConfig().GetString("server.pki.ca"))
 }
 func GetBigDataHostAddress() string {
-	return GetConfig().GetString("big_data.host.address")
+	return GetViperConfig().GetString("big_data.host.address")
 }
 func GetBigDataHostPort() int {
-	return GetConfig().GetInt("big_data.host.port")
+	return GetViperConfig().GetInt("big_data.host.port")
 }
