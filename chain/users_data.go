@@ -49,6 +49,9 @@ func UsersDataAddSuper(address common.Address) (error, *common.Hash) {
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
@@ -62,6 +65,9 @@ func UsersDataAddUser(uuid [16]byte, orgUuid [16]byte, userAddress common.Addres
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
@@ -75,6 +81,9 @@ func UsersDataDelUser(uuid [16]byte) (error, *common.Hash) {
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 func UsersDataIsUuidExist(uuid uuid.UUID) (bool, error) {
@@ -95,4 +104,37 @@ func UsersDataGetUuidByIdCartNoHash(hash common.Hash) (*uuid.UUID, error) {
 	}
 	userUuid := uuid.UUID(bytes16)
 	return &userUuid, nil
+}
+func UsersDataGetSuperSize() (*big.Int, error) {
+	err, instance := GetUsersDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	size, err := instance.GetSuperSize(nil)
+	if err != nil {
+		return nil, err
+	}
+	return size, nil
+}
+func UsersDataGetSuperByIndex(index *big.Int) (*common.Address, error) {
+	err, instance := GetUsersDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	address, err := instance.GetSuperByIndex(nil, index)
+	if err != nil {
+		return nil, err
+	}
+	return &address, nil
+}
+func UsersDataGetOwner() (*common.Address, error) {
+	err, instance := GetUsersDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	address, err := instance.GetOwner(nil)
+	if err != nil {
+		return nil, err
+	}
+	return &address, nil
 }

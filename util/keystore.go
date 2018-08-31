@@ -44,7 +44,7 @@ func GetTransactOptsFromStore(address common.Address, password string, nonce uin
 		return nil, err
 	}
 	auth.Value = nil
-	auth.GasLimit = uint64(1000000) // in units
+	auth.GasLimit = uint64(300000000) // in units
 	if nonce > 0 {
 		auth.Nonce = big.NewInt(int64(nonce))
 	}else {
@@ -52,7 +52,7 @@ func GetTransactOptsFromStore(address common.Address, password string, nonce uin
 	}
 	auth.GasPrice = nil
 	auth.From = address
-	auth.BlockLimit = uint64(750)
+	//auth.BlockLimit = uint64(750)
 	return  auth, nil
 }
 

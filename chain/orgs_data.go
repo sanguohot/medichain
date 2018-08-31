@@ -49,6 +49,9 @@ func OrgsDataAddSuper(address common.Address) (error, *common.Hash) {
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
@@ -63,6 +66,9 @@ func OrgsDataAddOrg(uuid [16]byte, orgAddress common.Address, publicKey [2][32]b
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
@@ -76,6 +82,9 @@ func OrgsDataDelOrg(uuid [16]byte) (error, *common.Hash) {
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 func OrgsDataIsUuidExist(uuid uuid.UUID) (bool, error) {

@@ -43,6 +43,9 @@ func SetAddressToCns(name string, address common.Address) (error, *common.Hash) 
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 

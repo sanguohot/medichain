@@ -20,7 +20,7 @@ func main() {
 		return
 	}
 
-	receipt, err := client.TransactionReceipt(context.Background(), common.HexToHash("0x7216b989e25643c258327a7f5e336258ffb347aabf1dcdc97992b262a7265ea9"))
+	receipt, err := client.TransactionReceipt(context.Background(), common.HexToHash("0xb4ec11e3a487dcbb64437566ad314b1648744c8ad9804008cb8d71e4449ddf8a"))
 	if err != nil {
 		log.Fatal(err)
 		return

@@ -49,11 +49,14 @@ func FilesDataAddSuper(address common.Address) (error, *common.Hash) {
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
 func FilesDataAddFile(uuid [16]byte, ownerUuid [16]byte, uploaderUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash common.Hash,
-	sha256Hash common.Hash, r [32]byte, s [32]byte, v uint8, address common.Address, password string) (error, *common.Hash) {
+	sha256Hash common.Hash, r [32]byte, s [32]byte, v uint8) (error, *common.Hash) {
 	err, instance, auth := GetFilesDataInstanceAndAuth()
 	if err != nil {
 		return err, nil
@@ -63,6 +66,9 @@ func FilesDataAddFile(uuid [16]byte, ownerUuid [16]byte, uploaderUuid [16]byte, 
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, &hash
+	}
 	return nil, &hash
 }
 
@@ -76,6 +82,9 @@ func FilesDataDelFile(uuid [16]byte) (error, *common.Hash) {
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 func FilesDataIsUuidExist(uuid uuid.UUID) (bool, error) {
@@ -139,6 +148,50 @@ func FilesDataGetFileSignerSize(fileUuid uuid.UUID) (*big.Int, error) {
 		return nil, err
 	}
 	size, err := instance.GetFileSignerSize(nil, fileUuid)
+	if err != nil {
+		return nil, err
+	}
+	return size, nil
+}
+func FilesDataGetSuperSize() (*big.Int, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	size, err := instance.GetSuperSize(nil)
+	if err != nil {
+		return nil, err
+	}
+	return size, nil
+}
+func FilesDataGetSuperByIndex(index *big.Int) (*common.Address, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	address, err := instance.GetSuperByIndex(nil, index)
+	if err != nil {
+		return nil, err
+	}
+	return &address, nil
+}
+func FilesDataGetOwner() (*common.Address, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	address, err := instance.GetOwner(nil)
+	if err != nil {
+		return nil, err
+	}
+	return &address, nil
+}
+func FilesDataGetUuidListSize() (*big.Int, error) {
+	err, instance := GetFilesDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	size, err := instance.GetUuidListSize(nil)
 	if err != nil {
 		return nil, err
 	}

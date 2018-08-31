@@ -53,6 +53,9 @@ func ControllerAddOrg(uuid [16]byte, name [4][32]byte, address common.Address, p
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
@@ -70,6 +73,9 @@ func ControllerAddUser(uuid [16]byte, orgUuid [16]byte, idCartNoHash common.Hash
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
@@ -88,6 +94,9 @@ func ControllerAddFile(uuid, ownerUuid [16]byte, fileType common.Hash, fileDesc 
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
@@ -106,6 +115,9 @@ func ControllerAddSign(fileUuid [16]byte, keccak256Hash common.Hash, address com
 		return err, nil
 	}
 	hash := tx.Hash()
+	if err := CheckReceiptStatus(hash); err!=nil {
+		return err, nil
+	}
 	return nil, &hash
 }
 
@@ -156,3 +168,4 @@ func ControllerGetFileByUuid(fileUuid [16]byte) (error, [16]byte, [16]byte, [32]
 	}
 	return nil, ownerUuid, uploaderUuid, fileType, fileDesc, sha256Hash, keccak256Hash, time
 }
+

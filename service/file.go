@@ -96,10 +96,12 @@ func AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc string, file
 	if err != nil {
 		return err, nil
 	}
-	// 上传到大数据库
-	err = datacenter.UploadToBigDataCenter(file)
+	isExist, err := chain.UsersDataIsUuidExist(ownerUuid)
 	if err != nil {
 		return err, nil
+	}
+	if !isExist {
+		return util.ErrUserNotExist, nil
 	}
 	fileDescBytes32_4, err := util.StringToBytes32_4(fileDesc)
 	if err != nil {
@@ -107,6 +109,11 @@ func AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc string, file
 	}
 	fileUuid := uuid.New()
 	err, txHash := chain.ControllerAddFile(fileUuid, ownerUuid, fileTypeHash, *fileDescBytes32_4, keccak256Hash, sha256Hash, address, password)
+	if err != nil {
+		return err, nil
+	}
+	// 上传到大数据库
+	err = datacenter.UploadToBigDataCenter(file)
 	if err != nil {
 		return err, nil
 	}

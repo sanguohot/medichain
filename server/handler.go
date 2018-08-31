@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"medichain/service"
 	"io/ioutil"
-	"fmt"
 )
 func PongHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
@@ -48,8 +47,11 @@ func AddFileHandler(c *gin.Context) {
 	fileType := c.PostForm("fileType")
 	fileDesc := c.PostForm("fileDesc")
 	sha256Hash := c.PostForm("sha256Hash")
-	file, header , err := c.Request.FormFile("file")
-	fmt.Println("header.Filename ===>", header.Filename)
+	file, _ , err := c.Request.FormFile("file")
+	if err != nil {
+		DoJsonResponse(c, err, nil)
+	}
+	//fmt.Println("header.Filename ===>", header.Filename)
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		DoJsonResponse(c, err, nil)
@@ -64,7 +66,11 @@ func AddFileSignHandler(c *gin.Context) {
 	fileUuidStr := c.Param("fileUuid")
 	keccak256Hash := c.PostForm("keccak256Hash")
 	err, hash := service.AddFileSign(fileUuidStr, addressStr, password, keccak256Hash)
-	DoJsonResponse(c, err, hash.Hex())
+	if hash == nil {
+		DoJsonResponse(c, err, nil)
+	}else {
+		DoJsonResponse(c, err, hash.Hex())
+	}
 }
 
 func GetFileHandler(c *gin.Context) {

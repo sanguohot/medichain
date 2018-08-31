@@ -8,6 +8,7 @@ import (
 	"medichain/util"
 	"medichain/chain"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	"fmt"
 )
 
 type UserAction struct {
@@ -20,12 +21,14 @@ type UserAction struct {
 
 func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserAction) {
 	if ok, err := idvalidator.Validate(idCartNo); !ok {
-		return err, nil
+		return fmt.Errorf("身份证%s", err.Error()), nil
 	}
 	if password == "" {
 		return util.ErrPwdRequire, nil
 	}
-	orgUuid := uuid.UUID{}
+	orgUuid := [16]byte{}
+	// do not user the following code, because it is not zero to all bytes
+	//orgUuid := uuid.UUID{}
 	if orgUuidStr != "" {
 		orgUuid, err := uuid.Parse(orgUuidStr)
 		if err != nil {
