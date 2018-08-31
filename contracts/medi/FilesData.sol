@@ -43,6 +43,17 @@ contract FilesData is Super {
     event onSetFileDesc(bytes16 uuid, bytes32[4] fileDesc);
     event onAddSign(bytes16 uuid, bytes16 userUuid, bytes32 r, bytes32 s, uint8 v);
     event onSetTime(bytes16 uuid, uint time);
+    event onAddFileStep0();
+    event onAddFileStep1();
+    event onAddFileStep2();
+    event onAddFileStep3();
+    event onAddFileStep4();
+    event onAddFileStep5();
+    event onAddFileStep6();
+    event onAddFileStep7();
+    event onAddFileStep8();
+    event onAddFileStep9();
+    event onAddFileStep10();
 
     mapping(bytes16 => File) uuidToFileMap;
     mapping(bytes32 => bytes16) keccak256HashToUuidMap;
@@ -105,20 +116,31 @@ contract FilesData is Super {
     function addFile(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
     , bytes32 sha256Hash, bytes32 r, bytes32 s, uint8 v, uint time)
     public onlySuperOrOwner onlyNotActive(uuid) {
+        onAddFileStep0();
         require(uuid!=0x0 && ownerUuid!=0x0 && uploaderUuid!=0x0 && fileType!=0x0 && keccak256Hash!=0x0 && sha256Hash!=0x0 && r!=0x0 && s!=0x0 && time!=0x0);
+        onAddFileStep1();
         require(fileNotExist(uuid));
+        onAddFileStep2();
         require(sha256HashNotExist(sha256Hash));
+        onAddFileStep3();
         require(keccak256HashNotExist(keccak256Hash));
+        onAddFileStep4();
         require(sha256Hash != keccak256Hash);
+        onAddFileStep5();
         require(checkUsersDataOk());
+        onAddFileStep6();
         require(usersData.isUuidExist(ownerUuid));
+        onAddFileStep7();
         require(usersData.isUuidExist(uploaderUuid));
+        onAddFileStep8();
         // 上传文件的用户可以不属于一个机构
         if(usersData.getOrgUuid(uploaderUuid) != 0x0){
             require(checkOrgsDataOk());
             require(orgsData.isUuidExist(usersData.getOrgUuid(uploaderUuid)));
         }
+        onAddFileStep9();
         require(usersData.getUserAddress(uploaderUuid) == ecrecover(keccak256Hash, v, r, s));
+        onAddFileStep10();
         File memory file;
         file.active = true;
         file.ownerUuid = ownerUuid;
