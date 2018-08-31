@@ -17,10 +17,10 @@ type FileAction struct {
 }
 
 type FileSignerAndDataAction struct {
-	idl []uuid.UUID
-	rl []common.Hash
-	sl []common.Hash
-	vl []uint8
+	Idl []uuid.UUID
+	Rl []common.Hash
+	Sl []common.Hash
+	Vl []uint8
 }
 
 func requireKeccak256HashNotExist(hash common.Hash) (error) {
@@ -150,10 +150,6 @@ func AddFileSign(fileUuidStr, addressStr, password, keccak256HashStr string) (er
 	if *keccak256HashFromChain != keccak256Hash {
 		return util.ErrFileHashNotMatch, nil
 	}
-	err = requireKeccak256HashNotExist(keccak256Hash)
-	if err != nil {
-		return err, nil
-	}
 	err, txHash := chain.ControllerAddSign(fileUuid, keccak256Hash, address, password)
 	if err != nil {
 		return err, nil
@@ -207,9 +203,9 @@ func GetFileSignerAndDataList(fileUuidStr string, startStr string, limitStr stri
 
 func getFileSignerAndDataActionByChainData(idl [][16]byte, rl [][32]byte, sl [][32]byte, vl []uint8) *FileSignerAndDataAction {
 	var (
-		idlNew []uuid.UUID
-		rlNew []common.Hash
-		slNew []common.Hash
+		idlNew []uuid.UUID = make([]uuid.UUID, len(idl))
+		rlNew []common.Hash = make([]common.Hash, len(idl))
+		slNew []common.Hash = make([]common.Hash, len(idl))
 	)
 	for i := 0; i < len(idl); i++ {
 		idlNew[i] = uuid.UUID(idl[i])
@@ -217,9 +213,9 @@ func getFileSignerAndDataActionByChainData(idl [][16]byte, rl [][32]byte, sl [][
 		slNew[i] = common.Hash(sl[i])
 	}
 	return &FileSignerAndDataAction{
-		idl: idlNew,
-		rl: rlNew,
-		sl: slNew,
-		vl: vl,
+		Idl: idlNew,
+		Rl: rlNew,
+		Sl: slNew,
+		Vl: vl,
 	}
 }

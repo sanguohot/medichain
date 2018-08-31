@@ -12,6 +12,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/google/uuid"
+	"medichain/service"
 )
 
 func main() {
@@ -55,10 +56,15 @@ func main() {
 
 	size, err := chain.FilesDataGetUuidListSize()
 	fmt.Println("file size ===>", size.Uint64())
-	fileUuid, err := uuid.Parse("a1d0cb87-6379-4f06-ad0a-eb4bf2a15cbd")
+	fileUuid, err := uuid.Parse("fa84d023-7e54-427d-9d64-c91e2a040dd0")
 	if err != nil {
 		log.Fatal(err)
 	}
 	err, fa, fb, fc, fd, fe, ff, fg :=  chain.ControllerGetFileByUuid(fileUuid)
-	fmt.Println("file a1d0cb87-6379-4f06-ad0a-eb4bf2a15cbd ====>", uuid.UUID(fa), uuid.UUID(fb), common.Hash(fc).Hex(), util.Bytes32_4ToString(fd), common.Hash(fe).Hex(), common.Hash(ff).Hex(), fg)
+	fmt.Println("fa84d023-7e54-427d-9d64-c91e2a040dd0 ====>", uuid.UUID(fa), uuid.UUID(fb), common.Hash(fc).Hex(), util.Bytes32_4ToString(fd), common.Hash(fe).Hex(), common.Hash(ff).Hex(), fg)
+	err, action := service.GetFileSignerAndDataList("fa84d023-7e54-427d-9d64-c91e2a040dd0", "0", "10")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(action)
 }

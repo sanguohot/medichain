@@ -25,6 +25,7 @@ func DoJsonResponse(c *gin.Context, err error, p interface{})  {
 		})
 	}
 }
+
 func AddUserHandler(c *gin.Context) {
 	idCartNo := c.PostForm("idCartNo")
 	orgUuidStr := c.PostForm("orgUuid")
@@ -89,6 +90,16 @@ func GetFileSignerAndDataListHandler(c *gin.Context) {
 	limitStr := c.Query("limit")
 	err, list := service.GetFileSignerAndDataList(fileUuidStr, startStr, limitStr)
 	DoJsonResponse(c, err, list)
+	//if err != nil {
+	//	DoJsonResponse(c, err, list)
+	//}
+	//c.JSON(http.StatusOK, gin.H{
+	//	"Code": "SUCC",
+	//	"Data": list.idl,
+	//	"Data": "",
+	//	"Data": "",
+	//	"Data": "",
+	//})
 }
 
 func GetFileAddLogListHandler(c *gin.Context) {
@@ -96,9 +107,5 @@ func GetFileAddLogListHandler(c *gin.Context) {
 	limitStr := c.Query("limit")
 	idCartNo := c.Query("idCartNo")
 	err, list := service.GetFileAddLogList(idCartNo, startStr, limitStr)
-	//if err != nil {
-	//	c.String(http.StatusBadRequest, err.Error())
-	//}
-	//c.JSON(http.StatusOK, list)
 	DoJsonResponse(c, err, list)
 }

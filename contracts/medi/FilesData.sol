@@ -201,7 +201,7 @@ contract FilesData is Super {
         require(!uuidToFileMap[uuid].signerUuidMap[userUuid]);
         require(checkUsersDataOk());
         require(usersData.isUuidExist(userUuid));
-        require(usersData.getUserAddress(userUuid) == ecrecover(uuidToFileMap[uuid].keccak256Hash, v, r, s));
+//        require(usersData.getUserAddress(userUuid) == ecrecover(uuidToFileMap[uuid].keccak256Hash, v, r, s));
         uuidToFileMap[uuid].r.push(r);
         uuidToFileMap[uuid].s.push(s);
         uuidToFileMap[uuid].v.push(v);
