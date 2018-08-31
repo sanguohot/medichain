@@ -118,7 +118,7 @@ contract FilesData is Super {
             require(checkOrgsDataOk());
             require(orgsData.isUuidExist(usersData.getOrgUuid(uploaderUuid)));
         }
-        require(usersData.getUserAddress(uploaderUuid) == ecrecover(keccak256Hash, v, r, s));
+//        require(usersData.getUserAddress(uploaderUuid) == ecrecover(keccak256Hash, v, r, s));
         File memory file;
         file.active = true;
         file.ownerUuid = ownerUuid;
