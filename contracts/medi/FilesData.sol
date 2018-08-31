@@ -218,41 +218,66 @@ contract FilesData is Super {
 
     // as it is seeable to everyone on the blockchain, so no need to check any input or the right.
     function getOwnerUuid(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes16) {
+    public constant returns (bytes16) {
+        if(!uuidToFileMap[uuid].active){
+            return bytes16(0);
+        }          
         return uuidToFileMap[uuid].ownerUuid;
     }
     function getUploaderUuid(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes16) {
+    public constant returns (bytes16) {
+        if(!uuidToFileMap[uuid].active){
+            return bytes16(0);
+        }         
         return uuidToFileMap[uuid].uploaderUuid;
     }
     function getSha256Hash(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32) {
+    public constant returns (bytes32) {
+        if(!uuidToFileMap[uuid].active){
+            return bytes32(0);
+        }         
         return uuidToFileMap[uuid].sha256Hash;
     }
     function getKeccak256Hash(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32) {
+    public constant returns (bytes32) {
+        if(!uuidToFileMap[uuid].active){
+            return bytes32(0);
+        }        
         return uuidToFileMap[uuid].keccak256Hash;
     }
     function getFileType(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32) {
+    public constant returns (bytes32) {
+        if(!uuidToFileMap[uuid].active){
+            return bytes32(0);
+        }        
         return uuidToFileMap[uuid].fileType;
     }
     function getFileDesc(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32[4]) {
+    public constant returns (bytes32[4]) {
+        if(!uuidToFileMap[uuid].active){
+            return [bytes32(0), bytes32(0), bytes32(0), bytes32(0)];
+        }        
         return uuidToFileMap[uuid].fileDesc;
     }
     function getTime(bytes16 uuid)
-    public onlyActive(uuid) constant returns (uint) {
+    public constant returns (uint) {
+        if(!uuidToFileMap[uuid].active){
+            return 0;
+        }
         return uuidToFileMap[uuid].time;
     }
     function getUuidByKeccak256Hash(bytes32 keccak256Hash)
     public constant returns (bytes16) {
-        require(uuidToFileMap[keccak256HashToUuidMap[keccak256Hash]].active);
+        if(!uuidToFileMap[keccak256HashToUuidMap[keccak256Hash]].active){
+            return bytes16(0);
+        }
         return keccak256HashToUuidMap[keccak256Hash];
     }
     function getUuidBySha256Hash(bytes32 sha256Hash)
     public constant returns (bytes16) {
-        require(uuidToFileMap[sha256HashToUuidMap[sha256Hash]].active);
+        if(!uuidToFileMap[sha256HashToUuidMap[sha256Hash]].active){
+            return bytes16(0);
+        }
         return sha256HashToUuidMap[sha256Hash];
     }
     function getUuidListSize()
@@ -260,19 +285,28 @@ contract FilesData is Super {
         return uuidList.length;
     }
     function getUuidByIndex(uint256 index) public constant returns (bytes16) {
-        require(index>=0 && index<getUuidListSize());
-        return uuidList[index];
+        if(index>=0 && index<getUuidListSize()){
+            return uuidList[index];
+        }
+        return bytes16(0);
     }
-    function getFileSignerSize(bytes16 uuid) public onlyActive(uuid) constant returns (uint256) {
+    function getFileSignerSize(bytes16 uuid) constant returns (uint256) {
+        if(!uuidToFileMap[uuid].active){
+            return 0;
+        }
         return uuidToFileMap[uuid].signerUuidList.length;
     }
-    function getFileSignerUuidByIndex(bytes16 uuid, uint256 index) public onlyActive(uuid) constant returns (bytes16) {
-        require(index>=0 && index<getFileSignerSize(uuid));
-        return uuidToFileMap[uuid].signerUuidList[index];
+    function getFileSignerUuidByIndex(bytes16 uuid, uint256 index) public constant returns (bytes16) {
+        if(uuidToFileMap[uuid].active && index>=0 && index<getFileSignerSize(uuid)){
+            return uuidToFileMap[uuid].signerUuidList[index];
+        }
+        return bytes16(0);
     }
-    function getFileSignDataByIndex(bytes16 uuid, uint256 index) public onlyActive(uuid) constant returns (bytes32, bytes32, uint8) {
-        require(index>=0 && index<getFileSignerSize(uuid));
-        return (uuidToFileMap[uuid].r[index], uuidToFileMap[uuid].s[index], uuidToFileMap[uuid].v[index]);
+    function getFileSignDataByIndex(bytes16 uuid, uint256 index) public constant returns (bytes32, bytes32, uint8) {
+        if(uuidToFileMap[uuid].active && index>=0 && index<getFileSignerSize(uuid)){
+           return (uuidToFileMap[uuid].r[index], uuidToFileMap[uuid].s[index], uuidToFileMap[uuid].v[index]); 
+        }
+        return (bytes32(0), bytes32(0), 0);
     }
     function isUuidExist(bytes16 uuid)
     public constant returns (bool) {

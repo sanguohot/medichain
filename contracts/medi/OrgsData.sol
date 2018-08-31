@@ -112,33 +112,52 @@ contract OrgsData is Super {
 
     // as it is seeable to everyone on the blockchain, so no need to check any input or the right.
     function getOrgAddress(bytes16 uuid)
-    public onlyActive(uuid) constant returns (address) {
+    public constant returns (address) {
+        if(!uuidToOrgMap[uuid].active){
+            return address(0);
+        }
         return uuidToOrgMap[uuid].orgAddress;
     }
     function getPublicKey(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32[2]) {
+    public constant returns (bytes32[2]) {
+        if(!uuidToOrgMap[uuid].active){
+            return [bytes32(0), bytes32(0)];
+        }        
         return uuidToOrgMap[uuid].publicKey;
     }
     function getNameHash(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32) {
+    public constant returns (bytes32) {
+        if(!uuidToOrgMap[uuid].active){
+            return bytes32(0);
+        }
         return uuidToOrgMap[uuid].nameHash;
     }
     function getName(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32[4]) {
+    public constant returns (bytes32[4]) {
+        if(!uuidToOrgMap[uuid].active){
+            return [bytes32(0), bytes32(0), bytes32(0), bytes32(0)];
+        }
         return uuidToOrgMap[uuid].name;
     }
     function getTime(bytes16 uuid)
-    public onlyActive(uuid) constant returns (uint) {
+    public constant returns (uint) {
+        if(!uuidToOrgMap[uuid].active){
+            return 0;
+        }
         return uuidToOrgMap[uuid].time;
     }
     function getUuidByNameHash(bytes32 nameHash)
     public constant returns (bytes16) {
-        require(uuidToOrgMap[nameHashToUuidMap[nameHash]].active);
+        if(!uuidToOrgMap[nameHashToUuidMap[nameHash]].active){
+            return bytes16(0);
+        }
         return nameHashToUuidMap[nameHash];
     }
     function getUuidByOrgAddress(address orgAddress)
     public constant returns (bytes16) {
-        require(uuidToOrgMap[orgAddressToUuidMap[orgAddress]].active);
+        if(!uuidToOrgMap[orgAddressToUuidMap[orgAddress]].active){
+            return bytes16(0);
+        }
         return orgAddressToUuidMap[orgAddress];
     }
     function getUuidListSize()
@@ -146,8 +165,10 @@ contract OrgsData is Super {
         return uuidList.length;
     }
     function getUuidByIndex(uint256 index) public constant returns (bytes16) {
-        require(index>=0 && index<getUuidListSize());
-        return uuidList[index];
+        if(index>=0 && index<getUuidListSize()){
+            return uuidList[index];
+        }
+        return bytes16(0);
     }
     function isUuidExist(bytes16 uuid)
     public constant returns (bool) {

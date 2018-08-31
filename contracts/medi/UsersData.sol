@@ -141,31 +141,52 @@ contract UsersData is Super {
 
     // as it is seeable to everyone on the blockchain, so no need to check any input or the right.
     function getUserAddress(bytes16 uuid)
-    public onlyActive(uuid) constant returns (address) {
+    public constant returns (address) {
+        if(!uuidToUserMap[uuid].active){
+            return address(0);
+        }        
         return uuidToUserMap[uuid].userAddress;
     }
     function getOrgUuid(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes16) {
+    public constant returns (bytes16) {
+        if(!uuidToUserMap[uuid].active){
+            return bytes16(0);
+        }
         return uuidToUserMap[uuid].orgUuid;
     }
     function getPublicKey(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32[2]) {
+    public constant returns (bytes32[2]) {
+        if(!uuidToUserMap[uuid].active){
+            return [bytes32(0), bytes32(0)];
+        }        
         return uuidToUserMap[uuid].publicKey;
     }
     function getIdCartNoHash(bytes16 uuid)
-    public onlyActive(uuid) constant returns (bytes32) {
+    public constant returns (bytes32) {
+        if(!uuidToUserMap[uuid].active){
+            return bytes32(0);
+        }
         return uuidToUserMap[uuid].idCartNoHash;
     }
     function getTime(bytes16 uuid)
-    public onlyActive(uuid) constant returns (uint) {
+    public constant returns (uint) {
+        if(!uuidToUserMap[uuid].active){
+            return 0;
+        }
         return uuidToUserMap[uuid].time;
     }
     function getUuidByIdCartNoHash(bytes32 idCartNoHash)
     public constant returns (bytes16) {
+        if(!uuidToUserMap[idCartNoHashToUuidMap[idCartNoHash]].active){
+            return bytes16(0);
+        }
         return idCartNoHashToUuidMap[idCartNoHash];
     }
     function getUuidByUserAddress(address userAddress)
     public constant returns (bytes16) {
+        if(!uuidToUserMap[userAddressToUuidMap[userAddress]].active){
+            return bytes16(0);
+        }
         return userAddressToUuidMap[userAddress];
     }
     function getUuidListSize()
@@ -173,7 +194,10 @@ contract UsersData is Super {
         return uuidList.length;
     }
     function getUuidByIndex(uint256 index) public constant returns (bytes16) {
-        return uuidList[index];
+        if(index>=0 && index<getUuidListSize()){
+            return uuidList[index];
+        }
+        return bytes16(0);
     }
     function isUuidExist(bytes16 uuid)
     public constant returns (bool) {
