@@ -7,7 +7,7 @@
 		},
 		"tls" : {
 			"enable": true,
-			"verify_peer": false
+			"verify_peer": true
 		},
 		"pki": {
 			"key": "/key/privkey.pem",
@@ -48,8 +48,8 @@
 		},
 		"keystore": "/keystore",
 		"easy_cns": {
-			"address": "0x580c58b4678753187BfdBB378d62663cfE493067",
-			"tx": "0x7918bc4e39ed09c7fecb9999afcc64656a138d21950757365c628a244adf55ed"
+			"address": "0x5EBc2cefBE7f414fDD1496050378F1a6751e5C6d",
+			"tx": "0x70d20a11d61683996f0464914bdefc4cf74194e3ebbde8df3136c5685beb6246"
 		}
     }
 }

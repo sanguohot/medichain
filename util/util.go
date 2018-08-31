@@ -11,6 +11,16 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+func IsValidAndNotZeroAddress(address common.Address) bool {
+	if IsZeroAddress(address) {
+		return false
+	}
+	if !IsValidAddress(address) {
+		return false
+	}
+	return true
+}
+
 // IsValidAddress validate hex address
 func IsValidAddress(iaddress interface{}) bool {
 	re := regexp.MustCompile("^0x[0-9a-fA-F]{40}$")

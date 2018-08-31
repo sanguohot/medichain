@@ -18,6 +18,7 @@ var (
 	ErrFileNotExist = errors.New("文件不存在")
 	ErrOrgNotExist = errors.New("机构不存在")
 	ErrInvalidAddress = errors.New("非法以太坊地址")
+	ErrInvalidOrZeroAddress = errors.New("非法或者全零的以太坊地址")
 	ErrFileUploadNotComplete = errors.New("文件上传不完整")
 	ErrFileHashNotMatch = errors.New("文件哈希不匹配")
 	ErrFileSignListOutOfIndex = errors.New("查询签名列表超出最大索引")

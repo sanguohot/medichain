@@ -12,7 +12,11 @@ func GetCnsInstance() (error, *medi.EasyCns) {
 	if err != nil {
 		return err, nil
 	}
-	instance, err := medi.NewEasyCns(common.HexToAddress(etc.GetBcosEasyCnsAddress()), client)
+	address := common.HexToAddress(etc.GetBcosEasyCnsAddress())
+	if !util.IsValidAndNotZeroAddress(address) {
+		return util.ErrInvalidOrZeroAddress, nil
+	}
+	instance, err := medi.NewEasyCns(address, client)
 	if err != nil {
 		return err, nil
 	}
@@ -20,6 +24,12 @@ func GetCnsInstance() (error, *medi.EasyCns) {
 }
 
 func SetAddressToCns(name string, address common.Address) (error, *common.Hash) {
+	if name == "" {
+		return util.ErrParamShouldNotNil, nil
+	}
+	if !util.IsValidAndNotZeroAddress(address) {
+		return util.ErrInvalidOrZeroAddress, nil
+	}
 	err, instance := GetCnsInstance()
 	if err != nil {
 		return err, nil
@@ -37,6 +47,9 @@ func SetAddressToCns(name string, address common.Address) (error, *common.Hash) 
 }
 
 func GetAddressFromCns(name string) (error, *common.Address) {
+	if name == "" {
+		return util.ErrParamShouldNotNil, nil
+	}
 	err, instance := GetCnsInstance()
 	if err != nil {
 		return err, nil
@@ -44,6 +57,9 @@ func GetAddressFromCns(name string) (error, *common.Address) {
 	address, err := instance.Get(nil, name)
 	if err != nil {
 		return err, nil
+	}
+	if !util.IsValidAndNotZeroAddress(address) {
+		return util.ErrInvalidOrZeroAddress, nil
 	}
 	return nil, &address
 }

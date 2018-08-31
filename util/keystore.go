@@ -31,6 +31,9 @@ func GetKeyJsonFromStore(address common.Address, password string) ([]byte, error
 }
 
 func GetTransactOptsFromStore(address common.Address, password string, nonce uint64) (*bind.TransactOpts, error) {
+	if !IsValidAndNotZeroAddress(address) {
+		return nil, ErrInvalidOrZeroAddress
+	}
 	rand.Seed(time.Now().Unix())
 	keyBytes, err := GetKeyJsonFromStore(address, password)
 	if err != nil {
