@@ -9,7 +9,6 @@ import (
 	"time"
 	"github.com/google/uuid"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"fmt"
 )
 
 func GetOrgsDataInstance() (error, *medi.OrgsData) {

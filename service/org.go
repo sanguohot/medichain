@@ -28,6 +28,7 @@ func checkOrgNameHash(hash common.Hash) error {
 	if isExist {
 		return util.ErrOrgExist
 	}
+	return err
 }
 func AddOrg(name string, password string) (error, *OrgAction) {
 	bytes32_4, err := util.StringToBytes32_4(name)
