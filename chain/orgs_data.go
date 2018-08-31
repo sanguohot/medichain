@@ -97,3 +97,36 @@ func OrgsDataGetUuidByNameHash(hash common.Hash) (*uuid.UUID, error) {
 	orgUuid := uuid.UUID(bytes16)
 	return &orgUuid, nil
 }
+func OrgsDataGetSuperSize() (*big.Int, error) {
+	err, instance := GetOrgsDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	size, err := instance.GetSuperSize(nil)
+	if err != nil {
+		return nil, err
+	}
+	return size, nil
+}
+func OrgsDataGetSuperByIndex(index *big.Int) (*common.Address, error) {
+	err, instance := GetOrgsDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	address, err := instance.GetSuperByIndex(nil, index)
+	if err != nil {
+		return nil, err
+	}
+	return &address, nil
+}
+func OrgsDataGetOwner() (*common.Address, error) {
+	err, instance := GetOrgsDataInstance()
+	if err != nil {
+		return nil, err
+	}
+	address, err := instance.GetOwner(nil)
+	if err != nil {
+		return nil, err
+	}
+	return &address, nil
+}

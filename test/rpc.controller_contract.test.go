@@ -3,28 +3,40 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/ethereum/go-ethereum/common"
 	"medichain/chain"
-	"github.com/google/uuid"
+	//"github.com/google/uuid"
 	"medichain/util"
+	//"hash"
+	"time"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 func main() {
-	orgUuid := uuid.New()
-	publicKey := [2][32]byte{}
-	publicKey[0] = common.HexToHash("0x06ed2e37f17a997fd3256e0d1f41107af2f9b2ed4a96f6e65b357b1dbb7fbb01")
-	publicKey[1] = common.HexToHash("0x6872be104937d773d928df94a0966e8e7e88aca75dbd768592dc9c94d5afdda9")
-	address := common.HexToAddress("0x646829bFA80580b07767b796B4055DB9BDf148b5")
-	password := "123456"
-	name := "广西中医一附院"
+	name := "天津中医药大学第一附属医院"
 	nameBytes32_4, err := util.StringToBytes32_4(name)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	err, hash := chain.ControllerAddOrg(orgUuid, *nameBytes32_4, address, password)
+	//orgUuid := uuid.New()
+	//password := "123456"
+	//_, _, address, err := util.NewWallet(password)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//err, hash := chain.ControllerAddOrg(orgUuid, *nameBytes32_4, *address, password)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//fmt.Println("交易成功 ===>", hash.Hex())
+	time.Sleep(time.Second * 1)
+	id, err := chain.OrgsDataGetUuidByNameHash(util.Bytes32_4Hash(*nameBytes32_4))
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("交易成功 ===>", hash.Hex())
+	err, addressNew, a, b, c, d := chain.ControllerGetOrgByUuid(*id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(id, addressNew.Hex(), common.Hash(b).Hex(), hexutil.Encode(util.Bytes32_2ToBytes(a))[2:], util.Bytes32_4ToString(c), d)
 }

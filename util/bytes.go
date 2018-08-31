@@ -50,6 +50,13 @@ func BytesToBytes32_2(input []byte) (*[2][32]byte, error) {
 	return &bytes32_2, nil
 }
 
+func Bytes32_2ToBytes(input [2][32]byte) ([]byte) {
+	b := BytesCombine(input[0][:], input[1][:])
+	// 末尾0是不需要的，直接从bytes trim 0，不要转为字符串后trim space，因为space值为32而不是0，trim不掉
+	tb := bytes.TrimRight(b, "\x00")
+	return tb
+}
+
 func IsZeroBytes(s []byte) bool {
 	for _, v := range s {
 		if v != 0 {

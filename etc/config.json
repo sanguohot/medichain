@@ -3,7 +3,7 @@
 		"dir": "E:/evan/goland/src/medichain",
 		"host": {
 			"address": "0.0.0.0",
-			"port": 8080
+			"port": 8443
 		},
 		"tls" : {
 			"enable": true,
@@ -48,8 +48,8 @@
 		},
 		"keystore": "/keystore",
 		"easy_cns": {
-			"address": "0xA757d8d58ce9BCFDF74C2a09f716C127F2B86384",
-			"tx": "0x077b508065f29ce9cc45cabeae5b69c6705afb718843a07d3e9fbabd44173010"
+			"address": "0x4eFcD1938107f1B249Ad711326A506aD9d6C58e2",
+			"tx": "0xb98ef4947b953e3bf3f712d78b2200d35e1df60249b4710b913f70e22855c259"
 		}
     }
 }
