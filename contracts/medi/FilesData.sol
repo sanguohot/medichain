@@ -116,31 +116,31 @@ contract FilesData is Super {
     function addFile(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
     , bytes32 sha256Hash, bytes32 r, bytes32 s, uint8 v, uint time)
     public onlySuperOrOwner onlyNotActive(uuid) {
-        onAddFileStep0();
-        require(uuid!=0x0 && ownerUuid!=0x0 && uploaderUuid!=0x0 && fileType!=0x0 && keccak256Hash!=0x0 && sha256Hash!=0x0 && r!=0x0 && s!=0x0 && time!=0x0);
-        onAddFileStep1();
-        require(fileNotExist(uuid));
-        onAddFileStep2();
-        require(sha256HashNotExist(sha256Hash));
-        onAddFileStep3();
-        require(keccak256HashNotExist(keccak256Hash));
-        onAddFileStep4();
-        require(sha256Hash != keccak256Hash);
-        onAddFileStep5();
-        require(checkUsersDataOk());
-        onAddFileStep6();
-        require(usersData.isUuidExist(ownerUuid));
-        onAddFileStep7();
-        require(usersData.isUuidExist(uploaderUuid));
-        onAddFileStep8();
-        // 上传文件的用户可以不属于一个机构
-        if(usersData.getOrgUuid(uploaderUuid) != 0x0){
-            require(checkOrgsDataOk());
-            require(orgsData.isUuidExist(usersData.getOrgUuid(uploaderUuid)));
-        }
-        onAddFileStep9();
-        require(usersData.getUserAddress(uploaderUuid) == ecrecover(keccak256Hash, v, r, s));
-        onAddFileStep10();
+        // onAddFileStep0();
+        // require(uuid!=0x0 && ownerUuid!=0x0 && uploaderUuid!=0x0 && fileType!=0x0 && keccak256Hash!=0x0 && sha256Hash!=0x0 && r!=0x0 && s!=0x0 && time!=0x0);
+        // onAddFileStep1();
+        // require(fileNotExist(uuid));
+        // onAddFileStep2();
+        // require(sha256HashNotExist(sha256Hash));
+        // onAddFileStep3();
+        // require(keccak256HashNotExist(keccak256Hash));
+        // onAddFileStep4();
+        // require(sha256Hash != keccak256Hash);
+        // onAddFileStep5();
+        // require(checkUsersDataOk());
+        // onAddFileStep6();
+        // require(usersData.isUuidExist(ownerUuid));
+        // onAddFileStep7();
+        // require(usersData.isUuidExist(uploaderUuid));
+        // onAddFileStep8();
+        // // 上传文件的用户可以不属于一个机构
+        // if(usersData.getOrgUuid(uploaderUuid) != 0x0){
+        //     require(checkOrgsDataOk());
+        //     require(orgsData.isUuidExist(usersData.getOrgUuid(uploaderUuid)));
+        // }
+        // onAddFileStep9();
+        // require(usersData.getUserAddress(uploaderUuid) == ecrecover(keccak256Hash, v, r, s));
+        // onAddFileStep10();
         File memory file;
         file.active = true;
         file.ownerUuid = ownerUuid;
@@ -151,11 +151,11 @@ contract FilesData is Super {
         file.sha256Hash = sha256Hash;
         file.time = time;
         uuidToFileMap[uuid] = file;
-        uuidToFileMap[uuid].r.push(r);
-        uuidToFileMap[uuid].s.push(s);
-        uuidToFileMap[uuid].v.push(v);
-        uuidToFileMap[uuid].signerUuidList.push(uploaderUuid);
-        uuidToFileMap[uuid].signerUuidMap[uploaderUuid] = true;
+        // uuidToFileMap[uuid].r.push(r);
+        // uuidToFileMap[uuid].s.push(s);
+        // uuidToFileMap[uuid].v.push(v);
+        // uuidToFileMap[uuid].signerUuidList.push(uploaderUuid);
+        // uuidToFileMap[uuid].signerUuidMap[uploaderUuid] = true;
         keccak256HashToUuidMap[keccak256Hash] = uuid;
         sha256HashToUuidMap[sha256Hash] = uuid;
         uuidList.push(uuid);

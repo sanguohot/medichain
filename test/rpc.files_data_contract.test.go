@@ -12,6 +12,7 @@ import (
 	"medichain/util"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	//"medichain/etc"
 )
 
 func main() {
@@ -45,13 +46,13 @@ func main() {
 		fmt.Println("super 0 ===>",super.Hex())
 	}
 	password := "123456"
-	userAddress := common.HexToAddress("0xac701984bfb160b16db2c572a4a24a279bf39568")
+	userAddress := common.HexToAddress("0x996ff28238f9083896b075ed78b70b6b4687b42a")
 	fileUuid := uuid.New()
-	ownerUuid, err := uuid.Parse("a8d5c99a-fe25-456b-9871-285fa97f46f4")
+	ownerUuid, err := uuid.Parse("6933cd1d-f7cb-4201-b92b-77f58a6d590a")
 	if err != nil {
 		log.Fatal(err)
 	}
-	uploaderUuid, err := uuid.Parse("7a2b15c3-b4d6-405a-a6cc-5cf8d6e1fe92")
+	uploaderUuid, err := uuid.Parse("eddd0c10-bf7e-4bb0-b33f-6ad0150b94c8")
 	if err != nil {
 		log.Fatal(err)
 	}

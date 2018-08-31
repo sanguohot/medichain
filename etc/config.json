@@ -48,8 +48,8 @@
 		},
 		"keystore": "/keystore",
 		"easy_cns": {
-			"address": "0x310e7C03364A33c8A2c1968876Dfff73814A8cbf",
-			"tx": "0x04088a3cc83a61761b714fce33d1306f500f9a0ac1630ab077163d6d54e33a75"
+			"address": "0xDFb96f1F40B43f342815545df6C1e4d3A1808e5d",
+			"tx": "0xbbb4c366350d662da0a068f3dc81878c0174a71b4a29dc163b585166f480d0bd"
 		}
     }
 }
