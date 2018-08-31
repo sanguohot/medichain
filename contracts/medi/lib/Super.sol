@@ -60,4 +60,7 @@ contract Super {
         require(notOutOfIndex(index));
         return supers[index];
     }
+    function getOwner() public constant returns (address) {
+        return owner;
+    }
 }
