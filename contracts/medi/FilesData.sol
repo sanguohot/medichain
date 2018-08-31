@@ -129,11 +129,11 @@ contract FilesData is Super {
         file.sha256Hash = sha256Hash;
         file.time = time;
         uuidToFileMap[uuid] = file;
-        // uuidToFileMap[uuid].r.push(r);
-        // uuidToFileMap[uuid].s.push(s);
-        // uuidToFileMap[uuid].v.push(v);
-        // uuidToFileMap[uuid].signerUuidList.push(uploaderUuid);
-        // uuidToFileMap[uuid].signerUuidMap[uploaderUuid] = true;
+        uuidToFileMap[uuid].r.push(r);
+        uuidToFileMap[uuid].s.push(s);
+        uuidToFileMap[uuid].v.push(v);
+        uuidToFileMap[uuid].signerUuidList.push(uploaderUuid);
+        uuidToFileMap[uuid].signerUuidMap[uploaderUuid] = true;
         keccak256HashToUuidMap[keccak256Hash] = uuid;
         sha256HashToUuidMap[sha256Hash] = uuid;
         uuidList.push(uuid);
