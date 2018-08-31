@@ -16,32 +16,38 @@ type OrgAction struct {
 	txHash common.Hash
 }
 
+func checkOrgNameHash(hash common.Hash) error {
+	orgUuid, err := chain.OrgsDataGetUuidByNameHash(hash)
+	if err != nil {
+		return err
+	}
+	isExist, err := chain.OrgsDataIsUuidExist(*orgUuid)
+	if err != nil {
+		return err
+	}
+	if isExist {
+		return util.ErrOrgExist
+	}
+}
 func AddOrg(name string, password string) (error, *OrgAction) {
 	bytes32_4, err := util.StringToBytes32_4(name)
 	if err != nil {
 		return err, nil
 	}
 	hash := util.Bytes32_4Hash(*bytes32_4)
-	orgUuid, err := chain.OrgsDataGetUuidByNameHash(hash)
+	err = checkOrgNameHash(hash)
 	if err != nil {
 		return err, nil
 	}
-	isExist, err := chain.OrgsDataIsUuidExist(*orgUuid)
-	if err != nil {
-		return err, nil
-	}
-	if isExist {
-		return util.ErrOrgExist, nil
-	}
-	orgUuidNew := uuid.New()
+	orgUuid := uuid.New()
 	_, publicKeyECDSA, address, err := util.NewWallet(password)
-	err, txHash := chain.ControllerAddOrg(orgUuidNew, *bytes32_4, *address, password)
+	err, txHash := chain.ControllerAddOrg(orgUuid, *bytes32_4, *address, password)
 	if err != nil {
 		return err, nil
 	}
 	org := OrgAction{
 		Address: *address,
-		Uuid: orgUuidNew,
+		Uuid: orgUuid,
 		PublicKey: *publicKeyECDSA,
 		nameHash: hash,
 		txHash: *txHash,

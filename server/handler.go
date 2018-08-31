@@ -7,32 +7,38 @@ import (
 	"io/ioutil"
 	"fmt"
 )
-
 func PongHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})
 }
 
+func DoJsonResponse(c *gin.Context, err error, p interface{})  {
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Code": "FAIL",
+			"Message": err.Error(),
+		})
+	}else {
+		c.JSON(http.StatusOK, gin.H{
+			"Code": "SUCC",
+			"Data": p,
+		})
+	}
+}
 func AddUserHandler(c *gin.Context) {
 	idCartNo := c.PostForm("idCartNo")
 	orgUuidStr := c.PostForm("orgUuid")
 	password := c.PostForm("password")
-	err, user := service.AddUser(orgUuidStr, idCartNo, password)
-	if err != nil {
-		c.String(http.StatusOK, err.Error())
-	}
-	c.JSON(http.StatusOK, user)
+	err, obj := service.AddUser(orgUuidStr, idCartNo, password)
+	DoJsonResponse(c, err, obj)
 }
 
 func AddOrgHandler(c *gin.Context) {
 	name := c.PostForm("name")
 	password := c.PostForm("password")
-	err, org := service.AddOrg(name, password)
-	if err != nil {
-		c.String(http.StatusOK, err.Error())
-	}
-	c.JSON(http.StatusOK, org)
+	err, obj := service.AddOrg(name, password)
+	DoJsonResponse(c, err, obj)
 }
 
 func AddFileHandler(c *gin.Context) {
@@ -46,13 +52,10 @@ func AddFileHandler(c *gin.Context) {
 	fmt.Println("header.Filename ===>", header.Filename)
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		c.String(http.StatusOK, err.Error())
+		DoJsonResponse(c, err, nil)
 	}
-	err, fileAction := service.AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc, fileBytes, sha256Hash)
-	if err != nil {
-		c.String(http.StatusOK, err.Error())
-	}
-	c.JSON(http.StatusOK, fileAction)
+	err, obj := service.AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc, fileBytes, sha256Hash)
+	DoJsonResponse(c, err, obj)
 }
 
 func AddFileSignHandler(c *gin.Context) {
@@ -61,17 +64,14 @@ func AddFileSignHandler(c *gin.Context) {
 	fileUuidStr := c.Param("fileUuid")
 	keccak256Hash := c.PostForm("keccak256Hash")
 	err, hash := service.AddFileSign(fileUuidStr, addressStr, password, keccak256Hash)
-	if err != nil {
-		c.String(http.StatusOK, err.Error())
-	}
-	c.String(http.StatusOK, hash.Hex())
+	DoJsonResponse(c, err, hash.Hex())
 }
 
 func GetFileHandler(c *gin.Context) {
 	fileUuidStr := c.Param("fileUuid")
 	err, file := service.GetFile(fileUuidStr)
 	if err != nil {
-		c.String(http.StatusOK, err.Error())
+		DoJsonResponse(c, err, nil)
 	}
 	c.Header("content-disposition", `attachment; filename=` + fileUuidStr)
 	c.Data(http.StatusOK, http.DetectContentType(file), file)
@@ -82,10 +82,7 @@ func GetFileSignerAndDataListHandler(c *gin.Context) {
 	startStr := c.Query("start")
 	limitStr := c.Query("limit")
 	err, list := service.GetFileSignerAndDataList(fileUuidStr, startStr, limitStr)
-	if err != nil {
-		c.String(http.StatusOK, err.Error())
-	}
-	c.JSON(http.StatusOK, list)
+	DoJsonResponse(c, err, list)
 }
 
 func GetFileAddLogListHandler(c *gin.Context) {
@@ -93,8 +90,9 @@ func GetFileAddLogListHandler(c *gin.Context) {
 	limitStr := c.Query("limit")
 	idCartNo := c.Query("idCartNo")
 	err, list := service.GetFileAddLogList(idCartNo, startStr, limitStr)
-	if err != nil {
-		c.String(http.StatusOK, err.Error())
-	}
-	c.JSON(http.StatusOK, list)
+	//if err != nil {
+	//	c.String(http.StatusBadRequest, err.Error())
+	//}
+	//c.JSON(http.StatusOK, list)
+	DoJsonResponse(c, err, list)
 }

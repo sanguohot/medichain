@@ -9,6 +9,7 @@ import (
 	"time"
 	"github.com/google/uuid"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"fmt"
 )
 
 func GetOrgsDataInstance() (error, *medi.OrgsData) {
@@ -88,11 +89,11 @@ func OrgsDataIsUuidExist(uuid uuid.UUID) (bool, error) {
 func OrgsDataGetUuidByNameHash(hash common.Hash) (*uuid.UUID, error) {
 	err, instance := GetOrgsDataInstance()
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	bytes16, err := instance.GetUuidByNameHash(nil, hash)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	orgUuid := uuid.UUID(bytes16)
 	return &orgUuid, nil

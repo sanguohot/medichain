@@ -49,3 +49,12 @@ func BytesToBytes32_2(input []byte) (*[2][32]byte, error) {
 	}
 	return &bytes32_2, nil
 }
+
+func IsZeroBytes(s []byte) bool {
+	for _, v := range s {
+		if v != 0 {
+			return false
+		}
+	}
+	return true
+}

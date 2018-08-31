@@ -87,11 +87,11 @@ func UsersDataIsUuidExist(uuid uuid.UUID) (bool, error) {
 func UsersDataGetUuidByIdCartNoHash(hash common.Hash) (*uuid.UUID, error) {
 	err, instance := GetUsersDataInstance()
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	bytes16, err := instance.GetUuidByIdCartNoHash(nil, hash)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	userUuid := uuid.UUID(bytes16)
 	return &userUuid, nil

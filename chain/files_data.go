@@ -88,11 +88,11 @@ func FilesDataIsUuidExist(uuid uuid.UUID) (bool, error) {
 func FilesDataGetUuidByKeccak256Hash(hash common.Hash) (*uuid.UUID, error) {
 	err, instance := GetFilesDataInstance()
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	bytes16, err := instance.GetUuidByKeccak256Hash(nil, hash)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	fileUuid := uuid.UUID(bytes16)
 	return &fileUuid, nil
@@ -100,11 +100,11 @@ func FilesDataGetUuidByKeccak256Hash(hash common.Hash) (*uuid.UUID, error) {
 func FilesDataGetUuidBySha256Hash(hash common.Hash) (*uuid.UUID, error) {
 	err, instance := GetFilesDataInstance()
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	bytes16, err := instance.GetUuidBySha256Hash(nil, hash)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	fileUuid := uuid.UUID(bytes16)
 	return &fileUuid, nil
@@ -112,11 +112,11 @@ func FilesDataGetUuidBySha256Hash(hash common.Hash) (*uuid.UUID, error) {
 func FilesDataGetSha256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
 	err, instance := GetFilesDataInstance()
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	bytes32, err := instance.GetSha256Hash(nil, fileUuid)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	hash := common.Hash(bytes32)
 	return &hash, nil
@@ -124,11 +124,11 @@ func FilesDataGetSha256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
 func FilesDataGetKeccak256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
 	err, instance := GetFilesDataInstance()
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	bytes32, err := instance.GetKeccak256Hash(nil, fileUuid)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	hash := common.Hash(bytes32)
 	return &hash, nil
@@ -136,11 +136,11 @@ func FilesDataGetKeccak256Hash(fileUuid uuid.UUID) (*common.Hash, error) {
 func FilesDataGetFileSignerSize(fileUuid uuid.UUID) (*big.Int, error) {
 	err, instance := GetFilesDataInstance()
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	size, err := instance.GetFileSignerSize(nil, fileUuid)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return size, nil
 }
