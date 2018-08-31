@@ -6,16 +6,16 @@ import (
 	"github.com/google/uuid"
 	"github.com/luopotaotao/IdValidator/src/idvalidator"
 	"medichain/util"
-	"crypto/ecdsa"
 	"medichain/chain"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 type UserAction struct {
 	Uuid uuid.UUID
 	Address common.Address
-	PublicKey ecdsa.PublicKey
-	idCartNoHash common.Hash
-	txHash common.Hash
+	PublicKey string
+	IdCartNoHash common.Hash
+	TxHash common.Hash
 }
 
 func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserAction) {
@@ -60,9 +60,9 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserA
 	user := UserAction{
 		Address: *address,
 		Uuid: userUuidNew,
-		PublicKey: *publicKeyECDSA,
-		idCartNoHash: idCartNoHash,
-		txHash: *txHash,
+		PublicKey: hexutil.Encode(crypto.FromECDSAPub(publicKeyECDSA))[4:],
+		IdCartNoHash: idCartNoHash,
+		TxHash: *txHash,
 	}
 	return nil, &user
 }

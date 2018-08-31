@@ -2,18 +2,19 @@ package service
 
 import (
 	"github.com/ethereum/go-ethereum/common"
-	"crypto"
 	"github.com/google/uuid"
 	"medichain/util"
 	"medichain/chain"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 type OrgAction struct {
 	Uuid uuid.UUID
 	Address common.Address
-	PublicKey crypto.PublicKey
-	nameHash common.Hash
-	txHash common.Hash
+	PublicKey string
+	NameHash common.Hash
+	TxHash common.Hash
 }
 
 func checkOrgNameHash(hash common.Hash) error {
@@ -49,9 +50,9 @@ func AddOrg(name string, password string) (error, *OrgAction) {
 	org := OrgAction{
 		Address: *address,
 		Uuid: orgUuid,
-		PublicKey: *publicKeyECDSA,
-		nameHash: hash,
-		txHash: *txHash,
+		PublicKey: hexutil.Encode(crypto.FromECDSAPub(publicKeyECDSA))[4:],
+		NameHash: hash,
+		TxHash: *txHash,
 	}
 	return nil, &org
 }

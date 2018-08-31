@@ -30,8 +30,8 @@
 	},
 	"bcos": {
 		"host": {
-			"address": "10.6.250.56",
-			"rpc_port": 8545,
+			"address": "10.6.250.55",
+			"rpc_port": 8546,
 			"p2p_port": 30303,
 			"channel_port": 30304
 		},
@@ -48,8 +48,8 @@
 		},
 		"keystore": "/keystore",
 		"easy_cns": {
-			"address": "0x5EBc2cefBE7f414fDD1496050378F1a6751e5C6d",
-			"tx": "0x70d20a11d61683996f0464914bdefc4cf74194e3ebbde8df3136c5685beb6246"
+			"address": "0xA757d8d58ce9BCFDF74C2a09f716C127F2B86384",
+			"tx": "0x077b508065f29ce9cc45cabeae5b69c6705afb718843a07d3e9fbabd44173010"
 		}
     }
 }

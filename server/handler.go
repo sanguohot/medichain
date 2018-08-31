@@ -19,7 +19,7 @@ func DoJsonResponse(c *gin.Context, err error, p interface{})  {
 			"Code": "FAIL",
 			"Message": err.Error(),
 		})
-	}else {
+	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"Code": "SUCC",
 			"Data": p,
