@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	privateKey, err := crypto.HexToECDSA("7d6067e2dd73c4e11782d1b472066a7dbdf506d6e79b83c61f9d7140d8247cc0")
+	privateKey, err := crypto.HexToECDSA("7aaf3e2786ff4b38f4aceb6f86ff4a3670206376087d4bd0f041f91e61412e66")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,7 +24,7 @@ func main() {
 	}
 	publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
 
-	data := []byte("我hello")
+	data := []byte("hello world")
 	hash := crypto.Keccak256Hash(data)
 	//hash = common.HexToHash("0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8")
 	fmt.Println(hash.Hex())
