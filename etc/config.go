@@ -66,7 +66,8 @@ var (
 	ContractOrgsData = "OrgsData"
 	ContractController = "Controller"
 	ContractEasyCns = "EasyCns"
-	ContractMap = map[string]bool{ContractUsersData:true, ContractFilesData:true, ContractOrgsData:true, ContractController:true, ContractEasyCns:true}
+	ContractAuth = "Auth"
+	ContractMap = map[string]bool{ContractUsersData:true, ContractFilesData:true, ContractOrgsData:true, ContractController:true, ContractEasyCns:true, ContractAuth:true}
 	TEST_OK = "ok"
 	TEST_FAIL = "fail"
 )

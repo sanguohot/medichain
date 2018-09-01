@@ -11,7 +11,7 @@ import (
 func main() {
 	etc.InitConfig("")
 	cnsAddress := common.HexToAddress(etc.GetBcosEasyCnsAddress())
-	err, address, hash := deploy.DeployContract(&cnsAddress, etc.ContractController)
+	err, address, hash := deploy.DeployContract(&cnsAddress, etc.ContractAuth)
 	if err != nil {
 		log.Fatal(err)
 	}

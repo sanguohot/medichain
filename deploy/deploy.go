@@ -9,6 +9,7 @@ import (
 	"medichain/etc"
 	"context"
 	"github.com/ethereum/go-ethereum/core/types"
+	authContract "medichain/contracts/auth"
 )
 
 func DeployContract(cnsAddress *common.Address, contract string) (error, *common.Address, *common.Hash) {
@@ -53,6 +54,8 @@ func DeployContract(cnsAddress *common.Address, contract string) (error, *common
 		address, tx, _, err = medi.DeployFilesData(auth, client, *cnsAddress)
 	case etc.ContractController:
 		address, tx, _, err = medi.DeployController(auth, client, *cnsAddress)
+	case etc.ContractAuth:
+		address, tx, _, err = authContract.DeployAuth(auth, client)
 	}
 	hash := tx.Hash()
 	return nil, &address, &hash
