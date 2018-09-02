@@ -16,8 +16,8 @@ func GetEthDialClient() (*ethclient.Client, error) {
 }
 
 func CheckReceiptStatus(txHash common.Hash) error {
-	// 一秒出块，需要延时一秒才能查询到交易结果
-	time.Sleep(time.Second * 1)
+	// 一秒出块，需要延时一秒以上才能查询到交易结果
+	time.Sleep(time.Millisecond * 1100)
 	client, err := GetEthDialClient()
 	if err != nil {
 		return err

@@ -1,20 +1,20 @@
 package main
 
 import (
-	"log"
-	"fmt"
+	//"log"
+	//"medichain/etc"
+	//"github.com/ethereum/go-ethereum/common"
 	"medichain/deploy"
-	"medichain/etc"
-	"github.com/ethereum/go-ethereum/common"
+	//"fmt"
 )
 
 func main() {
-	etc.InitConfig("")
-	cnsAddress := common.HexToAddress(etc.GetBcosEasyCnsAddress())
-	err, address, hash := deploy.DeployContract(&cnsAddress, etc.ContractAuth)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(address.Hex())
-	fmt.Println(hash.Hex())
+	//cnsAddress := common.HexToAddress(etc.GetBcosEasyCnsAddress())
+	//err, address, hash := deploy.DeployContract(&cnsAddress, etc.ContractController)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//fmt.Println(address.Hex())
+	//fmt.Println(hash.Hex())
+	deploy.DeployAllByDefaultEasyCnsAddress()
 }

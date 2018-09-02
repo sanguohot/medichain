@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	name := etc.ContractAuth
-	if err, hash := chain.SetAddressToCns(name, common.HexToAddress("0x81f0aB32fce109E9968ccA872D12B73D35655e04")); err != nil {
+	name := etc.ContractOrgsData
+	if err, hash := chain.SetAddressToCns(name, common.HexToAddress("0xFFb476051318DE8bf94655FCf5bb61cF808834Fa")); err != nil {
 		log.Fatal(err)
 	}else {
 		fmt.Printf("tx sent: %s\n", hash.Hex()) // tx sent: 0x8d490e535678e9a24360e955d75b27ad307bdfb97a1dca51d0f3035dcee3e870

@@ -27,7 +27,7 @@ func main() {
 	data := []byte("hello world")
 	hash := crypto.Keccak256Hash(data)
 	//hash = common.HexToHash("0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8")
-	fmt.Println(hash.Hex())
+	fmt.Println(hash.Hex(), len(data))
 	signature, err := crypto.Sign(hash.Bytes(), privateKey)
 	if err != nil {
 		log.Fatal(err)

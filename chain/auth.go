@@ -36,26 +36,52 @@ func GetAuthInstanceAndAuth() (error, *authContract.Auth, *bind.TransactOpts) {
 	return nil, instance, auth
 }
 
-func AuthVerifyWithoutPrefix(hash [32]byte, v uint8, r [32]byte, s [32]byte) (error, *common.Address) {
+func AuthVerifySignatureWithoutPrefix(hash [32]byte, v uint8, r [32]byte, s [32]byte) (error, *common.Address) {
 	err, instance := GetAuthInstance()
 	if err != nil {
 		return err, nil
 	}
-	address, err := instance.VerifyWithoutPrefix(nil, hash, v, r, s)
+	address, err := instance.VerifySignatureWithoutPrefix(nil, hash, v, r, s)
 	if err != nil {
 		return err, nil
 	}
 	return nil, &address
 }
 
-func AuthVerifyWithPrefix(hash [32]byte, v uint8, r [32]byte, s [32]byte) (error, *common.Address) {
+func AuthVerifySignatureWithPrefix(hash [32]byte, v uint8, r [32]byte, s [32]byte) (error, *common.Address) {
 	err, instance := GetAuthInstance()
 	if err != nil {
 		return err, nil
 	}
-	address, err := instance.VerifyWithPrefix(nil, hash, v, r, s)
+	address, err := instance.VerifySignatureWithPrefix(nil, hash, v, r, s)
 	if err != nil {
 		return err, nil
 	}
 	return nil, &address
+}
+
+func AuthGetKeccak256FromHash(hash [32]byte) (error, *common.Hash) {
+	err, instance := GetAuthInstance()
+	if err != nil {
+		return err, nil
+	}
+	bytes32, err := instance.GetKeccak256FromHash(nil, hash)
+	if err != nil {
+		return err, nil
+	}
+	retHash := common.Hash(bytes32)
+	return nil, &retHash
+}
+
+func AuthGetSha3FromHash(hash [32]byte) (error, *common.Hash) {
+	err, instance := GetAuthInstance()
+	if err != nil {
+		return err, nil
+	}
+	bytes32, err := instance.GetSha3FromHash(nil, hash)
+	if err != nil {
+		return err, nil
+	}
+	retHash := common.Hash(bytes32)
+	return nil, &retHash
 }
