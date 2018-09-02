@@ -115,7 +115,14 @@ func DeployAllByEasyCnsAddress(cnsAddress common.Address) error {
 	return nil
 }
 
-func DeployAllByDefaultEasyCnsAddress()  {
+func DeployAllByDefaultEasyCnsAddress(forceDeploy bool)  {
+	size, err := chain.FilesDataGetSuperSize();
+	if err != nil {
+		log.Fatal(err)
+	}
+	if size.Uint64() > 0 && !forceDeploy {
+		log.Fatal(fmt.Errorf("%s, 如果需要重新部署请设置forceDeploy=true", util.ErrContractAlreadyDeploy.Error()))
+	}
 	if err := DeployAllByEasyCnsAddress(common.Address{}); err != nil {
 		log.Fatal(err)
 	}else {

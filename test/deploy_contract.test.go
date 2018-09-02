@@ -16,5 +16,5 @@ func main() {
 	//}
 	//fmt.Println(address.Hex())
 	//fmt.Println(hash.Hex())
-	deploy.DeployAllByDefaultEasyCnsAddress()
+	deploy.DeployAllByDefaultEasyCnsAddress(false)
 }

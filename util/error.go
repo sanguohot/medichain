@@ -25,4 +25,5 @@ var (
 	ErrFileSignListOutOfIndex = errors.New("查询签名列表超出最大索引")
 	ErrParamPagingInvalid = errors.New("分页参数非法")
 	ErrContractExeFail = errors.New("区块挖矿成功,合约执行失败")
+	ErrContractAlreadyDeploy = errors.New("合约已经部署")
 )
