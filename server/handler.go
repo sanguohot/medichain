@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"medichain/service"
 	"io/ioutil"
+	"fmt"
 )
 func PongHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
@@ -77,7 +78,11 @@ func GetFileHandler(c *gin.Context) {
 		DoJsonResponse(c, err, nil)
 	}
 	c.Header("content-disposition", `attachment; filename=` + fileUuidStr)
+	// charset=utf-8
+	// application/octet-stream
+	fmt.Printf("\nfile %s content type auto detect ===> %s", fileUuidStr, http.DetectContentType(file))
 	c.Data(http.StatusOK, http.DetectContentType(file), file)
+	//c.Data(http.StatusOK, "application/octet-stream", file)
 }
 
 func GetFileSignerAndDataListHandler(c *gin.Context) {
@@ -86,16 +91,6 @@ func GetFileSignerAndDataListHandler(c *gin.Context) {
 	limitStr := c.Query("limit")
 	err, list := service.GetFileSignerAndDataList(fileUuidStr, startStr, limitStr)
 	DoJsonResponse(c, err, list)
-	//if err != nil {
-	//	DoJsonResponse(c, err, list)
-	//}
-	//c.JSON(http.StatusOK, gin.H{
-	//	"Code": "SUCC",
-	//	"Data": list.idl,
-	//	"Data": "",
-	//	"Data": "",
-	//	"Data": "",
-	//})
 }
 
 func GetFileAddLogListHandler(c *gin.Context) {

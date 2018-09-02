@@ -18,7 +18,7 @@ type FileAction struct {
 }
 type FileSignerAction struct {
 	UUID uuid.UUID `json:"uuid"`
-	Type string `json:"type"`
+	//Type string `json:"type"`
 }
 type FileSignerAndDataAction struct {
 	Signers []FileSignerAction `json:"signers"`
@@ -219,7 +219,6 @@ func getFileSignerAndDataActionByChainData(idl [][16]byte, rl [][32]byte, sl [][
 	for i := 0; i < len(idl); i++ {
 		signers[i] = FileSignerAction{
 			UUID: idl[i],
-			Type: "user",
 		}
 		signatures[i] = hexutil.Encode(util.RSVtoSig(rl[i], sl[i], vl[i]))[2:]
 	}
