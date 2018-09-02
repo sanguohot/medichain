@@ -100,25 +100,25 @@ func ControllerAddFile(uuid, ownerUuid [16]byte, fileType common.Hash, fileDesc 
 	return nil, &hash
 }
 
-func ControllerAddSign(fileUuid [16]byte, keccak256Hash common.Hash, address common.Address, password string) (error, *common.Hash) {
+func ControllerAddSign(fileUuid [16]byte, keccak256Hash common.Hash, address common.Address, password string) (error, [32]byte, [32]byte, uint8, *common.Hash) {
 	err, instance, auth := GetControllerInstanceAndAuth(address, password)
 	if err != nil {
-		return err, nil
+		return err, [32]byte{}, [32]byte{}, 0, nil
 	}
 	signBytes, err := util.SignWithHash(keccak256Hash, address, password)
 	if err != nil {
-		return err, nil
+		return err, [32]byte{}, [32]byte{}, 0, nil
 	}
 	r, s, v := util.SigRSV(signBytes)
 	tx, err := instance.AddSign(auth, fileUuid, r, s, v)
 	if err != nil {
-		return err, nil
+		return err, [32]byte{}, [32]byte{}, 0, nil
 	}
 	hash := tx.Hash()
 	if err := CheckReceiptStatus(hash); err!=nil {
-		return err, nil
+		return err, [32]byte{}, [32]byte{}, 0, nil
 	}
-	return nil, &hash
+	return nil, r, s, v, &hash
 }
 
 func ControllerGetFileSignersAndDataByUuid(fileUuid [16]byte, start *big.Int, limit *big.Int) (error, [][16]byte, [][32]byte, [][32]byte, []uint8) {

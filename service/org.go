@@ -10,13 +10,12 @@ import (
 )
 
 type OrgAction struct {
-	Uuid uuid.UUID
-	Address common.Address
-	PublicKey string
-	NameHash common.Hash
-	TxHash common.Hash
+	UUID      uuid.UUID `json:"uuid"`
+	Address   common.Address `json:"address"`
+	PublicKey string `json:"publicKey"`
+	NameHash  common.Hash `json:"nameHash"`
+	TransactionHash    common.Hash `json:"transactionHash"`
 }
-
 func checkOrgNameHash(hash common.Hash) error {
 	orgUuid, err := chain.OrgsDataGetUuidByNameHash(hash)
 	if err != nil {
@@ -49,10 +48,10 @@ func AddOrg(name string, password string) (error, *OrgAction) {
 	}
 	org := OrgAction{
 		Address: *address,
-		Uuid: orgUuid,
+		UUID: orgUuid,
 		PublicKey: hexutil.Encode(crypto.FromECDSAPub(publicKeyECDSA))[4:],
 		NameHash: hash,
-		TxHash: *txHash,
+		TransactionHash: *txHash,
 	}
 	return nil, &org
 }

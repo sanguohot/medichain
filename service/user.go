@@ -12,13 +12,12 @@ import (
 )
 
 type UserAction struct {
-	Uuid uuid.UUID
-	Address common.Address
-	PublicKey string
-	IdCartNoHash common.Hash
-	TxHash common.Hash
+	UUID         uuid.UUID `json:"uuid"`
+	Address      common.Address `json:"address"`
+	PublicKey    string `json:"publicKey"`
+	IDCartNoHash common.Hash `json:"idCartNoHash"`
+	TransactionHash       common.Hash `json:"transactionHash"`
 }
-
 func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserAction) {
 	if ok, err := idvalidator.Validate(idCartNo); !ok {
 		return fmt.Errorf("身份证%s", err.Error()), nil
@@ -62,10 +61,10 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserA
 	}
 	user := UserAction{
 		Address: *address,
-		Uuid: userUuidNew,
+		UUID: userUuidNew,
 		PublicKey: hexutil.Encode(crypto.FromECDSAPub(publicKeyECDSA))[4:],
-		IdCartNoHash: idCartNoHash,
-		TxHash: *txHash,
+		IDCartNoHash: idCartNoHash,
+		TransactionHash: *txHash,
 	}
 	return nil, &user
 }

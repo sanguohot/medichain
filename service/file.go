@@ -7,22 +7,27 @@ import (
 	"medichain/util"
 	"medichain/chain"
 	"medichain/datacenter"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 type FileAction struct {
-	Uuid uuid.UUID
-	Keccak256Hash common.Hash
-	Sha256Hash common.Hash
-	txHash common.Hash
+	UUID            uuid.UUID `json:"uuid"`
+	Keccak256Hash   common.Hash `json:"keccak256Hash"`
+	Sha256Hash      common.Hash `json:"sha256Hash"`
+	TransactionHash common.Hash `json:"transactionHash"`
 }
-
+type FileSignerAction struct {
+	UUID uuid.UUID `json:"uuid"`
+	Type string `json:"type"`
+}
 type FileSignerAndDataAction struct {
-	Idl []uuid.UUID
-	Rl []common.Hash
-	Sl []common.Hash
-	Vl []uint8
+	Signers []FileSignerAction `json:"signers"`
+	Signatures []string `json:"signatures"`
 }
-
+type FileAddSignAction struct {
+	Signature string `json:"signature"`
+	TransactionHash common.Hash `json:"transactionHash"`
+}
 func requireKeccak256HashNotExist(hash common.Hash) (error) {
 	fileUuid, err := chain.FilesDataGetUuidByKeccak256Hash(hash)
 	if err != nil {
@@ -118,15 +123,15 @@ func AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc string, file
 		return err, nil
 	}
 	fileAction := FileAction{
-		Uuid: fileUuid,
+		UUID: fileUuid,
 		Keccak256Hash: keccak256Hash,
 		Sha256Hash: sha256Hash,
-		txHash: *txHash,
+		TransactionHash: *txHash,
 	}
 	return nil, &fileAction
 }
 
-func AddFileSign(fileUuidStr, addressStr, password, keccak256HashStr string) (error, *common.Hash) {
+func AddFileSign(fileUuidStr, addressStr, password, keccak256HashStr string) (error, *FileAddSignAction) {
 	fileUuid, err := uuid.Parse(fileUuidStr)
 	if err != nil {
 		return err, nil
@@ -150,11 +155,16 @@ func AddFileSign(fileUuidStr, addressStr, password, keccak256HashStr string) (er
 	if *keccak256HashFromChain != keccak256Hash {
 		return util.ErrFileHashNotMatch, nil
 	}
-	err, txHash := chain.ControllerAddSign(fileUuid, keccak256Hash, address, password)
+	err, r, s, v, txHash := chain.ControllerAddSign(fileUuid, keccak256Hash, address, password)
 	if err != nil {
 		return err, nil
 	}
-	return nil, txHash
+	signature := string(util.RSVtoSig(r, s, v))
+
+	return nil, &FileAddSignAction{
+		Signature: signature,
+		TransactionHash: *txHash,
+	}
 }
 
 func GetFile(fileUuidStr string) (error, []byte) {
@@ -203,19 +213,18 @@ func GetFileSignerAndDataList(fileUuidStr string, startStr string, limitStr stri
 
 func getFileSignerAndDataActionByChainData(idl [][16]byte, rl [][32]byte, sl [][32]byte, vl []uint8) *FileSignerAndDataAction {
 	var (
-		idlNew []uuid.UUID = make([]uuid.UUID, len(idl))
-		rlNew []common.Hash = make([]common.Hash, len(idl))
-		slNew []common.Hash = make([]common.Hash, len(idl))
+		signers []FileSignerAction = make([]FileSignerAction, len(idl))
+		signatures []string = make([]string, len(idl))
 	)
 	for i := 0; i < len(idl); i++ {
-		idlNew[i] = uuid.UUID(idl[i])
-		rlNew[i] = common.Hash(rl[i])
-		slNew[i] = common.Hash(sl[i])
+		signers[i] = FileSignerAction{
+			UUID: idl[i],
+			Type: "user",
+		}
+		signatures[i] = hexutil.Encode(util.RSVtoSig(rl[i], sl[i], vl[i]))[2:]
 	}
 	return &FileSignerAndDataAction{
-		Idl: idlNew,
-		Rl: rlNew,
-		Sl: slNew,
-		Vl: vl,
+		Signers: signers,
+		Signatures: signatures,
 	}
 }
