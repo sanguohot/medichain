@@ -13,7 +13,8 @@ import (
 )
 
 func main() {
-	privateKey, err := crypto.HexToECDSA("7aaf3e2786ff4b38f4aceb6f86ff4a3670206376087d4bd0f041f91e61412e66")
+	privateKeyStr := "7aaf3e2786ff4b38f4aceb6f86ff4a3670206376087d4bd0f041f91e61412e66"
+	privateKey, err := crypto.HexToECDSA(privateKeyStr)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,8 +27,8 @@ func main() {
 
 	data := []byte("hello world")
 	hash := crypto.Keccak256Hash(data)
-	//hash = common.HexToHash("0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8")
-	fmt.Println(hash.Hex(), len(data))
+	fmt.Println("data ===>", string(data))
+	fmt.Println("keccak256Hash ===>", hash.Hex())
 	signature, err := crypto.Sign(hash.Bytes(), privateKey)
 	if err != nil {
 		log.Fatal(err)
@@ -39,9 +40,12 @@ func main() {
 		log.Fatal(err)
 	}
 	r, s, v := util.SigRSV(signBytes)
-	fmt.Println("r =>", hexutil.Encode(r[:])[:])
-	fmt.Println("s =>",hexutil.Encode(s[:])[:])
-	fmt.Println("v =>", v)
+	fmt.Println("private key ===>", privateKeyStr)
+	fmt.Println("public key ===>", hexutil.Encode(publicKeyBytes)[4:])
+	fmt.Println("address ===>", crypto.PubkeyToAddress(*publicKeyECDSA).Hex())
+	fmt.Println("r ===>", hexutil.Encode(r[:])[:])
+	fmt.Println("s ===>",hexutil.Encode(s[:])[:])
+	fmt.Println("v ===>", v)
 	signatureNoRecoverID := signature[:len(signature)-1] // remove recovery id
 	verified := crypto.VerifySignature(publicKeyBytes, hash.Bytes(), signatureNoRecoverID)
 	fmt.Println(verified) // true

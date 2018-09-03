@@ -6,6 +6,7 @@ import (
 	"medichain/service"
 	"io/ioutil"
 	"fmt"
+	_ "github.com/gogs/chardet"
 )
 func PongHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{

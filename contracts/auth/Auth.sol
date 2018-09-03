@@ -4,7 +4,6 @@ contract Auth {
     bytes prefix = "\x19Ethereum Signed Message:\n32";
     function verifySignatureWithPrefix( bytes32 hash, uint8 v, bytes32 r, bytes32 s) public constant returns(address retAddr) {
         bytes32 prefixedHash = sha3(prefix, hash);
-        // 验证过程(这里就可以看出，通过v返回address)
         return ecrecover(prefixedHash, v, r, s);
     }
     function verifySignatureWithoutPrefix( bytes32 hash, uint8 v, bytes32 r, bytes32 s) public constant returns(address retAddr) {
