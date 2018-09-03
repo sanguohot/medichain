@@ -18,6 +18,14 @@
   revision = "79e00513b1011888b1e675157ab89f527f901cae"
 
 [[projects]]
+  branch = "master"
+  digest = "1:fc97057328b082635ccf61d06245d83457e72a8697e6ee1443b3a9ff383da5ca"
+  name = "github.com/chennqqi/chardet"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ae230b79a1bb4a46c1f273aa29f2da9e646487f5"
+
+[[projects]]
   digest = "1:c166378e8ab0f794f293dfb941d250dd70b035b05dec58879f717621d0fe1714"
   name = "github.com/deckarep/golang-set"
   packages = ["."]
@@ -95,14 +103,6 @@
   pruneopts = "UT"
   revision = "2fee6af1a9795aafbe0253a0cfbdf668e1fb8a9a"
   version = "v1.8.0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:272e9cf3573644ee5eb02122600081d13b24b834138f7ba999ba6d064f876d10"
-  name = "github.com/gogs/chardet"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "2404f777256163ea3eadb273dada5dcb037993c0"
 
 [[projects]]
   digest = "1:97df918963298c287643883209a2c3f642e6593379f97ab400c2a2e219ab647d"
@@ -378,12 +378,22 @@
   revision = "fa5fdf94c78965f1aa8423f0cc50b8b8d728b05a"
 
 [[projects]]
-  digest = "1:8029e9743749d4be5bc9f7d42ea1659471767860f0cdc34d37c3111bd308a295"
+  digest = "1:8f7c241380ada214cc0a33be778a7c5d42a31fa098f2139ddd893a177036d66b"
   name = "golang.org/x/text"
   packages = [
+    "encoding",
+    "encoding/internal",
+    "encoding/internal/identifier",
+    "encoding/japanese",
+    "encoding/korean",
+    "encoding/simplifiedchinese",
+    "encoding/traditionalchinese",
+    "encoding/unicode",
     "internal/gen",
     "internal/triegen",
     "internal/ucd",
+    "internal/utf8internal",
+    "runes",
     "transform",
     "unicode/cldr",
     "unicode/norm",
@@ -440,6 +450,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/chennqqi/chardet",
     "github.com/ethereum/go-ethereum",
     "github.com/ethereum/go-ethereum/accounts",
     "github.com/ethereum/go-ethereum/accounts/abi",
@@ -456,7 +467,6 @@
     "github.com/ethereum/go-ethereum/rlp",
     "github.com/ethereum/go-ethereum/rpc",
     "github.com/gin-gonic/gin",
-    "github.com/gogs/chardet",
     "github.com/google/uuid",
     "github.com/luopotaotao/IdValidator/src/idvalidator",
     "github.com/mattn/go-sqlite3",
