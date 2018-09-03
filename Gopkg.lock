@@ -18,14 +18,6 @@
   revision = "79e00513b1011888b1e675157ab89f527f901cae"
 
 [[projects]]
-  branch = "master"
-  digest = "1:fc97057328b082635ccf61d06245d83457e72a8697e6ee1443b3a9ff383da5ca"
-  name = "github.com/chennqqi/chardet"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "ae230b79a1bb4a46c1f273aa29f2da9e646487f5"
-
-[[projects]]
   digest = "1:c166378e8ab0f794f293dfb941d250dd70b035b05dec58879f717621d0fe1714"
   name = "github.com/deckarep/golang-set"
   packages = ["."]
@@ -244,6 +236,14 @@
   version = "v1.5.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:806c7068601e61930fdec4af117537716357e5bca9afcbbece792f448e221e86"
+  name = "github.com/sanguohot/chardet"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "20e22483e848655fba132bd9b5dbaf01017e839e"
+
+[[projects]]
   digest = "1:81e02c4edb639c80559c0650f9401d3e2dcc3256d1fa215382bb7c83c1db9126"
   name = "github.com/shopspring/decimal"
   packages = ["."]
@@ -450,7 +450,6 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/chennqqi/chardet",
     "github.com/ethereum/go-ethereum",
     "github.com/ethereum/go-ethereum/accounts",
     "github.com/ethereum/go-ethereum/accounts/abi",
@@ -470,10 +469,13 @@
     "github.com/google/uuid",
     "github.com/luopotaotao/IdValidator/src/idvalidator",
     "github.com/mattn/go-sqlite3",
+    "github.com/sanguohot/chardet",
     "github.com/shopspring/decimal",
     "github.com/spacemonkeygo/openssl",
     "github.com/spf13/viper",
     "github.com/vedranvuk/magnet",
+    "golang.org/x/text/encoding/simplifiedchinese",
+    "golang.org/x/text/transform",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

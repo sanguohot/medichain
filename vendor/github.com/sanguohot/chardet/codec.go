@@ -1,7 +1,7 @@
 package chardet
 
 import (
-	"bytes"                         
+	"bytes"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/encoding/korean"
