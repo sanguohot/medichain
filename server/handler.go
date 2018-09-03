@@ -6,7 +6,7 @@ import (
 	"medichain/service"
 	"io/ioutil"
 	"fmt"
-	_ "github.com/gogs/chardet"
+	_ "github.com/hydra13142/chardet"
 )
 func PongHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
@@ -81,9 +81,15 @@ func GetFileHandler(c *gin.Context) {
 	c.Header("content-disposition", `attachment; filename=` + fileUuidStr)
 	// charset=utf-8
 	// application/octet-stream
-	fmt.Printf("\nfile %s content type auto detect ===> %s", fileUuidStr, http.DetectContentType(file))
-	c.Data(http.StatusOK, http.DetectContentType(file), file)
-	//c.Data(http.StatusOK, "application/octet-stream", file)
+	defaultDetect := http.DetectContentType(file)
+	fmt.Printf("file %s content type auto detect ===> %s\n", fileUuidStr, defaultDetect)
+	//result, err := chardet.NewTextDetector().DetectAll(file)
+	//if err != nil {
+	//	DoJsonResponse(c, err, nil)
+	//}
+	//fmt.Println(result)
+	//c.Data(http.StatusOK, defaultDetect, file)
+	c.Data(http.StatusOK, "text/plain; charset=gb2312", file)
 }
 
 func GetFileSignerAndDataListHandler(c *gin.Context) {
