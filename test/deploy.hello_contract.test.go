@@ -14,9 +14,9 @@ import (
 )
 
 func main() {
-	client, err := ethclient.Dial("http://10.6.250.54:8546")
+	client, err := ethclient.Dial("http://10.6.250.55:8546")
 	if err != nil {
-		fmt.Println("dail http://10.6.250.54:8546 ===>", err)
+		fmt.Println("dail http://10.6.250.55:8546 ===>", err)
 		return
 	}
 

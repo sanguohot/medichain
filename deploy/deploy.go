@@ -62,7 +62,18 @@ func DeployContract(cnsAddress *common.Address, contract string) (error, *common
 	hash := tx.Hash()
 	return nil, &address, &hash
 }
-
+func DeployEasyCns(forceDeploy bool)  {
+	cnsAddress := common.HexToAddress(etc.GetBcosEasyCnsAddress())
+	if util.IsValidAndNotZeroAddress(cnsAddress) && !forceDeploy {
+		log.Fatal(fmt.Errorf("%s:%s, 如果需要重新部署请设置forceDeploy=true", util.ErrContractAlreadyDeploy.Error(), cnsAddress.Hex()))
+	}
+	err, address, hash := DeployContract(&cnsAddress, etc.ContractEasyCns)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("new easy cns address ===>", address.Hex())
+	fmt.Println("transaction hash ===>", hash.Hex())
+}
 func DeployAllByEasyCnsAddress(cnsAddress common.Address) error {
 	if !util.IsValidAndNotZeroAddress(cnsAddress) {
 		cnsAddress = common.HexToAddress(etc.GetBcosEasyCnsAddress())
@@ -118,11 +129,14 @@ func DeployAllByEasyCnsAddress(cnsAddress common.Address) error {
 func DeployAllByDefaultEasyCnsAddress(forceDeploy bool)  {
 	size, err := chain.FilesDataGetSuperSize();
 	if err != nil {
-		log.Fatal(err)
+		//log.Fatal(err)
+		// 这里不要退出，可能是合约没有部署或者设置报错abi: unmarshalling empty output
+	}else {
+		if size.Uint64() > 0 && !forceDeploy {
+			log.Fatal(fmt.Errorf("%s, 如果需要重新部署请设置forceDeploy=true", util.ErrContractAlreadyDeploy.Error()))
+		}
 	}
-	if size.Uint64() > 0 && !forceDeploy {
-		log.Fatal(fmt.Errorf("%s, 如果需要重新部署请设置forceDeploy=true", util.ErrContractAlreadyDeploy.Error()))
-	}
+
 	if err := DeployAllByEasyCnsAddress(common.Address{}); err != nil {
 		log.Fatal(err)
 	}else {
