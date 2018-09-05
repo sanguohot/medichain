@@ -83,7 +83,8 @@ type Header struct {
 	Extra       []byte         `json:"extraData"        gencodec:"required"`
 	// modify start   - by sanguohot for fisco-bcos usage
 	GenIndex    *big.Int       `json:"genIndex"         gencodec:"required"`
-	NodeList    [][]byte       `json:"nodeList"         gencodec:"required"`
+	// hex string not start with 0x
+	NodeList    []common.UnprefixedDoubleHash       `json:"nodeList"         gencodec:"required"`
 	// modify end   - by sanguohot for fisco-bcos usage
 	MixDigest   common.Hash    `json:"mixHash"`
 	Nonce       BlockNonce     `json:"nonce"`

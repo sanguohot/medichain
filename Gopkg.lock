@@ -27,7 +27,7 @@
 
 [[projects]]
   branch = "fisco-bcos-v1.8.13"
-  digest = "1:f7cd53b82cd0ab372f654208be6408e7cddcd7bc410a618979e6e6e9716189d2"
+  digest = "1:2486ac7ab5f616889299fe3bdc76f3478b920bcd462e8020ebeec2288607153d"
   name = "github.com/ethereum/go-ethereum"
   packages = [
     ".",
@@ -56,7 +56,7 @@
     "trie",
   ]
   pruneopts = "T"
-  revision = "ced1a893c96ae4c157a42e9241b7445412231147"
+  revision = "0dd6c791445ca83a98e3b38b1bbdf41c6e148cff"
   source = "github.com/sanguohot/go-ethereum"
 
 [[projects]]
@@ -359,7 +359,7 @@
     "scrypt",
   ]
   pruneopts = "UT"
-  revision = "182538f80094b6a8efaade63a8fd8e0d9d5843dd"
+  revision = "0709b304e793a5edb4a2c0145f281ecdc20838a4"
 
 [[projects]]
   branch = "master"
@@ -412,7 +412,7 @@
     "internal/fastwalk",
   ]
   pruneopts = "UT"
-  revision = "7ca132754999accbaa5c1735eda29e7ce0f3bf03"
+  revision = "0aa4b8830f481fed77b73cf7cea2bc3129e05148"
 
 [[projects]]
   digest = "1:cbc72c4c4886a918d6ab4b95e347ffe259846260f99ebdd8a198c2331cf2b2e9"
