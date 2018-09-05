@@ -347,7 +347,7 @@ func (b *Block) UncleHash() common.Hash   { return b.header.UncleHash }
 func (b *Block) Extra() []byte            { return common.CopyBytes(b.header.Extra) }
 // modify start   - by sanguohot for fisco-bcos usage
 func (b *Block) GenIndex() *big.Int            { return new(big.Int).Set(b.header.GenIndex) }
-func (b *Block) NodeList() [][]byte            { return b.header.NodeList }
+func (b *Block) NodeList() []common.UnprefixedDoubleHash            { return b.header.NodeList }
 // modify end   - by sanguohot for fisco-bcos usage
 
 func (b *Block) Header() *Header { return CopyHeader(b.header) }
