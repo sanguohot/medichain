@@ -10,9 +10,9 @@ import (
 )
 
 func main() {
-	client, err := ethclient.Dial("http://10.6.250.56:8545")
+	client, err := ethclient.Dial("http://10.6.250.55:8546")
 	if err != nil {
-		fmt.Println("dail http://10.6.250.56:8845 ===> %s", err)
+		fmt.Println("dail http://10.6.250.55:8846 ===> %s", err)
 		return
 	}
 	header, err := client.HeaderByNumber(context.Background(), nil)
@@ -31,6 +31,7 @@ func main() {
 	fmt.Println("block.TxHash(transactionsRoot) ===>", block.TxHash().Hex())          // 0x9e8751ebb5069389b855bba72d94902cc385042661498a415979b7b6ee9ba4b9
 	// block hash计算不对
 	fmt.Println("block.Hash ===>", block.Hash().Hex())
+	fmt.Println("block.nodelist 0 length ===>", len(block.NodeList()[0]))
 	fmt.Println("block.Extra ===>", hexutil.Encode(block.Extra()))
 	fmt.Println("block.Transactions ===>", block.Transactions())   // 144
 	count, err := client.TransactionCount(context.Background(), common.HexToHash("0xe2192c151e5060b5b26c4fdf9d0ec887edcfd5da64595acc2dc49948e2b4a45b"))
