@@ -6,5 +6,5 @@ import (
 
 func main() {
 	//deploy.DeployEasyCns(false)
-	deploy.DeployAllByDefaultEasyCnsAddress(false)
+	deploy.DeployAllByDefaultEasyCnsAddress(true)
 }

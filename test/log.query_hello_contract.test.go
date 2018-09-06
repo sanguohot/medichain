@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	client, err := ethclient.Dial("wss://10.6.250.54:8822")
+	client, err := ethclient.Dial("http://10.6.250.55:8545")
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -23,10 +23,10 @@ func main() {
 	// 0xb349Eba018bFA9d89Da90829629D39668F6653A2
 	// 0xca21167a870cf8b9618d259af454c6d00b30b028
 	// 0xB818715eb048286A608B5E9851877AD7A30a41A0
-	contractAddress := common.HexToAddress("0xB818715eb048286A608B5E9851877AD7A30a41A0")
+	contractAddress := common.HexToAddress("0xfcd14ED03E6D94CA127d557a1883Dd042a81ea11")
 	query := ethereum.FilterQuery{
-		FromBlock: big.NewInt(640),
-		ToBlock:   big.NewInt(647),
+		FromBlock: big.NewInt(0),
+		ToBlock:   nil,
 		Addresses: []common.Address{
 			contractAddress,
 		},

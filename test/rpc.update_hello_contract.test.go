@@ -16,7 +16,7 @@ import (
 
 func main() {
 	rand.Seed(time.Now().Unix())
-	client, err := ethclient.Dial("http://10.6.250.55:8545")
+	client, err := ethclient.Dial("http://10.6.250.55:8546")
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -33,7 +33,7 @@ func main() {
 		return
 	}
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-	toAddress := common.HexToAddress("0x60D4eE5c461677840Ab3552A6845fDf7db4a5317")
+	toAddress := common.HexToAddress("0xfcd14ED03E6D94CA127d557a1883Dd042a81ea11")
 	auth := bind.NewKeyedTransactor(privateKey) // 设置私钥和签名方法
 	auth.Nonce = big.NewInt(rand.Int63n(100000000)) // 也是fisco-bcos的randomid字段，这里按照web3.js计算随机数
 	auth.Value = nil
