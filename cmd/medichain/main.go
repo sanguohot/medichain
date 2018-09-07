@@ -1,10 +1,9 @@
 package main
 
 import (
-	"github.com/urfave/cli"
-	"medichain/cmd/medichain/abi"
-	"log"
 	"fmt"
+	"github.com/urfave/cli"
+	"log"
 	"os"
 	"time"
 )
@@ -26,7 +25,7 @@ func InitApp() error {
 		fmt.Printf("\n%s", app.Usage)
 		return nil
 	}
-	app.Commands = *abi.AbiCommands
+	app.Commands = nil
 
 	return app.Run(os.Args)
 }

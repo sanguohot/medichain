@@ -1,9 +1,10 @@
 package service
 
 import (
+	"fmt"
+	"github.com/ethereum/go-ethereum/crypto"
 	"medichain/chain"
 	"medichain/datacenter"
-	"github.com/ethereum/go-ethereum/crypto"
 )
 
 func SetFileAddLogList() error {
@@ -11,6 +12,7 @@ func SetFileAddLogList() error {
 	if err != nil {
 		return err
 	}
+	fmt.Print("now set file add log list to sqlite...")
 	err = datacenter.SqliteSetFileAddLogList(list)
 	if err != nil {
 		return err

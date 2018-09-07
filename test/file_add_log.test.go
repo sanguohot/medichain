@@ -1,9 +1,9 @@
 package main
 
 import (
-	"medichain/service"
-	"log"
 	"fmt"
+	"log"
+	"medichain/service"
 )
 
 

@@ -26,4 +26,5 @@ var (
 	ErrParamPagingInvalid = errors.New("分页参数非法")
 	ErrContractExeFail = errors.New("区块挖矿成功,合约执行失败")
 	ErrContractAlreadyDeploy = errors.New("合约已经部署")
+	ErrMatchLogNotFound = errors.New("找不到匹配的事件日志")
 )

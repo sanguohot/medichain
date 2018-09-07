@@ -14,7 +14,7 @@ type FileAddLog struct {
 	FileDesc	string
 	Keccak256Hash	string
 	Sha256Hash	string
-	CreateTime	uint
+	CreateTime	uint64
 	Signature	string
 	Signer	string
 	BlockNum	uint64
@@ -33,7 +33,7 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	defer db.Close()
 	stmt, err := db.Prepare("INSERT INTO tbl_file_add_event_log(FileUuid, OwnerUuid, UploaderUuid, FileType" +
 		", FileDesc, Keccak256Hash, Sha256Hash, CreateTime, Signature, Signer, BlockNum, BlockHash, TransactionHash" +
-			", ContractAddress) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+			", ContractAddress) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	if err != nil {
 		return err
 	}

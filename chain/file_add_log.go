@@ -1,22 +1,23 @@
 package chain
 
 import (
-	"medichain/contracts/medi"
-	"fmt"
-	"medichain/etc"
-	"medichain/datacenter"
-	"github.com/ethereum/go-ethereum"
-	"math/big"
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"strings"
-	"github.com/ethereum/go-ethereum/common"
 	"context"
-	"github.com/google/uuid"
-	"medichain/util"
+	"fmt"
+	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/google/uuid"
+	"math/big"
+	"medichain/contracts/medi"
+	"medichain/datacenter"
+	"medichain/etc"
+	"medichain/util"
+	"strings"
 )
 
-
+var addFileEventName = "onAddFile"
 func ChainGetFileAddLogList(fromBlock int64, toBlock int64) (error, []datacenter.FileAddLog) {
 	client, err := GetEthDialClient()
 	if err != nil {
@@ -38,68 +39,99 @@ func ChainGetFileAddLogList(fromBlock int64, toBlock int64) (error, []datacenter
 	if err != nil {
 		return err, nil
 	}
-
 	contractAbi, err := abi.JSON(strings.NewReader(string(medi.FilesDataABI)))
 	if err != nil {
 		return err, nil
 	}
-	fl := []datacenter.FileAddLog{}
-	fmt.Println("logs count ===>", len(logs))
-	for i, vLog := range logs {
-		var event struct {
-			uuid [16]byte
-			ownerUuid [16]byte
-			uploaderUuid [16]byte
-			fileType [32]byte
-			fileDesc [4][32]byte
-			keccak256Hash [32]byte
-			sha256Hash [32]byte
-			r [32]byte
-			s [32]byte
-			v uint8
-			time uint
+	var addFileTopic *common.Hash
+	for _, item := range contractAbi.Events {
+		if item.Name == addFileEventName {
+			hash := item.Id()
+			addFileTopic = &hash
 		}
-		// 参数一是事件参数构造的对象
-		// 参数二是事件函数名，不是合约函数名
-		// 参数三是事件的数据
-		err := contractAbi.Unpack(&event, "onAddFile", vLog.Data)
+	}
+	if addFileTopic == nil {
+		return util.ErrMatchLogNotFound, nil
+	}
+	return rangeLogsToGetFileAddLogList(contractAbi, *address, logs, *addFileTopic)
+}
+
+func rangeLogsToGetFileAddLogList(contractAbi abi.ABI, address common.Address, logs []types.Log, topic common.Hash) (error, []datacenter.FileAddLog) {
+	fmt.Printf("FilesData contract %s logs ===> %d\n", address.Hex(), len(logs))
+	fl := []datacenter.FileAddLog{}
+	for _, log := range logs {
+		found := false
+		for _, item := range log.Topics {
+			if item == topic {
+				found = true
+				break
+			}
+		}
+		if !found {
+			continue
+		}
+		err, f := parseEventToFileAddLog(contractAbi, address, log)
 		if err != nil {
 			return err, nil
 		}
-		fileUuid := uuid.UUID(event.uuid)
-		ownerUuid := uuid.UUID(event.ownerUuid)
-		uploaderUuid := uuid.UUID(event.uploaderUuid)
-		fileType := common.Hash(event.fileType)
-		fileDesc := util.Bytes32_4ToString(event.fileDesc)
-		keccak256Hash := common.Hash(event.keccak256Hash)
-		sha256Hash := common.Hash(event.sha256Hash)
-		r := common.Hash(event.r)
-		s := common.Hash(event.s)
-		signature := util.RSVtoSig(r, s, event.v)
-		signers := uploaderUuid
-		fmt.Println(event)
-		f := datacenter.FileAddLog {
-			FileUuid: fileUuid.String(),
-			OwnerUuid: ownerUuid.String(),
-			UploaderUuid: uploaderUuid.String(),
-			FileType: fileType.Hex(),
-			FileDesc: fileDesc,
-			Keccak256Hash: keccak256Hash.Hex(),
-			Sha256Hash: sha256Hash.Hex(),
-			CreateTime: event.time,
-			Signature: hexutil.Encode(signature)[2:],
-			Signer: signers.String(),
-			BlockNum: vLog.BlockNumber,
-			BlockHash: vLog.BlockHash.Hex(),
-			TransactionHash: vLog.TxHash.Hex(),
-			ContractAddress: address.Hex(),
-		}
-		fl[i] = f
+		fl = append(fl, *f)
 	}
-
+	if len(fl) == 0 {
+		return util.ErrMatchLogNotFound, nil
+	}
 	return nil, fl
 }
-
+func parseEventToFileAddLog(contractAbi abi.ABI, address common.Address, log types.Log) (error, *datacenter.FileAddLog) {
+	var event struct {
+		Uuid [16]byte
+		OwnerUuid [16]byte
+		UploaderUuid [16]byte
+		FileType [32]byte
+		FileDesc [4][32]byte
+		Keccak256Hash [32]byte
+		Sha256Hash [32]byte
+		R [32]byte
+		S [32]byte
+		V uint8
+		Time *big.Int
+	}
+	fmt.Println("TxHash ===>", log.TxHash.Hex())
+	// 参数一是事件参数构造的对象
+	// 参数二是事件函数名，不是合约函数名
+	// 参数三是事件的数据
+	err := contractAbi.Unpack(&event, addFileEventName, log.Data)
+	if err != nil {
+		return err, nil
+	}
+	fileUuid := uuid.UUID(event.Uuid)
+	ownerUuid := uuid.UUID(event.OwnerUuid)
+	uploaderUuid := uuid.UUID(event.UploaderUuid)
+	fileType := common.Hash(event.FileType)
+	fileDesc := util.Bytes32_4ToString(event.FileDesc)
+	keccak256Hash := common.Hash(event.Keccak256Hash)
+	sha256Hash := common.Hash(event.Sha256Hash)
+	r := common.Hash(event.R)
+	s := common.Hash(event.S)
+	signature := util.RSVtoSig(r, s, event.V)
+	signers := uploaderUuid
+	f := datacenter.FileAddLog {
+		FileUuid: fileUuid.String(),
+		OwnerUuid: ownerUuid.String(),
+		UploaderUuid: uploaderUuid.String(),
+		FileType: fileType.Hex(),
+		FileDesc: fileDesc,
+		Keccak256Hash: keccak256Hash.Hex(),
+		Sha256Hash: sha256Hash.Hex(),
+		CreateTime: event.Time.Uint64(),
+		Signature: hexutil.Encode(signature)[2:],
+		Signer: signers.String(),
+		BlockNum: log.BlockNumber,
+		BlockHash: log.BlockHash.Hex(),
+		TransactionHash: log.TxHash.Hex(),
+		ContractAddress: address.Hex(),
+	}
+	return nil, &f
+}
 func ChainGetFileAddLogListAll() (error, []datacenter.FileAddLog) {
 	client, err := GetEthDialClient()
 	if err != nil {
