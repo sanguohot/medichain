@@ -2,14 +2,15 @@ package datacenter
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"medichain/etc"
-	"fmt"
 )
 type FileAddLog struct {
 	FileUuid	string
 	OwnerUuid	string
 	UploaderUuid	string
+	OrgUuid	string
 	FileType	string
 	FileDesc	string
 	Keccak256Hash	string
@@ -31,15 +32,15 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 		return err
 	}
 	defer db.Close()
-	stmt, err := db.Prepare("INSERT INTO tbl_file_add_event_log(FileUuid, OwnerUuid, UploaderUuid, FileType" +
+	stmt, err := db.Prepare("INSERT INTO tbl_file_add_event_log(FileUuid, OwnerUuid, UploaderUuid, OrgUuid, FileType" +
 		", FileDesc, Keccak256Hash, Sha256Hash, CreateTime, Signature, Signer, BlockNum, BlockHash, TransactionHash" +
-			", ContractAddress) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+			", ContractAddress) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	if err != nil {
 		return err
 	}
 	var res sql.Result
 	for _, f := range fl {
-		res, err = stmt.Exec(f.FileUuid, f.OwnerUuid, f.UploaderUuid, f.FileType, f.FileDesc, f.Keccak256Hash, f.Sha256Hash, f.CreateTime,
+		res, err = stmt.Exec(f.FileUuid, f.OwnerUuid, f.UploaderUuid, f.OrgUuid, f.FileType, f.FileDesc, f.Keccak256Hash, f.Sha256Hash, f.CreateTime,
 			f.Signature, f.Signer, f.BlockNum, f.BlockHash, f.TransactionHash, f.ContractAddress)
 		if err != nil {
 			return err
@@ -77,7 +78,7 @@ func SqliteGetFileAddLogList(ownerUuid string) (error, []FileAddLog) {
 	var fl []FileAddLog
 	for rows.Next() {
 		f := FileAddLog{}
-		err = rows.Scan(&f.FileUuid, &f.OwnerUuid, &f.UploaderUuid, &f.FileType, &f.FileDesc, &f.Keccak256Hash, &f.Sha256Hash, &f.CreateTime,
+		err = rows.Scan(&f.FileUuid, &f.OwnerUuid, &f.UploaderUuid, &f.OrgUuid, &f.FileType, &f.FileDesc, &f.Keccak256Hash, &f.Sha256Hash, &f.CreateTime,
 			&f.Signature, &f.Signer, &f.BlockNum, &f.BlockHash, &f.TransactionHash, &f.ContractAddress)
 		if err != nil {
 			return err, nil

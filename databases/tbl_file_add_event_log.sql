@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `tbl_file_add_event_log` (
 	`FileUuid`	TEXT NOT NULL,
 	`OwnerUuid`	TEXT NOT NULL,
 	`UploaderUuid`	TEXT NOT NULL,
+	`OrgUuid`	TEXT,
 	`FileType`	TEXT NOT NULL,
 	`FileDesc`	TEXT,
 	`Keccak256Hash`	TEXT NOT NULL UNIQUE,
@@ -18,3 +19,4 @@ CREATE INDEX IF NOT EXISTS `idx1` ON `tbl_file_add_event_log` (`OwnerUuid`);
 CREATE INDEX IF NOT EXISTS `idx2` ON `tbl_file_add_event_log` (`FileType`);
 CREATE INDEX IF NOT EXISTS `idx3` ON `tbl_file_add_event_log` (`UploaderUuid`);
 CREATE INDEX IF NOT EXISTS `idx4` ON `tbl_file_add_event_log` (`ContractAddress`);
+CREATE INDEX IF NOT EXISTS `idx5` ON `tbl_file_add_event_log` (`OrgUuid`);

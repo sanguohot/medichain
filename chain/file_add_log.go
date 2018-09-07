@@ -86,6 +86,7 @@ func parseEventToFileAddLog(contractAbi abi.ABI, address common.Address, log typ
 		Uuid [16]byte
 		OwnerUuid [16]byte
 		UploaderUuid [16]byte
+		OrgUuid [16]byte
 		FileType [32]byte
 		FileDesc [4][32]byte
 		Keccak256Hash [32]byte
@@ -106,6 +107,7 @@ func parseEventToFileAddLog(contractAbi abi.ABI, address common.Address, log typ
 	fileUuid := uuid.UUID(event.Uuid)
 	ownerUuid := uuid.UUID(event.OwnerUuid)
 	uploaderUuid := uuid.UUID(event.UploaderUuid)
+	orgUuid := uuid.UUID(event.OrgUuid)
 	fileType := common.Hash(event.FileType)
 	fileDesc := util.Bytes32_4ToString(event.FileDesc)
 	keccak256Hash := common.Hash(event.Keccak256Hash)
@@ -118,6 +120,7 @@ func parseEventToFileAddLog(contractAbi abi.ABI, address common.Address, log typ
 		FileUuid: fileUuid.String(),
 		OwnerUuid: ownerUuid.String(),
 		UploaderUuid: uploaderUuid.String(),
+		OrgUuid: orgUuid.String(),
 		FileType: fileType.Hex(),
 		FileDesc: fileDesc,
 		Keccak256Hash: keccak256Hash.Hex(),

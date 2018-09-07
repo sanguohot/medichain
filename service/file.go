@@ -2,12 +2,12 @@ package service
 
 import (
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/google/uuid"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
-	"medichain/util"
+	"github.com/google/uuid"
 	"medichain/chain"
 	"medichain/datacenter"
-	"github.com/ethereum/go-ethereum/common/hexutil"
+	"medichain/util"
 )
 
 type FileAction struct {
@@ -86,10 +86,28 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc 
 	if err != nil {
 		return err, nil
 	}
-	orgUuid, err := uuid.Parse(orgUuidStr)
+	isExist, err := chain.UsersDataIsUuidExist(ownerUuid)
 	if err != nil {
 		return err, nil
 	}
+	if !isExist {
+		return util.ErrUserNotExist, nil
+	}
+	var orgUuid uuid.UUID
+	if orgUuidStr != "" {
+		orgUuid, err = uuid.Parse(orgUuidStr)
+		if err != nil {
+			return err, nil
+		}
+		isExist, err = chain.OrgsDataIsUuidExist(orgUuid)
+		if err != nil {
+			return err, nil
+		}
+		if !isExist {
+			return util.ErrOrgNotExist, nil
+		}
+	}
+
 	if !common.IsHexAddress(addressStr) {
 		return util.ErrInvalidAddress, nil
 	}
@@ -104,20 +122,6 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc 
 	err = requireHashNotExist(keccak256Hash, sha256Hash)
 	if err != nil {
 		return err, nil
-	}
-	isExist, err := chain.UsersDataIsUuidExist(ownerUuid)
-	if err != nil {
-		return err, nil
-	}
-	if !isExist {
-		return util.ErrUserNotExist, nil
-	}
-	isExist, err = chain.OrgsDataIsUuidExist(orgUuid)
-	if err != nil {
-		return err, nil
-	}
-	if !isExist {
-		return util.ErrOrgNotExist, nil
 	}
 	fileDescBytes32_4, err := util.StringToBytes32_4(fileDesc)
 	if err != nil {
