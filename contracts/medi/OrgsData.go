@@ -4,14 +4,15 @@
 package medi
 
 import (
-	ethereum "go-ethereum"
-	"go-ethereum/accounts/abi"
-	"go-ethereum/accounts/abi/bind"
-	"go-ethereum/common"
-	"go-ethereum/core/types"
-	"go-ethereum/event"
 	"math/big"
 	"strings"
+
+	ethereum "github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/event"
 )
 
 // OrgsDataABI is the input ABI used to generate the binding from.
