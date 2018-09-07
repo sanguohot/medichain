@@ -1,13 +1,13 @@
 package chain
 
 import (
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"math/big"
+	"medichain/contracts/medi"
 	"medichain/etc"
 	"medichain/util"
-	"medichain/contracts/medi"
 	"time"
-	"math/big"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 
 func GetControllerInstance() (error, *medi.Controller) {
@@ -79,7 +79,7 @@ func ControllerAddUser(uuid [16]byte, orgUuid [16]byte, idCartNoHash common.Hash
 	return nil, &hash
 }
 
-func ControllerAddFile(uuid, ownerUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash, sha256Hash common.Hash, address common.Address, password string) (error, *common.Hash) {
+func ControllerAddFile(uuid, ownerUuid [16]byte, orgUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash, sha256Hash common.Hash, address common.Address, password string) (error, *common.Hash) {
 	err, instance, auth := GetControllerInstanceAndAuth(address, password)
 	if err != nil {
 		return err, nil
@@ -89,7 +89,7 @@ func ControllerAddFile(uuid, ownerUuid [16]byte, fileType common.Hash, fileDesc 
 		return err, nil
 	}
 	r, s, v := util.SigRSV(signBytes)
-	tx, err := instance.AddFile(auth, uuid, ownerUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, big.NewInt(time.Now().Unix()))
+	tx, err := instance.AddFile(auth, uuid, ownerUuid, orgUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, big.NewInt(time.Now().Unix()))
 	if err != nil {
 		return err, nil
 	}
@@ -157,15 +157,15 @@ func ControllerGetUserByUuid(userUuid [16]byte) (error, common.Address, [16]byte
 	return nil, address, orgUuid, publicKey, idCartNoHash, time
 }
 
-func ControllerGetFileByUuid(fileUuid [16]byte) (error, [16]byte, [16]byte, [32]byte, [4][32]byte, [32]byte, [32]byte, *big.Int) {
+func ControllerGetFileByUuid(fileUuid [16]byte) (error, [16]byte, [16]byte, [16]byte, [32]byte, [4][32]byte, [32]byte, [32]byte) {
 	err, instance := GetControllerInstance()
 	if err != nil {
-		return err, [16]byte{}, [16]byte{}, [32]byte{}, [4][32]byte{}, [32]byte{}, [32]byte{}, nil
+		return err, [16]byte{}, [16]byte{}, [16]byte{}, [32]byte{}, [4][32]byte{}, [32]byte{}, [32]byte{}
 	}
-	ownerUuid, uploaderUuid, fileType, fileDesc, sha256Hash, keccak256Hash, time, err := instance.GetFileByUuid(nil, fileUuid)
+	ownerUuid, uploaderUuid, orgUuid, fileType, fileDesc, sha256Hash, keccak256Hash, err := instance.GetFileByUuid(nil, fileUuid)
 	if err != nil {
-		return err, [16]byte{}, [16]byte{}, [32]byte{}, [4][32]byte{}, [32]byte{}, [32]byte{}, nil
+		return err, [16]byte{}, [16]byte{}, [16]byte{}, [32]byte{}, [4][32]byte{}, [32]byte{}, [32]byte{}
 	}
-	return nil, ownerUuid, uploaderUuid, fileType, fileDesc, sha256Hash, keccak256Hash, time
+	return nil, ownerUuid, uploaderUuid, orgUuid, fileType, fileDesc, sha256Hash, keccak256Hash
 }
 

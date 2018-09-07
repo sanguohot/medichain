@@ -47,6 +47,7 @@ func AddFileHandler(c *gin.Context) {
 	addressStr := c.PostForm("address")
 	password := c.PostForm("password")
 	ownerUuidStr := c.PostForm("ownerUuid")
+	orgUuidStr := c.PostForm("orgUuid")
 	fileType := c.PostForm("fileType")
 	fileDesc := c.PostForm("fileDesc")
 	sha256Hash := c.PostForm("sha256Hash")
@@ -59,7 +60,7 @@ func AddFileHandler(c *gin.Context) {
 	if err != nil {
 		DoJsonResponse(c, err, nil)
 	}
-	err, obj := service.AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc, fileBytes, sha256Hash)
+	err, obj := service.AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc, fileBytes, sha256Hash)
 	DoJsonResponse(c, err, obj)
 }
 

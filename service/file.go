@@ -81,8 +81,12 @@ func requireHashNotExist(keccak256Hash, sha256Hash common.Hash) error {
 	}
 	return nil
 }
-func AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc string, file []byte, sha256HashStr string) (error, *FileAction) {
+func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc string, file []byte, sha256HashStr string) (error, *FileAction) {
 	ownerUuid, err := uuid.Parse(ownerUuidStr)
+	if err != nil {
+		return err, nil
+	}
+	orgUuid, err := uuid.Parse(orgUuidStr)
 	if err != nil {
 		return err, nil
 	}
@@ -108,12 +112,19 @@ func AddFile(ownerUuidStr, addressStr, password, fileType, fileDesc string, file
 	if !isExist {
 		return util.ErrUserNotExist, nil
 	}
+	isExist, err = chain.OrgsDataIsUuidExist(orgUuid)
+	if err != nil {
+		return err, nil
+	}
+	if !isExist {
+		return util.ErrOrgNotExist, nil
+	}
 	fileDescBytes32_4, err := util.StringToBytes32_4(fileDesc)
 	if err != nil {
 		return err, nil
 	}
 	fileUuid := uuid.New()
-	err, txHash := chain.ControllerAddFile(fileUuid, ownerUuid, fileTypeHash, *fileDescBytes32_4, keccak256Hash, sha256Hash, address, password)
+	err, txHash := chain.ControllerAddFile(fileUuid, ownerUuid, orgUuid, fileTypeHash, *fileDescBytes32_4, keccak256Hash, sha256Hash, address, password)
 	if err != nil {
 		return err, nil
 	}

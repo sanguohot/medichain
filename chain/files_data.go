@@ -55,13 +55,13 @@ func FilesDataAddSuper(address common.Address) (error, *common.Hash) {
 	return nil, &hash
 }
 
-func FilesDataAddFile(uuid [16]byte, ownerUuid [16]byte, uploaderUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash common.Hash,
+func FilesDataAddFile(uuid [16]byte, ownerUuid [16]byte, uploaderUuid [16]byte, orgUuid [16]byte, fileType common.Hash, fileDesc [4][32]byte, keccak256Hash common.Hash,
 	sha256Hash common.Hash, r [32]byte, s [32]byte, v uint8) (error, *common.Hash) {
 	err, instance, auth := GetFilesDataInstanceAndAuth()
 	if err != nil {
 		return err, nil
 	}
-	tx, err := instance.AddFile(auth, uuid, ownerUuid, uploaderUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, big.NewInt(time.Now().Unix()))
+	tx, err := instance.AddFile(auth, uuid, ownerUuid, uploaderUuid, orgUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, big.NewInt(time.Now().Unix()))
 	if err != nil {
 		return err, nil
 	}
