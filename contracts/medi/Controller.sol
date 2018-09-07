@@ -64,13 +64,13 @@ contract Controller {
         require(checkOrgsDataOk());
         orgsData.addOrg(uuid, msg.sender, publicKey, nameHash, name, time);
     }
-    function addFile(bytes16 uuid, bytes16 ownerUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
+    function addFile(bytes16 uuid, bytes16 ownerUuid, bytes16 orgUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
     , bytes32 sha256Hash, bytes32 r, bytes32 s, uint8 v, uint time)
     public {
         require(checkUsersDataOk());
         require(checkFilesDataOk());
         // 这里可能是医生上传患者的资料
-        filesData.addFile(uuid, ownerUuid, usersData.getUuidByUserAddress(msg.sender), fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, time);
+        filesData.addFile(uuid, ownerUuid, usersData.getUuidByUserAddress(msg.sender), orgUuid, fileType, fileDesc, keccak256Hash, sha256Hash, r, s, v, time);
     }
     function addSign(bytes16 uuid, bytes32 r, bytes32 s, uint8 v)
     public {
@@ -99,16 +99,17 @@ contract Controller {
         orgsData.getTime(uuid)
         );
     }
-    function getFileByUuid(bytes16 uuid) public constant returns (bytes16, bytes16, bytes32, bytes32[4], bytes32, bytes32, uint) {
+    function getFileByUuid(bytes16 uuid) public constant returns (bytes16, bytes16, bytes16, bytes32, bytes32[4], bytes32, bytes32) {
         require(checkFilesDataOk());
         return (
         filesData.getOwnerUuid(uuid),
         filesData.getUploaderUuid(uuid),
+        filesData.getOrgUuid(uuid),
         filesData.getFileType(uuid),
         filesData.getFileDesc(uuid),
         filesData.getSha256Hash(uuid),
-        filesData.getKeccak256Hash(uuid),
-        filesData.getTime(uuid)
+        filesData.getKeccak256Hash(uuid)
+        // filesData.getTime(uuid)
         );
     }
     function getMax(uint256 size, uint256 start, uint256 limit) internal constant returns (uint256) {

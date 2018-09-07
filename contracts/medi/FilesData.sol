@@ -15,6 +15,7 @@ contract FilesData is Super {
         bool active;
         bytes16 ownerUuid;
         bytes16 uploaderUuid;
+        bytes16 orgUuid;
         // 文件类型的keccak256 hash，类型在外部定义，在外部代码解释
         // 可以是标签云的hash，比如keccak256("门诊、急诊、住院")=0x116d70e0d1a135c065fc75f30d0035554486f00333e5505f39d414e775ddc42d
         // 由于类型比较规则，比较重要，我们作为hash存证，但同时由于其开放性和扩展性，我们交由上层应用定义
@@ -33,12 +34,13 @@ contract FilesData is Super {
         bytes16[] signerUuidList;
         mapping(bytes16 => bool) signerUuidMap;
     }
-    event onAddFile(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
+    event onAddFile(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes16 orgUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
     , bytes32 sha256Hash, bytes32 r, bytes32 s, uint8 v, uint time);
     event onDelFile(bytes16 uuid);
     event onSetActive(bytes16 uuid, bool active);
     event onSetOwnerUuid(bytes16 uuid, bytes16 ownerUuid);
     event onSetUploaderUuid(bytes16 uuid, bytes16 uploaderUuid);
+    event onSetOrgUuid(bytes16 uuid, bytes16 orgUuid);
     event onSetFileType(bytes16 uuid, bytes32 fileType);
     event onSetFileDesc(bytes16 uuid, bytes32[4] fileDesc);
     event onAddSign(bytes16 uuid, bytes16 userUuid, bytes32 r, bytes32 s, uint8 v);
@@ -102,7 +104,31 @@ contract FilesData is Super {
         }
         return true;
     }
-    function addFile(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
+    function addFileFirstPart(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes16 orgUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
+    , bytes32 sha256Hash, uint time) internal {
+        File memory file;
+        file.active = true;
+        file.ownerUuid = ownerUuid;
+        file.uploaderUuid = uploaderUuid;
+        file.orgUuid = orgUuid;
+        file.fileType = fileType;
+        file.fileDesc = fileDesc;
+        file.keccak256Hash = keccak256Hash;
+        file.sha256Hash = sha256Hash;
+        file.time = time;
+        uuidToFileMap[uuid] = file;
+        uuidToFileMap[uuid].signerUuidList.push(uploaderUuid);
+        uuidToFileMap[uuid].signerUuidMap[uploaderUuid] = true;
+        keccak256HashToUuidMap[keccak256Hash] = uuid;
+        sha256HashToUuidMap[sha256Hash] = uuid;
+        uuidList.push(uuid);
+    }
+    function addFileSecondPart(bytes16 uuid, bytes32 r, bytes32 s, uint8 v) internal {
+        uuidToFileMap[uuid].r.push(r);
+        uuidToFileMap[uuid].s.push(s);
+        uuidToFileMap[uuid].v.push(v);
+    }
+    function addFile(bytes16 uuid, bytes16 ownerUuid, bytes16 uploaderUuid, bytes16 orgUuid, bytes32 fileType, bytes32[4] fileDesc, bytes32 keccak256Hash
     , bytes32 sha256Hash, bytes32 r, bytes32 s, uint8 v, uint time)
     public onlySuperOrOwner onlyNotActive(uuid) {
         require(uuid!=0x0 && ownerUuid!=0x0 && uploaderUuid!=0x0 && fileType!=0x0 && keccak256Hash!=0x0 && sha256Hash!=0x0 && r!=0x0 && s!=0x0 && time!=0x0);
@@ -113,31 +139,22 @@ contract FilesData is Super {
         require(checkUsersDataOk());
         require(usersData.isUuidExist(ownerUuid));
         require(usersData.isUuidExist(uploaderUuid));
+        require(checkOrgsDataOk());
+        if(orgUuid != 0x0){
+            require(orgsData.isUuidExist(orgUuid));
+        }
         // 上传文件的用户可以不属于一个机构
         if(usersData.getOrgUuid(uploaderUuid) != 0x0){
-            require(checkOrgsDataOk());
             require(orgsData.isUuidExist(usersData.getOrgUuid(uploaderUuid)));
         }
+        if(usersData.getOrgUuid(ownerUuid) != 0x0){
+            require(orgsData.isUuidExist(usersData.getOrgUuid(ownerUuid)));
+        }
 //        require(usersData.getUserAddress(uploaderUuid) == ecrecover(keccak256Hash, v, r, s));
-        File memory file;
-        file.active = true;
-        file.ownerUuid = ownerUuid;
-        file.uploaderUuid = uploaderUuid;
-        file.fileType = fileType;
-        file.fileDesc = fileDesc;
-        file.keccak256Hash = keccak256Hash;
-        file.sha256Hash = sha256Hash;
-        file.time = time;
-        uuidToFileMap[uuid] = file;
-        uuidToFileMap[uuid].r.push(r);
-        uuidToFileMap[uuid].s.push(s);
-        uuidToFileMap[uuid].v.push(v);
-        uuidToFileMap[uuid].signerUuidList.push(uploaderUuid);
-        uuidToFileMap[uuid].signerUuidMap[uploaderUuid] = true;
-        keccak256HashToUuidMap[keccak256Hash] = uuid;
-        sha256HashToUuidMap[sha256Hash] = uuid;
-        uuidList.push(uuid);
-        onAddFile(uuid, ownerUuid, uploaderUuid, fileType, fileDesc, keccak256Hash
+        addFileFirstPart(uuid, ownerUuid, uploaderUuid, orgUuid, fileType, fileDesc, keccak256Hash
+        , sha256Hash, time);
+        addFileSecondPart(uuid, r, s, v);
+        onAddFile(uuid, ownerUuid, uploaderUuid, orgUuid, fileType, fileDesc, keccak256Hash
         , sha256Hash, r, s, v, time);
     }
     function delFile(bytes16 uuid)
@@ -167,6 +184,14 @@ contract FilesData is Super {
         require(usersData.isUuidExist(uploaderUuid));
         uuidToFileMap[uuid].uploaderUuid = uploaderUuid;
         onSetUploaderUuid(uuid, uploaderUuid);
+    }
+    function setOrgUuid(bytes16 uuid, bytes16 orgUuid)
+    public onlySuperOrOwner onlyActive(uuid) {
+        require(uuid!=0x0 && orgUuid!=0x0);
+        require(checkOrgsDataOk());
+        require(orgsData.isUuidExist(orgUuid));
+        uuidToFileMap[uuid].orgUuid = orgUuid;
+        onSetOrgUuid(uuid, orgUuid);
     }
     function setFileType(bytes16 uuid, bytes32 fileType)
     public onlySuperOrOwner onlyActive(uuid) {
@@ -230,6 +255,13 @@ contract FilesData is Super {
             return bytes16(0);
         }         
         return uuidToFileMap[uuid].uploaderUuid;
+    }
+    function getOrgUuid(bytes16 uuid)
+    public constant returns (bytes16) {
+        if(!uuidToFileMap[uuid].active){
+            return bytes16(0);
+        }         
+        return uuidToFileMap[uuid].orgUuid;
     }
     function getSha256Hash(bytes16 uuid)
     public constant returns (bytes32) {
