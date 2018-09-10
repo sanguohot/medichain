@@ -118,10 +118,10 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc 
 		return util.ErrFileUploadNotComplete, nil
 	}
 	// define them and check file type
-	if etc.FileTypeMap[fileType] {
+	fileTypeHash := crypto.Keccak256Hash([]byte(fileType))
+	if etc.FileTypeMap[fileTypeHash] == fileType {
 		return util.ErrFileTypeNotSupport, nil
 	}
-	fileTypeHash := crypto.Keccak256Hash([]byte(fileType))
 	keccak256Hash := crypto.Keccak256Hash(file)
 	err = requireHashNotExist(keccak256Hash, sha256Hash)
 	if err != nil {

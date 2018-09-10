@@ -32,6 +32,8 @@ func InitServer() {
 		v1.GET("/file/:fileUuid/signature", GetFileSignerAndDataListHandler)
 		v1.GET("/fileAddLog", GetFileAddLogListHandler)
 		v1.GET("/file/:fileUuid", GetFileHandler)
+		v1.GET("/file_log", GetFileAddLogListHandler)
+		v1.GET("/file_log/:fileUuid", GetFileAddLogDetailHandler)
 	}
 	s := &http.Server{
 		Addr:           fmt.Sprintf("%s:%d", etc.GetServerHostAddress(), etc.GetServerHostPort()),

@@ -1,6 +1,8 @@
 package etc
 
 import (
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/spf13/viper"
 	"log"
 	"path"
@@ -70,11 +72,19 @@ var (
 	ContractMap = map[string]bool{ContractUsersData:true, ContractFilesData:true, ContractOrgsData:true, ContractController:true, ContractEasyCns:true, ContractAuth:true}
 	TEST_OK = "ok"
 	TEST_FAIL = "fail"
-	FileTypeMap = map[string]bool{"预约":true, "接诊":true, "影像文件":true, "诊断报告":true}
+	FileTypeList = []string{"预约", "接诊", "影像采集", "治疗方案", "诊断报告"}
+	FileTypeMap = map[common.Hash]string{}
 )
 
+func initFileTypeMap()  {
+	for _, item := range FileTypeList {
+		hash := crypto.Keccak256Hash([]byte(item))
+		FileTypeMap[hash] = item
+	}
+}
 func init()  {
 	InitConfig(defaultFilePath)
+	initFileTypeMap()
 }
 func InitConfig(filePath string) {
 	ViperConfig = viper.New()

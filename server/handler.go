@@ -103,3 +103,9 @@ func GetFileAddLogListHandler(c *gin.Context) {
 	err, list := service.GetFileAddLogList(idCartNo, startStr, limitStr)
 	DoJsonResponse(c, err, list)
 }
+
+func GetFileAddLogDetailHandler(c *gin.Context) {
+	fileUuid := c.Param("fileUuid")
+	err, detail := service.GetFileAddLogDetail(fileUuid)
+	DoJsonResponse(c, err, detail)
+}
