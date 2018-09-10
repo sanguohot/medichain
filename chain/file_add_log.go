@@ -145,5 +145,12 @@ func ChainGetFileAddLogListAll() (error, []datacenter.FileAddLog) {
 	if err != nil {
 		return err, nil
 	}
-	return ChainGetFileAddLogList(0, header.Number.Int64())
+	err, max := datacenter.SqliteGetFileAddLogMaxBlockNum()
+	if err != nil {
+		return err, nil
+	}
+	if max >= header.Number.Uint64() {
+		return nil, []datacenter.FileAddLog{}
+	}
+	return ChainGetFileAddLogList(int64(max), header.Number.Int64())
 }

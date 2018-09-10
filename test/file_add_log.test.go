@@ -9,11 +9,6 @@ import (
 
 
 func main() {
-	err, max := datacenter.SqliteGetFileAddLogMaxBlockNum()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("datacenter.SqliteGetMaxBlockNum ===>", max)
 	err, total := datacenter.SqliteGetFileAddLogTotal("", "", "")
 	if err != nil {
 		log.Fatal(err)
