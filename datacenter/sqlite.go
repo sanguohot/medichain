@@ -69,7 +69,7 @@ func SqliteGetFileAddLogList(ownerUuid string, start, limit uint64) (error, []Fi
 	%s
 	ORDER BY CreateTime DESC
 	LIMIT %d OFFSET %d
-`, ownerQuery, start, limit)
+`, ownerQuery, limit, start)
 	rows, err := db.Query(sql)
 	if err != nil {
 		return err, nil
