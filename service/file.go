@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"medichain/chain"
 	"medichain/datacenter"
+	"medichain/etc"
 	"medichain/util"
 )
 
@@ -117,6 +118,9 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc 
 		return util.ErrFileUploadNotComplete, nil
 	}
 	// define them and check file type
+	if etc.FileTypeMap[fileType] {
+		return util.ErrFileTypeNotSupport, nil
+	}
 	fileTypeHash := crypto.Keccak256Hash([]byte(fileType))
 	keccak256Hash := crypto.Keccak256Hash(file)
 	err = requireHashNotExist(keccak256Hash, sha256Hash)

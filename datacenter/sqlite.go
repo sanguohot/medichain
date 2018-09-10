@@ -87,3 +87,26 @@ func SqliteGetFileAddLogList(ownerUuid string) (error, []FileAddLog) {
 	}
 	return nil, fl
 }
+
+func SqliteGetMaxBlockNum() (error, uint64) {
+	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
+	if err != nil {
+		return err, 0
+	}
+	defer db.Close()
+	sql := "SELECT MAX(BlockNum) FROM tbl_file_add_event_log"
+	rows, err := db.Query(sql)
+	if err != nil {
+		return err, 0
+	}
+	defer rows.Close()
+	var blockNum uint64
+	for rows.Next() {
+		err = rows.Scan(&blockNum)
+		if err != nil {
+			return err, 0
+		}
+		break
+	}
+	return nil, blockNum
+}

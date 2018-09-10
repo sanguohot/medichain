@@ -70,6 +70,7 @@ var (
 	ContractMap = map[string]bool{ContractUsersData:true, ContractFilesData:true, ContractOrgsData:true, ContractController:true, ContractEasyCns:true, ContractAuth:true}
 	TEST_OK = "ok"
 	TEST_FAIL = "fail"
+	FileTypeMap = map[string]bool{"预约":true, "接诊":true, "影像文件":true, "诊断报告":true}
 )
 
 func init()  {
