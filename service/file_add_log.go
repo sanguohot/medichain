@@ -10,12 +10,16 @@ import (
 	"medichain/etc"
 	"medichain/util"
 )
+type FileAddLogSimpleItem struct {
+	FileUUID string `json:"FileUuid"`
+	OwnerUUID string `json:"OwnerUuid"`
+	OrgUUID string `json:"OrgUuid"`
+	FileType string `json:"FileType"`
+	CreateTime uint64 `json:"CreateTime"`
+}
 type FileAddLogSimpleAction struct {
-	FileUuid	string
-	OwnerUuid	string
-	OrgUuid	string
-	FileType	string
-	CreateTime	uint64
+	Total uint64 `json:"Total"`
+	List []FileAddLogSimpleItem `json:"List"`
 }
 func SetFileAddLogList() error {
 	err, list := chain.ChainGetFileAddLogListAll()
@@ -30,9 +34,24 @@ func SetFileAddLogList() error {
 	return nil
 }
 
-func GetFileAddLogList(idCartNo, startStr, limitStr string) (error, []FileAddLogSimpleAction) {
+func GetFileAddLogList(idCartNo, orgUuidStr, startStr, limitStr string) (error, *FileAddLogSimpleAction) {
+	if orgUuidStr != ""{
+		orgUuid, err := uuid.Parse(orgUuidStr)
+		if err != nil {
+			return err, nil
+		}
+		exist, err := chain.OrgsDataIsUuidExist(orgUuid)
+		if err != nil {
+			return err, nil
+		}
+		if !exist {
+			return util.ErrOrgNotExist, nil
+		}
+	}
+
 	var (
 		ownerUuidStr string
+		fl []datacenter.FileAddLog
 	)
 	if idCartNo != "" {
 		uuid, err := chain.UsersDataGetUuidByIdCartNoHash(crypto.Keccak256Hash([]byte(idCartNo)))
@@ -45,24 +64,32 @@ func GetFileAddLogList(idCartNo, startStr, limitStr string) (error, []FileAddLog
 	if err != nil {
 		return err, nil
 	}
-	err, fl := datacenter.SqliteGetFileAddLogList("", ownerUuidStr, startBig.Uint64(), limitBig.Uint64())
+	err, total := datacenter.SqliteGetFileAddLogTotal("", orgUuidStr, ownerUuidStr)
 	if err != nil {
 		return err, nil
 	}
-	return nil, wrapperToFileAddLogSimpleAction(fl)
+	if total > 0 {
+		err, fl = datacenter.SqliteGetFileAddLogList("", orgUuidStr, ownerUuidStr, startBig.Uint64(), limitBig.Uint64())
+		if err != nil {
+			return err, nil
+		}
+	}
+
+	return nil, wrapperToFileAddLogSimpleAction(total, fl)
 }
-func wrapperToFileAddLogSimpleAction(list []datacenter.FileAddLog) []FileAddLogSimpleAction {
-	var wrapperList []FileAddLogSimpleAction
+func wrapperToFileAddLogSimpleAction(total uint64, list []datacenter.FileAddLog) *FileAddLogSimpleAction {
+	wrapper := FileAddLogSimpleAction{}
+	wrapper.Total = total
 	for _, item := range list {
-		wrapperList = append(wrapperList, FileAddLogSimpleAction{
-			FileUuid: item.FileUuid,
-			OwnerUuid: item.OwnerUuid,
-			OrgUuid: item.OrgUuid,
+		wrapper.List = append(wrapper.List, FileAddLogSimpleItem{
+			FileUUID: item.FileUuid,
+			OwnerUUID: item.OwnerUuid,
+			OrgUUID: item.OrgUuid,
 			FileType: etc.FileTypeMap[common.HexToHash(item.FileTypeHash)],
 			CreateTime: item.CreateTime,
 		})
 	}
-	return wrapperList
+	return &wrapper
 }
 
 func GetFileAddLogDetail(fileUuidStr string) (error, *datacenter.FileAddLog) {
@@ -70,7 +97,7 @@ func GetFileAddLogDetail(fileUuidStr string) (error, *datacenter.FileAddLog) {
 	if err != nil {
 		return err, nil
 	}
-	err, fl := datacenter.SqliteGetFileAddLogList(fileUuidStr, "", 0, 0)
+	err, fl := datacenter.SqliteGetFileAddLogList(fileUuidStr, "", "", 0, 0)
 	if err != nil {
 		return err, nil
 	}

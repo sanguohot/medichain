@@ -33,7 +33,7 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 		return err
 	}
 	defer db.Close()
-	stmt, err := db.Prepare("INSERT INTO tbl_file_add_event_log(FileUuid, OwnerUuid, UploaderUuid, OrgUuid, FileTypeHash, FileType" +
+	stmt, err := db.Prepare("INSERT  OR IGNORE INTO tbl_file_add_event_log(FileUuid, OwnerUuid, UploaderUuid, OrgUuid, FileTypeHash, FileType" +
 		", FileDesc, Keccak256Hash, Sha256Hash, CreateTime, Signature, Signer, BlockNum, BlockHash, TransactionHash" +
 			", ContractAddress) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	if err != nil {
@@ -54,7 +54,7 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	return nil
 }
 
-func SqliteGetFileAddLogList(fileUuid, ownerUuid string, start, limit uint64) (error, []FileAddLog) {
+func SqliteGetFileAddLogList(fileUuid, orgUuid, ownerUuid string, start, limit uint64) (error, []FileAddLog) {
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
 	if err != nil {
 		return err, nil
@@ -64,9 +64,13 @@ func SqliteGetFileAddLogList(fileUuid, ownerUuid string, start, limit uint64) (e
 		ownerQuery string
 		fileQuery string
 		limitQuery string
+		orgQuery string
 	)
 	if ownerUuid != "" {
 		ownerQuery = fmt.Sprintf("AND OwnerUuid=%s", ownerUuid)
+	}
+	if orgUuid != "" {
+		orgQuery = fmt.Sprintf("AND OrgUuid=%s", orgUuid)
 	}
 	if fileUuid != "" {
 		fileQuery = fmt.Sprintf("AND FileUuid=\"%s\"", fileUuid)
@@ -74,7 +78,7 @@ func SqliteGetFileAddLogList(fileUuid, ownerUuid string, start, limit uint64) (e
 	if limit > 0 {
 		limitQuery = fmt.Sprintf("LIMIT %d OFFSET %d", limit, start)
 	}
-	sql := fmt.Sprintf("SELECT * FROM tbl_file_add_event_log WHERE 1=1 %s %s ORDER BY CreateTime DESC %s", ownerQuery, fileQuery, limitQuery)
+	sql := fmt.Sprintf("SELECT * FROM tbl_file_add_event_log WHERE 1=1 %s %s %s ORDER BY CreateTime DESC %s", ownerQuery, fileQuery, orgQuery, limitQuery)
 	fmt.Println(sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
@@ -94,7 +98,7 @@ func SqliteGetFileAddLogList(fileUuid, ownerUuid string, start, limit uint64) (e
 	return nil, fl
 }
 
-func SqliteGetMaxBlockNum() (error, uint64) {
+func SqliteGetFileAddLogMaxBlockNum() (error, uint64) {
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
 	if err != nil {
 		return err, 0
@@ -104,7 +108,6 @@ func SqliteGetMaxBlockNum() (error, uint64) {
 	fmt.Println(sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
-	fmt.Println(rows.Columns())
 	if err != nil {
 		return err, 0
 	}
@@ -121,4 +124,46 @@ func SqliteGetMaxBlockNum() (error, uint64) {
 		break
 	}
 	return nil, *blockNum
+}
+
+func SqliteGetFileAddLogTotal(fileUuid, orgUuid, ownerUuid string) (error, uint64) {
+	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
+	if err != nil {
+		return err, 0
+	}
+	defer db.Close()
+	var (
+		ownerQuery string
+		fileQuery string
+		orgQuery string
+	)
+	if ownerUuid != "" {
+		ownerQuery = fmt.Sprintf("AND OwnerUuid=%s", ownerUuid)
+	}
+	if orgUuid != "" {
+		orgQuery = fmt.Sprintf("AND OrgUuid=%s", orgUuid)
+	}
+	if fileUuid != "" {
+		fileQuery = fmt.Sprintf("AND FileUuid=\"%s\"", fileUuid)
+	}
+	sql := fmt.Sprintf("SELECT COUNT(*) FROM tbl_file_add_event_log WHERE 1=1 %s %s %s", ownerQuery, fileQuery, orgQuery)
+	fmt.Println(sql)
+	rows, err := db.Query(sql)
+	defer rows.Close()
+	if err != nil {
+		return err, 0
+	}
+	// 需要设置为指针, 并且判断是否为nil
+	var count *uint64
+	for rows.Next() {
+		err = rows.Scan(&count)
+		if err != nil {
+			return err, 0
+		}
+		if count == nil {
+			return nil, 0
+		}
+		break
+	}
+	return nil, *count
 }

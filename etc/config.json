@@ -6,7 +6,7 @@
 			"port": 8443
 		},
 		"tls" : {
-			"enable": true,
+			"enable": false,
 			"verify_peer": true
 		},
 		"pki": {

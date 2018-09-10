@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -119,8 +120,8 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc 
 	}
 	// define them and check file type
 	fileTypeHash := crypto.Keccak256Hash([]byte(fileType))
-	if etc.FileTypeMap[fileTypeHash] == fileType {
-		return util.ErrFileTypeNotSupport, nil
+	if etc.FileTypeMap[fileTypeHash] != fileType {
+		return fmt.Errorf("%s ===> %s", util.ErrFileTypeNotSupport.Error(), fileType), nil
 	}
 	keccak256Hash := crypto.Keccak256Hash(file)
 	err = requireHashNotExist(keccak256Hash, sha256Hash)
