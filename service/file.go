@@ -206,7 +206,7 @@ func GetFile(fileUuidStr string) (error, []byte) {
 	return nil, file
 }
 
-func GetFileSignerAndDataList(fileUuidStr string, startStr string, limitStr string) (error, *FileSignerAndDataAction) {
+func GetFileSignerAndDataList(fileUuidStr string, startStr, limitStr string) (error, *FileSignerAndDataAction) {
 	fileUuid, err := uuid.Parse(fileUuidStr)
 	if err != nil {
 		return err, nil
@@ -220,6 +220,9 @@ func GetFileSignerAndDataList(fileUuidStr string, startStr string, limitStr stri
 		return err, nil
 	}
 	err, startBig, limitBig := TransformPagingParamFromStringToBigInt(startStr, limitStr)
+	if err != nil {
+		return err, nil
+	}
 	if size.Cmp(startBig) != 1 {
 		return util.ErrFileSignListOutOfIndex, nil
 	}

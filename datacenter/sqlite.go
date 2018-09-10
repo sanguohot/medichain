@@ -53,7 +53,7 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	return nil
 }
 
-func SqliteGetFileAddLogList(ownerUuid string) (error, []FileAddLog) {
+func SqliteGetFileAddLogList(ownerUuid string, start, limit uint64) (error, []FileAddLog) {
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
 	if err != nil {
 		return err, nil
@@ -68,7 +68,8 @@ func SqliteGetFileAddLogList(ownerUuid string) (error, []FileAddLog) {
 	WHERE 1=1
 	%s
 	ORDER BY CreateTime DESC
-`, ownerQuery)
+	LIMIT %d OFFSET %d
+`, ownerQuery, start, limit)
 	rows, err := db.Query(sql)
 	if err != nil {
 		return err, nil
