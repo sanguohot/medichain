@@ -5,6 +5,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/spf13/viper"
 	"log"
+	"os"
 	"path"
 )
 // auto generate struct
@@ -12,7 +13,6 @@ import (
 // use mapstructure to replace json for '_' key words, e.g. rpc_port,big_data
 type ConfigStruct struct {
 	Server struct {
-		Dir  string `json:"dir"`
 		Host struct {
 			Address string `json:"address"`
 			Port    int    `json:"port"`
@@ -74,6 +74,7 @@ var (
 	TEST_FAIL = "fail"
 	FileTypeList = []string{"预约", "接诊", "影像采集", "治疗方案", "诊断报告"}
 	FileTypeMap = map[common.Hash]string{}
+	serverPath = os.Getenv("MEDICHAIN_PATH")
 )
 
 func initFileTypeMap()  {
@@ -83,6 +84,9 @@ func initFileTypeMap()  {
 	}
 }
 func init()  {
+	if serverPath == "" {
+		log.Fatal("MEDICHAIN_PATH env required")
+	}
 	InitConfig(defaultFilePath)
 	initFileTypeMap()
 }
@@ -130,7 +134,8 @@ func GetBcosEasyCnsAddress() string {
 	return GetViperConfig().GetString("bcos.easy_cns.address")
 }
 func GetServerDir() string {
-	return GetViperConfig().GetString("server.dir")
+	//return GetViperConfig().GetString("server.dir")
+	return serverPath
 }
 func GetServerHostAddress() string {
 	return GetViperConfig().GetString("server.host.address")
