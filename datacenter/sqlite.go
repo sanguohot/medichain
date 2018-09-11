@@ -67,10 +67,10 @@ func SqliteGetFileAddLogList(fileUuid, orgUuid, ownerUuid string, start, limit u
 		orgQuery string
 	)
 	if ownerUuid != "" {
-		ownerQuery = fmt.Sprintf("AND OwnerUuid=%s", ownerUuid)
+		ownerQuery = fmt.Sprintf("AND OwnerUuid=\"%s\"", ownerUuid)
 	}
 	if orgUuid != "" {
-		orgQuery = fmt.Sprintf("AND OrgUuid=%s", orgUuid)
+		orgQuery = fmt.Sprintf("AND OrgUuid=\"%s\"", orgUuid)
 	}
 	if fileUuid != "" {
 		fileQuery = fmt.Sprintf("AND FileUuid=\"%s\"", fileUuid)
@@ -138,10 +138,10 @@ func SqliteGetFileAddLogTotal(fileUuid, orgUuid, ownerUuid string) (error, uint6
 		orgQuery string
 	)
 	if ownerUuid != "" {
-		ownerQuery = fmt.Sprintf("AND OwnerUuid=%s", ownerUuid)
+		ownerQuery = fmt.Sprintf("AND OwnerUuid=\"%s\"", ownerUuid)
 	}
 	if orgUuid != "" {
-		orgQuery = fmt.Sprintf("AND OrgUuid=%s", orgUuid)
+		orgQuery = fmt.Sprintf("AND OrgUuid=\"%s\"", orgUuid)
 	}
 	if fileUuid != "" {
 		fileQuery = fmt.Sprintf("AND FileUuid=\"%s\"", fileUuid)
