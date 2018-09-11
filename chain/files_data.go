@@ -2,9 +2,9 @@ package chain
 
 import (
 	"github.com/ethereum/go-ethereum/common"
-	"medichain/etc"
-	"medichain/util"
-	"medichain/contracts/medi"
+	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/contracts/medi"
 	"math/big"
 	"time"
 	"github.com/google/uuid"

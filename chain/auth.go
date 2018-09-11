@@ -2,9 +2,9 @@ package chain
 
 import (
 	"github.com/ethereum/go-ethereum/common"
-	"medichain/etc"
-	"medichain/util"
-	authContract "medichain/contracts/auth"
+	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/util"
+	authContract "github.com/sanguohot/medichain/contracts/auth"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 

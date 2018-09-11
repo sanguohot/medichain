@@ -6,7 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	ethereum "github.com/ethereum/go-ethereum"
-	hello "medichain/contracts/hello"
+	hello "github.com/sanguohot/medichain/contracts/hello"
 	"context"
 	"math/big"
 	"strings"

@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"medichain/datacenter"
-	"medichain/service"
+	"github.com/sanguohot/medichain/datacenter"
+	"github.com/sanguohot/medichain/service"
 )
 
 

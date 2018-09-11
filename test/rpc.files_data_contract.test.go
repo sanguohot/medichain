@@ -2,18 +2,18 @@ package main
 
 import (
 	"fmt"
-	"medichain/chain"
-	//"medichain/etc"
+	"github.com/sanguohot/medichain/chain"
+	//"github.com/sanguohot/medichain/etc"
 	"log"
 	//"time"
 	"math/big"
 	"github.com/google/uuid"
 	"github.com/ethereum/go-ethereum/common"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	//"medichain/etc"
-	"medichain/etc"
+	//"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/etc"
 )
 
 func main() {

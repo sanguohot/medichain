@@ -3,8 +3,8 @@ package service
 import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/google/uuid"
-	"medichain/util"
-	"medichain/chain"
+	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/chain"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 )

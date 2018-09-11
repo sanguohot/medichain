@@ -7,10 +7,10 @@ import (
 	"errors"
 	"bytes"
 	"mime/multipart"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"io"
 	"encoding/json"
-	"medichain/etc"
+	"github.com/sanguohot/medichain/etc"
 	"github.com/ethereum/go-ethereum/common"
 )
 

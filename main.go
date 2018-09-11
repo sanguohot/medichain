@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "medichain/etc"
-	_ "medichain/server"
+	_ "github.com/sanguohot/medichain/etc"
+	_ "github.com/sanguohot/medichain/server"
 )
 
 func main() {

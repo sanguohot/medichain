@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"medichain/chain"
-	"medichain/etc"
+	"github.com/sanguohot/medichain/chain"
+	"github.com/sanguohot/medichain/etc"
 	"log"
 	"time"
 	"math/big"

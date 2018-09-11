@@ -2,10 +2,10 @@ package chain
 
 import (
 	"testing"
-	"medichain/etc"
+	"github.com/sanguohot/medichain/etc"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/google/uuid"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 )
 
 func init()  {

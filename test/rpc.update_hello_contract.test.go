@@ -6,7 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	hello "medichain/contracts/hello" // for demo
+	hello "github.com/sanguohot/medichain/contracts/hello" // for demo
 	"math/rand"
 	"time"
 	"math/big"

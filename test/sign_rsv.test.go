@@ -5,7 +5,7 @@ import (
 	"log"
 	"encoding/hex"
 
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 )

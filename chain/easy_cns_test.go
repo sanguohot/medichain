@@ -3,7 +3,7 @@ package chain
 import (
 	"testing"
 	"github.com/ethereum/go-ethereum/common"
-	"medichain/etc"
+	"github.com/sanguohot/medichain/etc"
 )
 
 func init()  {

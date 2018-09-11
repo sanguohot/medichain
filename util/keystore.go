@@ -8,7 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	//"bytes"
 	"math/big"
-	"medichain/etc"
+	"github.com/sanguohot/medichain/etc"
 	"time"
 	"bytes"
 	"crypto/ecdsa"

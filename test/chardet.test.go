@@ -9,7 +9,7 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"strings"
 	"io/ioutil"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 )
 func DecodeToGBK(utf8Str string) (dst string, err error) {
 	var trans transform.Transformer = simplifiedchinese.GBK.NewEncoder()

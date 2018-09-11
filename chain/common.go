@@ -2,11 +2,11 @@ package chain
 
 import (
 	"fmt"
-	"medichain/etc"
+	"github.com/sanguohot/medichain/etc"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/common"
 	"context"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"time"
 )
 

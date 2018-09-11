@@ -5,7 +5,7 @@ import (
 	"log"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	hello "medichain/contracts/hello" // for demo
+	hello "github.com/sanguohot/medichain/contracts/hello" // for demo
 )
 
 func main() {

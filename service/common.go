@@ -2,7 +2,7 @@ package service
 
 import (
 	"math/big"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"strconv"
 )
 var (

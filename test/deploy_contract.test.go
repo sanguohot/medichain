@@ -1,6 +1,6 @@
 package main
 
-import "medichain/deploy"
+import "github.com/sanguohot/medichain/deploy"
 
 func main() {
 	//deploy.DeployEasyCns(false)

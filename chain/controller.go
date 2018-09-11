@@ -4,9 +4,9 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"math/big"
-	"medichain/contracts/medi"
-	"medichain/etc"
-	"medichain/util"
+	"github.com/sanguohot/medichain/contracts/medi"
+	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/util"
 	"time"
 )
 

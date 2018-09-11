@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
-	"medichain/etc"
+	"github.com/sanguohot/medichain/etc"
 )
 type FileAddLog struct {
 	FileUuid	string

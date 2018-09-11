@@ -10,10 +10,10 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/google/uuid"
 	"math/big"
-	"medichain/contracts/medi"
-	"medichain/datacenter"
-	"medichain/etc"
-	"medichain/util"
+	"github.com/sanguohot/medichain/contracts/medi"
+	"github.com/sanguohot/medichain/datacenter"
+	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/util"
 	"strings"
 )
 

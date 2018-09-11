@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"medichain/chain"
-	"medichain/etc"
+	"github.com/sanguohot/medichain/chain"
+	"github.com/sanguohot/medichain/etc"
 	"log"
 	//"github.com/google/uuid"
-	//"medichain/util"
+	//"github.com/sanguohot/medichain/util"
 	"time"
 	"math/big"
 )

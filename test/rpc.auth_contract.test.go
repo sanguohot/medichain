@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"medichain/chain"
+	"github.com/sanguohot/medichain/chain"
 	"log"
 	"github.com/ethereum/go-ethereum/common"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 

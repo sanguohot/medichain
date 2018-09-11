@@ -5,10 +5,10 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/google/uuid"
-	"medichain/chain"
-	"medichain/datacenter"
-	"medichain/etc"
-	"medichain/util"
+	"github.com/sanguohot/medichain/chain"
+	"github.com/sanguohot/medichain/datacenter"
+	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/util"
 )
 type FileAddLogSimpleItem struct {
 	FileUUID string `json:"FileUuid"`

@@ -3,10 +3,10 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"medichain/service"
+	"github.com/sanguohot/medichain/service"
 	"io/ioutil"
 	"fmt"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 )
 func PongHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{

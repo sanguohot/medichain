@@ -4,7 +4,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"log"
 	"github.com/ethereum/go-ethereum/crypto"
 )

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"fmt"
 	"go-ethereum-change/common"
 	"github.com/ethereum/go-ethereum/crypto"

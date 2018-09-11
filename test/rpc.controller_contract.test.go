@@ -3,16 +3,16 @@ package main
 import (
 	"fmt"
 	"log"
-	"medichain/chain"
+	"github.com/sanguohot/medichain/chain"
 	//"github.com/google/uuid"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	//"hash"
 	"time"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/google/uuid"
-	"medichain/service"
+	"github.com/sanguohot/medichain/service"
 )
 
 func main() {

@@ -9,7 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	//"github.com/ethereum/go-ethereum/common"
 	"encoding/hex"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 )
 
 func main() {

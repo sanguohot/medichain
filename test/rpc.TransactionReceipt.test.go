@@ -10,7 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/crypto"
 	"strings"
-	"medichain/contracts/hello"
+	"github.com/sanguohot/medichain/contracts/hello"
 )
 
 func main() {

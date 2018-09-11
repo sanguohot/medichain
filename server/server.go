@@ -1,16 +1,16 @@
 package server
 
 import (
-	"github.com/gin-gonic/gin"
-	"medichain/server/middle"
-	"time"
-	"net/http"
-	"fmt"
-	"medichain/etc"
+	"crypto/tls"
 	"crypto/x509"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/server/middle"
 	"io/ioutil"
 	"log"
-	"crypto/tls"
+	"net/http"
+	"time"
 )
 
 func init()  {

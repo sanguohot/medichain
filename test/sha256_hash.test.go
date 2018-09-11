@@ -1,7 +1,7 @@
 package main
 
 import (
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"fmt"
 )
 

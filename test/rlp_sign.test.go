@@ -4,7 +4,7 @@ import (
 	"crypto/ecdsa"
 	"fmt"
 	"log"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"

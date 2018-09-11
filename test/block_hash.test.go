@@ -1,7 +1,7 @@
 package main
 
 import (
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"github.com/ethereum/go-ethereum/core/types"
 	"encoding/json"
 	"log"

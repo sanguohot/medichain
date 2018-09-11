@@ -1,9 +1,9 @@
 package main
 
 import (
-	"medichain/datacenter"
+	"github.com/sanguohot/medichain/datacenter"
 	"fmt"
-	"medichain/util"
+	"github.com/sanguohot/medichain/util"
 	"io/ioutil"
 	"bytes"
 	"log"

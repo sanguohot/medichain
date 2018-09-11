@@ -10,7 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	helloWorldContracts "medichain/contracts/hello" // for demo
+	helloWorldContracts "github.com/sanguohot/medichain/contracts/hello" // for demo
 )
 
 func main() {
