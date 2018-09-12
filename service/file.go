@@ -179,8 +179,7 @@ func AddFileSign(fileUuidStr, addressStr, password, keccak256HashStr string) (er
 	if err != nil {
 		return err, nil
 	}
-	signature := string(util.RSVtoSig(r, s, v))
-
+	signature := hexutil.Encode(util.RSVtoSig(r, s, v))[2:]
 	return nil, &FileAddSignAction{
 		Signature: signature,
 		TransactionHash: *txHash,
