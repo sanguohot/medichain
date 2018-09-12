@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${MEDICHAIN_NAME}-deploy
+  namespace: ${MEDICHAIN_NAMESPACE}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ${MEDICHAIN_NAME}-deploy
+    spec:
+      containers:
+      - name: proxy
+        image: ${MEDICHAIN_IMAGE}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: ${MEDICHAIN_PORT}
+          protocol: tcp
+        volumeMounts:
+        - name: ${MEDICHAIN_NAME}-config-volume
+          mountPath: /root/etc # 这里是路径
+        - name: ${MEDICHAIN_NAME}-keystore-volume
+          mountPath: /root/keystore
+        - name: ${MEDICHAIN_NAME}-databases-volume
+          mountPath: /root/databases
+      volumes:
+      - name: ${MEDICHAIN_NAME}-databases-volume
+        hostPath:
+          # directory location on host
+          path: /opt/medichain/databases
+          # this field is optional
+          type: Directory
+      - name: ${MEDICHAIN_NAME}-databases-volume
+        hostPath:
+          # directory location on host
+          path: /opt/medichain/keystore
+          # this field is optional
+          type: Directory
+      - name: ${MEDICHAIN_NAME}-config-volume
+        configMap:
+          name: ${MEDICHAIN_NAME}-configmap
+          items:
+          - key: first # 使用configmap里面key对应的数据
+            path: config.json # 代表/root/etc/config.json文件
+      restartPolicy: Always

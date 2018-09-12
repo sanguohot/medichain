@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${MEDICHAIN_NAME}-svc
+  namespace: ${MEDICHAIN_NAMESPACE}
+  labels:
+    app: ${MEDICHAIN_NAME}-svc
+spec:
+  selector:
+    app: ${MEDICHAIN_NAME}-deploy
+  ports:
+    - port: ${MEDICHAIN_PORT}
+      targetPort: ${MEDICHAIN_PORT}
+      nodePort: ${MEDICHAIN_PORT}
+      protocol: tcp
+  type: NodePort

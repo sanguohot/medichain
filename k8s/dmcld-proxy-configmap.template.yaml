@@ -1,0 +1,61 @@
+apiVersion: v1
+data:
+  first: |
+    {
+      "server": {
+        "host": {
+          "address": "0.0.0.0",
+          "port": 8443
+        },
+        "tls" : {
+          "enable": false,
+          "verify_peer": true
+        },
+        "pki": {
+          "key": "/key/privkey.pem",
+          "cert": "/key/fullchain.pem",
+          "ca": "/key/chain.pem"
+        }
+      },
+      "big_data": {
+        "host": {
+          "address": "${BIG_DATA_HOST_ADDRESS}",
+          "port": ${BIG_DATA_HOST_PORT}
+        },
+        "root_folder": {
+          "code": "${BIG_DATA_ROOT_FOLDER_CODE}",
+          "name": "medichain"
+        }
+      },
+      "sqlite": {
+        "file_name": "medichain.db"
+      },
+      "bcos": {
+        "host": {
+          "address": "${BCOS_HOST_ADDRESS}",
+          "rpc_port": ${BCOS_HOST_RPC_PORT},
+          "p2p_port": 30303,
+          "channel_port": 30304
+        },
+        "pki": {
+          "key": "/key/privkey.pem",
+          "cert": "/key/fullchain.pem",
+          "ca": "/key/chain.pem"
+        },
+        "owner": {
+          "private_key": "7aaf3e2786ff4b38f4aceb6f86ff4a3670206376087d4bd0f041f91e61412e66",
+          "public_key": "8ec34f461212f6bbfd759f400b5a80679ecd56f496148ad2c4669d9e1127965be94cbd7230c091e5bfa310596f354d1339a122e7335bdf799f504b3c1fcb07a5",
+          "address": "0x1d306aDe962d9f20590be45e68DB6246da73811D",
+          "password": "${BCOS_OWNER_PASSWORD}"
+        },
+        "keystore": "/keystore",
+        "easy_cns": {
+          "address": "0x178838F5d7d0a6eC4c54Bc969d3d79d81e69b20C",
+          "tx": "0x54a2fbd906abce260932c6a7dfeb05c9512f65eaad07ad7a771d3eb385d5fa18"
+        }
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: ${MEDICHAIN_NAME}-config
+  namespace: ${MEDICHAIN_NAMESPACE}
