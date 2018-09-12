@@ -12,5 +12,5 @@ spec:
     - port: ${MEDICHAIN_PORT}
       targetPort: ${MEDICHAIN_PORT}
       nodePort: ${MEDICHAIN_PORT}
-      protocol: tcp
+      protocol: TCP
   type: NodePort

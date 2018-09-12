@@ -11,12 +11,12 @@ spec:
         app: ${MEDICHAIN_NAME}-deploy
     spec:
       containers:
-      - name: proxy
+      - name: medichain
         image: ${MEDICHAIN_IMAGE}
         imagePullPolicy: Always
         ports:
         - containerPort: ${MEDICHAIN_PORT}
-          protocol: tcp
+          protocol: TCP
         volumeMounts:
         - name: ${MEDICHAIN_NAME}-config-volume
           mountPath: /root/etc # 这里是路径
