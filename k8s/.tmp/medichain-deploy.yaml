@@ -1,52 +1,51 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${MEDICHAIN_NAME}-deploy
-  namespace: ${MEDICHAIN_NAMESPACE}
+  name: medichain-deploy
+  namespace: medical-test
   labels:
-    app: ${MEDICHAIN_NAME}-deploy
+    app: medichain-deploy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ${MEDICHAIN_NAME}-deploy
+      app: medichain-deploy
   template:
     metadata:
       labels:
-        app: ${MEDICHAIN_NAME}-deploy
+        app: medichain-deploy
     spec:
       containers:
       - name: medichain
-        image: ${MEDICHAIN_IMAGE}
+        image: sanguohot/medichain:1.0
         imagePullPolicy: Always
         ports:
-        - containerPort: ${MEDICHAIN_PORT}
+        - containerPort: 8443
           protocol: TCP
         volumeMounts:
-        - name: ${MEDICHAIN_NAME}-config-volume
+        - name: medichain-config-volume
           mountPath: /root/etc # 这里是路径
-        - name: ${MEDICHAIN_NAME}-keystore-volume
+        - name: medichain-keystore-volume
           mountPath: /root/keystore
-        - name: ${MEDICHAIN_NAME}-databases-volume
+        - name: medichain-databases-volume
           mountPath: /root/databases
       volumes:
-      - name: ${MEDICHAIN_NAME}-databases-volume
+      - name: medichain-databases-volume
         hostPath:
           # directory location on host
           path: /opt/medichain/databases
           # this field is optional
           type: DirectoryOrCreate
-      - name: ${MEDICHAIN_NAME}-keystore-volume
+      - name: medichain-keystore-volume
         hostPath:
           # directory location on host
           path: /opt/medichain/keystore
           # this field is optional
           type: DirectoryOrCreate
-      - name: ${MEDICHAIN_NAME}-config-volume
+      - name: medichain-config-volume
         configMap:
-          name: ${MEDICHAIN_NAME}-configmap
+          name: medichain-configmap
           items:
           - key: first # 使用configmap里面key对应的数据
             path: config.json # 代表/root/etc/config.json文件
       restartPolicy: Always
-

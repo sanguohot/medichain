@@ -19,11 +19,11 @@ data:
       },
       "big_data": {
         "host": {
-          "address": "${BIG_DATA_HOST_ADDRESS}",
-          "port": ${BIG_DATA_HOST_PORT}
+          "address": "172.16.194.2",
+          "port": 9998
         },
         "root_folder": {
-          "code": "${BIG_DATA_ROOT_FOLDER_CODE}",
+          "code": "8038a5728000002fdir00000ffb9ccc4",
           "name": "medichain"
         }
       },
@@ -32,8 +32,8 @@ data:
       },
       "bcos": {
         "host": {
-          "address": "${BCOS_HOST_ADDRESS}",
-          "rpc_port": ${BCOS_HOST_RPC_PORT},
+          "address": "10.6.250.55",
+          "rpc_port": 8546,
           "p2p_port": 30303,
           "channel_port": 30304
         },
@@ -46,7 +46,7 @@ data:
           "private_key": "7aaf3e2786ff4b38f4aceb6f86ff4a3670206376087d4bd0f041f91e61412e66",
           "public_key": "8ec34f461212f6bbfd759f400b5a80679ecd56f496148ad2c4669d9e1127965be94cbd7230c091e5bfa310596f354d1339a122e7335bdf799f504b3c1fcb07a5",
           "address": "0x1d306aDe962d9f20590be45e68DB6246da73811D",
-          "password": "${BCOS_OWNER_PASSWORD}"
+          "password": "123456"
         },
         "keystore": "/keystore",
         "easy_cns": {
@@ -57,5 +57,5 @@ data:
     }
 kind: ConfigMap
 metadata:
-  name: ${MEDICHAIN_NAME}-configmap
-  namespace: ${MEDICHAIN_NAMESPACE}
+  name: medichain-configmap
+  namespace: medical-test
