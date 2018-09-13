@@ -26,18 +26,22 @@ spec:
         - name: ${MEDICHAIN_NAME}-config-volume
           mountPath: /root/etc # 这里是路径
         - name: ${MEDICHAIN_NAME}-keystore-volume
-          mountPath: /data
-          subPath: ${MEDICHAIN_NAME}/keystore
+          mountPath: /root/keystore
         - name: ${MEDICHAIN_NAME}-databases-volume
-          mountPath: /data
-          subPath: ${MEDICHAIN_NAME}/databases
+          mountPath: /root/databases
       volumes:
       - name: ${MEDICHAIN_NAME}-databases-volume
-        persistentVolumeClaim:
-          claimName: ${MEDICHAIN_NAME}-ceph-pvc-databases
+        hostPath:
+          # directory location on host
+          path: /opt/medichain/databases
+          # this field is optional
+          type: DirectoryOrCreate
       - name: ${MEDICHAIN_NAME}-keystore-volume
-        persistentVolumeClaim:
-          claimName: ${MEDICHAIN_NAME}-ceph-pvc-keystore
+        hostPath:
+          # directory location on host
+          path: /opt/medichain/keystore
+          # this field is optional
+          type: DirectoryOrCreate
       - name: ${MEDICHAIN_NAME}-config-volume
         configMap:
           name: ${MEDICHAIN_NAME}-configmap

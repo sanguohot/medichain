@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ${MEDICHAIN_NAME}-ceph-pv
+  namespace: ${MEDICHAIN_NAMESPACE}
+  labels:
+    pv: ${MEDICHAIN_NAME}-ceph-pv
+spec:
+  capacity:
+    storage: ${MEDICHAIN_CEPH_PV_SIZE}
+  accessModes:
+  - ReadWriteMany
+  cephfs:
+    monitors:
+    - 10.6.250.7:6789
+    - 10.6.250.8:6789
+    - 10.6.250.9:6789
+    user: admin
+    secretRef:
+      name: ${MEDICHAIN_NAME}-ceph-secret
+    readOnly: false
+  persistentVolumeReclaimPolicy: Retain # Retain不删除数据，Recycle删除全部数据，Delete数据和挂载卷一起删除
