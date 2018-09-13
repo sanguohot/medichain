@@ -3,3 +3,4 @@ dist
 .vendor-new
 keystore
 /databases/medichain.db
+.tmp
