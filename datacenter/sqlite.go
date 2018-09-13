@@ -107,7 +107,7 @@ func SqliteGetFileAddLogMaxBlockNum() (error, uint64) {
 	}
 	defer db.Close()
 	sql := "SELECT MAX(BlockNum) FROM tbl_file_add_event_log"
-	fmt.Printf("sqlite: %s\n", sql)
+	//fmt.Printf("sqlite: %s\n", sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
 	if err != nil {
