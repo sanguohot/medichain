@@ -26,10 +26,10 @@ spec:
         - name: ${MEDICHAIN_NAME}-config-volume
           mountPath: /root/etc # 这里是路径
         - name: ${MEDICHAIN_NAME}-keystore-volume
-          mountPath: /data
-          subPath: ${MEDICHAIN_NAME}/keystore
+          mountPath: /root/keystore # 这里是容器目录
+          subPath: ${MEDICHAIN_NAME}/keystore # 这里是ceph卷里面的目录
         - name: ${MEDICHAIN_NAME}-databases-volume
-          mountPath: /data
+          mountPath: /root/databases
           subPath: ${MEDICHAIN_NAME}/databases
       volumes:
       - name: ${MEDICHAIN_NAME}-databases-volume
