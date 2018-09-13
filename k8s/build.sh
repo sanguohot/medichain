@@ -4,7 +4,8 @@ yaml_array=(\
 medichain-deploy.template.yaml \
 medichain-configmap.template.yaml \
 medichain-service.template.yaml  \
-medichain-pv.template.yaml \
+medichain-pv-keystore.template.yaml \
+medichain-pv-databases.template.yaml \
 medichain-pvc-keystore.template.yaml \
 medichain-pvc-databases.template.yaml \
 )
