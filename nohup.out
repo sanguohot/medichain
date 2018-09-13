@@ -1,0 +1,20 @@
+timer: FileAddLogTimer start 2018-09-13 15:50:33.372726673 +0800 CST m=+0.036211050.
+[GIN-debug] [WARNING] Now Gin requires Go 1.6 or later and Go 1.7 will be required soon.
+
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /ping                     --> github.com/sanguohot/medichain/server.PongHandler (5 handlers)
+[GIN-debug] POST   /api/v1/user              --> github.com/sanguohot/medichain/server.AddUserHandler (5 handlers)
+[GIN-debug] POST   /api/v1/org               --> github.com/sanguohot/medichain/server.AddOrgHandler (5 handlers)
+[GIN-debug] POST   /api/v1/file              --> github.com/sanguohot/medichain/server.AddFileHandler (5 handlers)
+[GIN-debug] POST   /api/v1/file/:fileUuid/signature --> github.com/sanguohot/medichain/server.AddFileSignHandler (5 handlers)
+[GIN-debug] GET    /api/v1/file/:fileUuid/signature --> github.com/sanguohot/medichain/server.GetFileSignerAndDataListHandler (5 handlers)
+[GIN-debug] GET    /api/v1/fileAddLog        --> github.com/sanguohot/medichain/server.GetFileAddLogListHandler (5 handlers)
+[GIN-debug] GET    /api/v1/file/:fileUuid    --> github.com/sanguohot/medichain/server.GetFileHandler (5 handlers)
+[GIN-debug] GET    /api/v1/file_log          --> github.com/sanguohot/medichain/server.GetFileAddLogListHandler (5 handlers)
+[GIN-debug] GET    /api/v1/file_log/:fileUuid --> github.com/sanguohot/medichain/server.GetFileAddLogDetailHandler (5 handlers)
+listen tcp 0.0.0.0:8443: bind: address already in use
