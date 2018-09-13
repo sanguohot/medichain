@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/server/middle"
+	_ "github.com/sanguohot/medichain/timer"
 	"io/ioutil"
 	"log"
 	"net/http"

@@ -2,18 +2,17 @@ package chain
 
 import (
 	"context"
-	"fmt"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/google/uuid"
-	"math/big"
 	"github.com/sanguohot/medichain/contracts/medi"
 	"github.com/sanguohot/medichain/datacenter"
 	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/util"
+	"math/big"
 	"strings"
 )
 
@@ -57,7 +56,6 @@ func ChainGetFileAddLogList(fromBlock int64, toBlock int64) (error, []datacenter
 }
 
 func rangeLogsToGetFileAddLogList(contractAbi abi.ABI, address common.Address, logs []types.Log, topic common.Hash) (error, []datacenter.FileAddLog) {
-	fmt.Printf("FilesData contract %s logs ===> %d\n", address.Hex(), len(logs))
 	fl := []datacenter.FileAddLog{}
 	for _, log := range logs {
 		found := false
@@ -76,9 +74,6 @@ func rangeLogsToGetFileAddLogList(contractAbi abi.ABI, address common.Address, l
 		}
 		fl = append(fl, *f)
 	}
-	if len(fl) == 0 {
-		return util.ErrMatchLogNotFound, nil
-	}
 	return nil, fl
 }
 func parseEventToFileAddLog(contractAbi abi.ABI, address common.Address, log types.Log) (error, *datacenter.FileAddLog) {
@@ -96,7 +91,6 @@ func parseEventToFileAddLog(contractAbi abi.ABI, address common.Address, log typ
 		V uint8
 		Time *big.Int
 	}
-	fmt.Println("TxHash ===>", log.TxHash.Hex())
 	// 参数一是事件参数构造的对象
 	// 参数二是事件函数名，不是合约函数名
 	// 参数三是事件的数据
@@ -152,5 +146,5 @@ func ChainGetFileAddLogListAll() (error, []datacenter.FileAddLog) {
 	if max >= header.Number.Uint64() {
 		return nil, []datacenter.FileAddLog{}
 	}
-	return ChainGetFileAddLogList(int64(max), header.Number.Int64())
+	return ChainGetFileAddLogList(int64(max+1), header.Number.Int64())
 }

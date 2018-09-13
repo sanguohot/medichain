@@ -1,16 +1,16 @@
-package deploy
+package contracts
 
 import (
-	"fmt"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/sanguohot/medichain/contracts/medi" // for demo
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/sanguohot/medichain/util"
-	"github.com/sanguohot/medichain/etc"
 	"context"
+	"fmt"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	authContract "github.com/sanguohot/medichain/contracts/auth"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/sanguohot/medichain/chain"
+	authContract "github.com/sanguohot/medichain/contracts/auth"
+	"github.com/sanguohot/medichain/contracts/medi" // for demo
+	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/util"
 	"log"
 )
 

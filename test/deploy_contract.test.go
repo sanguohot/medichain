@@ -1,8 +1,8 @@
 package main
 
-import "github.com/sanguohot/medichain/deploy"
+import "github.com/sanguohot/medichain/contracts"
 
 func main() {
-	//deploy.DeployEasyCns(false)
-	deploy.DeployAllByDefaultEasyCnsAddress(false)
+	//contracts.DeployEasyCns(false)
+	contracts.DeployAllByDefaultEasyCnsAddress(false)
 }

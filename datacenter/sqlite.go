@@ -28,6 +28,8 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	if len(fl) == 0 {
 		return nil
 	}
+	fmt.Printf("sqlite: now set []FileAddLog %d\n", len(fl))
+	fmt.Println(fl)
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
 	if err != nil {
 		return err
@@ -79,7 +81,7 @@ func SqliteGetFileAddLogList(fileUuid, orgUuid, ownerUuid string, start, limit u
 		limitQuery = fmt.Sprintf("LIMIT %d OFFSET %d", limit, start)
 	}
 	sql := fmt.Sprintf("SELECT * FROM tbl_file_add_event_log WHERE 1=1 %s %s %s ORDER BY CreateTime DESC %s", ownerQuery, fileQuery, orgQuery, limitQuery)
-	fmt.Println(sql)
+	fmt.Printf("sqlite: %s\n", sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
 	if err != nil {
@@ -105,7 +107,7 @@ func SqliteGetFileAddLogMaxBlockNum() (error, uint64) {
 	}
 	defer db.Close()
 	sql := "SELECT MAX(BlockNum) FROM tbl_file_add_event_log"
-	fmt.Println(sql)
+	fmt.Printf("sqlite: %s\n", sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
 	if err != nil {
@@ -147,7 +149,7 @@ func SqliteGetFileAddLogTotal(fileUuid, orgUuid, ownerUuid string) (error, uint6
 		fileQuery = fmt.Sprintf("AND FileUuid=\"%s\"", fileUuid)
 	}
 	sql := fmt.Sprintf("SELECT COUNT(*) FROM tbl_file_add_event_log WHERE 1=1 %s %s %s", ownerQuery, fileQuery, orgQuery)
-	fmt.Println(sql)
+	fmt.Printf("sqlite: %s\n", sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
 	if err != nil {
