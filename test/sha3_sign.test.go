@@ -24,8 +24,8 @@ func main() {
 		log.Fatal("error casting public key to ECDSA")
 	}
 	publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
-
-	data := []byte("hello world")
+	fmt.Println("publicKey ===>", hexutil.Encode(publicKeyBytes))
+	data := []byte("hello")
 	hash := crypto.Keccak256Hash(data)
 	fmt.Println("data ===>", string(data))
 	fmt.Println("keccak256Hash ===>", hash.Hex())
