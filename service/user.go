@@ -1,14 +1,13 @@
 package service
 
 import (
+	"fmt"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/google/uuid"
-	"github.com/luopotaotao/IdValidator/src/idvalidator"
-	"github.com/sanguohot/medichain/util"
 	"github.com/sanguohot/medichain/chain"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"fmt"
+	"github.com/sanguohot/medichain/util"
 )
 
 type UserAction struct {
@@ -19,9 +18,12 @@ type UserAction struct {
 	TransactionHash       common.Hash `json:"transactionHash"`
 }
 func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserAction) {
-	if ok, err := idvalidator.Validate(idCartNo); !ok {
-		return fmt.Errorf("身份证%s", err.Error()), nil
+	if idCartNo == "" {
+		return fmt.Errorf("身份证不能为空"), nil
 	}
+	//if ok, err := idvalidator.Validate(idCartNo); !ok {
+	//	return fmt.Errorf("身份证%s", err.Error()), nil
+	//}
 	if password == "" {
 		return util.ErrPwdRequire, nil
 	}
