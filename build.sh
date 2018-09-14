@@ -1,12 +1,4 @@
 #!/bin/bash
-set -o errexit
-TAG=$MEDICHAIN_TAG
-if [ ! $TAG ]; then  
-  echo "MEDICHAIN_TAG env not set, e.g. 1.0,2.0,latest"
-  exit 1
-fi 
-DOCKER_IMG=sanguohot/medichain:$TAG
-docker build --force-rm=true -t ${DOCKER_IMG} .
-docker push ${DOCKER_IMG}
-docker images|grep none|awk '{print $3 }'|xargs docker rmi
-docker rmi ${DOCKER_IMG}
+
+GO11MODULE=on
+go build --ldflags "-linkmode external -extldflags -static" -a -o main -v
