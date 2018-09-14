@@ -6,5 +6,7 @@ if [ ! $TAG ]; then
   exit 1
 fi 
 DOCKER_IMG=sanguohot/medichain:$TAG
-docker build . -t ${DOCKER_IMG}
+docker build --force-rm=true -t ${DOCKER_IMG} .
 docker push ${DOCKER_IMG}
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
+docker rmi ${DOCKER_IMG}
