@@ -56,4 +56,13 @@ require (
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
 )
 
-replace github.com/ethereum/go-ethereum v1.8.15 => github.com/sanguohot/go-ethereum v1.8.14-0.20180905013405-eb10ed570864
+replace (
+	github.com/ethereum/go-ethereum v1.8.15 => github.com/sanguohot/go-ethereum v1.8.14-0.20180905013405-eb10ed570864
+	golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b => github.com/golang/crypto v0.0.0-20180910181607-0e37d006457b // indirect
+	golang.org/x/net v0.0.0-20180906233101-161cd47e91fd => github.com/golang/net v0.0.0-20180906233101-161cd47e91fd // indirect
+	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f => github.com/golang/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
+	golang.org/x/sys v0.0.0-20180906133057-8cf3aee42992 => github.com/golang/sys v0.0.0-20180906133057-8cf3aee42992
+	golang.org/x/text v0.3.0 => github.com/golang/text v0.3.0
+	golang.org/x/tools v0.0.0-20180910180008-18207bb12d3a => github.com/golang/tools v0.0.0-20180910180008-18207bb12d3a // indirect
+
+)

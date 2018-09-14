@@ -17,6 +17,7 @@ github.com/ethereum/go-ethereum/crypto
 github.com/ethereum/go-ethereum/accounts
 github.com/ethereum/go-ethereum/accounts/keystore
 github.com/ethereum/go-ethereum/crypto/ecies
+github.com/ethereum/go-ethereum/crypto/secp256k1
 github.com/ethereum/go-ethereum/crypto/sha3
 github.com/ethereum/go-ethereum/rlp
 github.com/ethereum/go-ethereum/rpc
@@ -25,7 +26,6 @@ github.com/ethereum/go-ethereum/log
 github.com/ethereum/go-ethereum/params
 github.com/ethereum/go-ethereum/trie
 github.com/ethereum/go-ethereum/common/mclock
-github.com/ethereum/go-ethereum/crypto/secp256k1
 github.com/ethereum/go-ethereum/p2p/netutil
 github.com/ethereum/go-ethereum/ethdb
 github.com/ethereum/go-ethereum/metrics
@@ -120,14 +120,14 @@ github.com/ugorji/go/codec
 github.com/urfave/cli
 # github.com/vedranvuk/magnet v0.0.0-20130912231909-9a8503cc3543
 github.com/vedranvuk/magnet
-# golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b
+# golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b => github.com/golang/crypto v0.0.0-20180910181607-0e37d006457b
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/scrypt
-# golang.org/x/net v0.0.0-20180906233101-161cd47e91fd
+# golang.org/x/net v0.0.0-20180906233101-161cd47e91fd => github.com/golang/net v0.0.0-20180906233101-161cd47e91fd
 golang.org/x/net/websocket
-# golang.org/x/sys v0.0.0-20180906133057-8cf3aee42992
+# golang.org/x/sys v0.0.0-20180906133057-8cf3aee42992 => github.com/golang/sys v0.0.0-20180906133057-8cf3aee42992
 golang.org/x/sys/unix
-# golang.org/x/text v0.3.0
+# golang.org/x/text v0.3.0 => github.com/golang/text v0.3.0
 golang.org/x/text/encoding/simplifiedchinese
 golang.org/x/text/transform
 golang.org/x/text/encoding
@@ -140,7 +140,7 @@ golang.org/x/text/encoding/unicode
 golang.org/x/text/unicode/norm
 golang.org/x/text/internal/utf8internal
 golang.org/x/text/runes
-# golang.org/x/tools v0.0.0-20180910180008-18207bb12d3a
+# golang.org/x/tools v0.0.0-20180910180008-18207bb12d3a => github.com/golang/tools v0.0.0-20180910180008-18207bb12d3a
 golang.org/x/tools/imports
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/internal/fastwalk
