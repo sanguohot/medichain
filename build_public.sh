@@ -1,12 +1,15 @@
 #!/bin/bash
 set -o errexit
-TAG=$MEDICHAIN_TAG
-if [ ! $TAG ]; then  
-  echo "MEDICHAIN_TAG env not set, e.g. 1.0,2.0,latest"
+IMG=
+if [ $1 ]; then
+  IMG=$1
+elif [ $MEDICHAIN_IMG ]; then
+    IMG=$MEDICHAIN_IMG
+else
+  echo "MEDICHAIN_IMG env or param required, e.g. sanguohot/medichain:1.0,sanguohot/medichain:latest"
   exit 1
-fi 
-DOCKER_IMG=sanguohot/medichain:$TAG
-docker build --force-rm=true -t ${DOCKER_IMG} .
-docker push ${DOCKER_IMG}
+fi
+docker build --force-rm=true -t ${IMG} .
+docker push ${IMG}
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
-docker rmi ${DOCKER_IMG}
+docker rmi ${IMG}
