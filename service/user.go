@@ -28,8 +28,6 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserA
 		return util.ErrPwdRequire, nil
 	}
 	orgUuid := [16]byte{}
-	// do not user the following code, because it is not zero to all bytes
-	//orgUuid := uuid.UUID{}
 	if orgUuidStr != "" {
 		orgUuid, err := uuid.Parse(orgUuidStr)
 		if err != nil {
@@ -53,7 +51,8 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserA
 		return err, nil
 	}
 	if isExist {
-		return util.ErrUserExist, nil
+		//return util.ErrUserExist, nil
+		return GetUserByIdCartNoHash(idCartNoHash)
 	}
 	_, publicKeyECDSA, address, err := util.NewWallet(password)
 	userUuidNew := uuid.New()
@@ -69,4 +68,22 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserA
 		TransactionHash: *txHash,
 	}
 	return nil, &user
+}
+
+func GetUserByIdCartNoHash(hash common.Hash) (error, *UserAction) {
+	userUuid, err := chain.UsersDataGetUuidByIdCartNoHash(hash)
+	if err != nil {
+		return err, nil
+	}
+	err, address, _, publicKey, _, _ := chain.ControllerGetUserByUuid(*userUuid)
+	if err != nil {
+		return err, nil
+	}
+	return nil, &UserAction{
+		Address: address,
+		UUID: *userUuid,
+		PublicKey: hexutil.Encode(util.Bytes32_2ToBytes(publicKey))[4:],
+		IDCartNoHash: hash,
+		TransactionHash: common.Hash{},
+	}
 }

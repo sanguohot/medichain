@@ -37,7 +37,9 @@ func AddOrg(name string, password string) (error, *OrgAction) {
 	}
 	hash := util.Bytes32_4Hash(*bytes32_4)
 	err = checkOrgNameHash(hash)
-	if err != nil {
+	if err == util.ErrOrgExist {
+		return GetOrgByNameHash(hash)
+	}else if err != nil {
 		return err, nil
 	}
 	orgUuid := uuid.New()
@@ -54,4 +56,22 @@ func AddOrg(name string, password string) (error, *OrgAction) {
 		TransactionHash: *txHash,
 	}
 	return nil, &org
+}
+
+func GetOrgByNameHash(hash common.Hash) (error, *OrgAction) {
+	orgUuid, err := chain.OrgsDataGetUuidByNameHash(hash)
+	if err != nil {
+		return err, nil
+	}
+	err, address, publicKey, nameHash, _, _ := chain.ControllerGetOrgByUuid(*orgUuid)
+	if err != nil {
+		return err, nil
+	}
+	return nil, &OrgAction{
+		Address: address,
+		UUID: *orgUuid,
+		PublicKey: hexutil.Encode(util.Bytes32_2ToBytes(publicKey))[4:],
+		NameHash: nameHash,
+		TransactionHash: common.Hash{},
+	}
 }
