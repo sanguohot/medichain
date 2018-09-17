@@ -2,6 +2,7 @@ package util
 
 import (
 	"math/big"
+	"os"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -132,4 +133,12 @@ func RSVtoSig(r [32]byte, s [32]byte, v uint8) []byte {
 	vStrByte := []byte{v}
 	copy(sig[64:65], vStrByte[:])
 	return sig
+}
+
+func FilePathExist(_path string) bool {
+	_, err := os.Stat(_path)
+	if err != nil && os.IsNotExist(err) {
+		return false
+	}
+	return true
 }

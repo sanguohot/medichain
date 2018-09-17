@@ -5,6 +5,10 @@ import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/util"
+	"io/ioutil"
+	"log"
+	"os"
 )
 type FileAddLog struct {
 	FileUuid	string
@@ -24,6 +28,32 @@ type FileAddLog struct {
 	TransactionHash	string
 	ContractAddress	string
 }
+func init()  {
+	if !util.FilePathExist(etc.GetSqliteFilePath()) {
+		if !util.FilePathExist(etc.GetSqliteFileAddLogPath()) {
+			log.Fatal(fmt.Errorf("sqlite: not found %s", etc.GetSqliteFileAddLogPath()))
+		}
+		_, err := os.Create(etc.GetSqliteFilePath())
+		if err != nil {
+			log.Fatal(err)
+		}
+		db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
+		defer db.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+		data, err := ioutil.ReadFile(etc.GetSqliteFileAddLogPath())
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(etc.GetSqliteFileAddLogPath(), "===>", string(data))
+		_, err = db.Exec(string(data))
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
 func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	if fl == nil || len(fl) == 0 {
 		return nil

@@ -25,7 +25,8 @@
 		}
 	},
 	"sqlite": {
-		"file_name": "medichain.db"
+		"file_name": "medichain.db",
+		"file_add_log_name": "tbl_file_add_event_log.sql"
 	},
 	"bcos": {
 		"host": {
