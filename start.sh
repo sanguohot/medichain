@@ -1,11 +1,12 @@
+#!/bin/bash
 set -o errexit
-TAG=$MEDICHAIN_TAG
-if [ ! $TAG ]; then
-  echo "MEDICHAIN_TAG env not set, e.g. 1.0,2.0,latest"
-  exit 1
+source shell/docker_img.sh
+IMG=$(SetDockerImg $1)
+if [[ ${IMG} == error:* ]]; then
+    echo "${IMG}"
+    exit 1
 fi
-IMG=sanguohot/medichain:$TAG
-SERVER_PATH=/opt/medichain
+SERVER_PATH=$(pwd)
 docker run -it -d --name medichain \
 -v ${SERVER_PATH}/key:/root/key \
 -v ${SERVER_PATH}/etc:/root/etc \
@@ -13,3 +14,4 @@ docker run -it -d --name medichain \
 -v ${SERVER_PATH}/databases:/root/databases \
 -p 8443:8443 \
 ${IMG}
+
