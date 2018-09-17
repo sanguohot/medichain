@@ -27,10 +27,10 @@ spec:
           mountPath: /root/etc # 这里是路径
         - name: ${MEDICHAIN_NAME}-keystore-volume
           mountPath: /root/keystore # 这里是容器目录
-          subPath: ${MEDICHAIN_NAME}/keystore # 这里是ceph卷里面的目录
+          subPath: data/blockchain/medichain/keystore # 这里是ceph卷里面的目录
         - name: ${MEDICHAIN_NAME}-databases-volume
           mountPath: /root/databases
-          subPath: ${MEDICHAIN_NAME}/databases
+          subPath: data/blockchain/medichain/databases
       volumes:
       - name: ${MEDICHAIN_NAME}-databases-volume
         persistentVolumeClaim:
