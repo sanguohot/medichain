@@ -30,27 +30,28 @@ type FileAddLog struct {
 }
 func init()  {
 	if !util.FilePathExist(etc.GetSqliteFilePath()) {
-		if !util.FilePathExist(etc.GetSqliteFileAddLogPath()) {
-			log.Fatal(fmt.Errorf("sqlite: not found %s", etc.GetSqliteFileAddLogPath()))
-		}
 		_, err := os.Create(etc.GetSqliteFilePath())
 		if err != nil {
 			log.Fatal(err)
 		}
-		db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
-		defer db.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
-		data, err := ioutil.ReadFile(etc.GetSqliteFileAddLogPath())
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(etc.GetSqliteFileAddLogPath(), "===>", string(data))
-		_, err = db.Exec(string(data))
-		if err != nil {
-			log.Fatal(err)
-		}
+	}
+	// 确保sql可以重复执行 也就是包含IF NOT EXISTS
+	if !util.FilePathExist(etc.GetSqliteFileAddLogPath()) {
+		log.Fatal(fmt.Errorf("sqlite: not found %s", etc.GetSqliteFileAddLogPath()))
+	}
+	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
+	defer db.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	data, err := ioutil.ReadFile(etc.GetSqliteFileAddLogPath())
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(etc.GetSqliteFileAddLogPath(), "===>", string(data))
+	_, err = db.Exec(string(data))
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
