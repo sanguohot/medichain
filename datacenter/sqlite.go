@@ -25,7 +25,7 @@ type FileAddLog struct {
 	ContractAddress	string
 }
 func SqliteSetFileAddLogList(fl []FileAddLog) error {
-	if len(fl) == 0 {
+	if fl == nil || len(fl) == 0 {
 		return nil
 	}
 	fmt.Printf("sqlite: now set []FileAddLog %d\n", len(fl))

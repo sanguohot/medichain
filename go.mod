@@ -5,6 +5,7 @@ require (
 	github.com/aristanetworks/goarista v0.0.0-20180907105523-ff33da284e76 // indirect
 	github.com/btcsuite/btcd v0.0.0-20180903232927-cff30e1d23fc // indirect
 	github.com/cespare/cp v1.0.0 // indirect
+	github.com/cweill/gotests v1.5.2 // indirect
 	github.com/deckarep/golang-set v0.0.0-20180831180637-cbaa98ba5575 // indirect
 	github.com/edsrzf/mmap-go v0.0.0-20170320065105-0bce6a688712 // indirect
 	github.com/ethereum/go-ethereum v1.8.15
