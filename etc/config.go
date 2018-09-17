@@ -174,5 +174,5 @@ func GetSqliteFilePath() string {
 	return path.Join(GetServerDir(), "databases", GetViperConfig().GetString("sqlite.file_name"))
 }
 func GetSqliteFileAddLogPath() string {
-	return path.Join(GetServerDir(), "databases", GetViperConfig().GetString("sqlite.file_add_log_name"))
+	return path.Join(GetServerDir(), "sql", GetViperConfig().GetString("sqlite.file_add_log_name"))
 }
