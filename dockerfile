@@ -13,6 +13,7 @@ FROM busybox:1.28
 WORKDIR /root/
 ENV MEDICHAIN_PATH=/root
 COPY ca-certificates.crt /etc/ssl/certs/
+COPY etc/config.json ./etc
 COPY --from=0 /opt/medichain/main .
 EXPOSE 8443/tcp
 ENTRYPOINT ["./main"]
