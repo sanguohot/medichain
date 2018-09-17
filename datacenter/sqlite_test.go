@@ -1,11 +1,16 @@
 package datacenter
 
 import (
+	"github.com/sanguohot/medichain/etc"
 	"reflect"
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
 )
+
+func init()  {
+	etc.InitConfig("../etc/config.json")
+}
 
 func TestSqliteSetFileAddLogList(t *testing.T) {
 	type args struct {
@@ -47,7 +52,7 @@ func TestSqliteGetFileAddLogList(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := SqliteGetFileAddLogList(tt.args.fileUuid, tt.args.orgUuid, tt.args.ownerUuid, tt.args.start, tt.args.limit)
+			err, got := SqliteGetFileAddLogList(tt.args.fileUuid, tt.args.orgUuid, tt.args.ownerUuid, tt.args.start, tt.args.limit)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("SqliteGetFileAddLogList() error = %v, wantErr %v", err, tt.wantErr)
 				return
