@@ -55,8 +55,6 @@ data:
         }
       }
     }
-  sql: |
-
 kind: ConfigMap
 metadata:
   name: ${MEDICHAIN_NAME}-configmap
