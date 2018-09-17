@@ -61,7 +61,7 @@ func main() {
 		log.Fatal(err)
 	}
 	err, fa, fb, fc, fd, fe, ff, fg :=  chain.ControllerGetFileByUuid(fileUuid)
-	fmt.Println("fa84d023-7e54-427d-9d64-c91e2a040dd0 ====>", uuid.UUID(fa), uuid.UUID(fb), common.Hash(fc).Hex(), util.Bytes32_4ToString(fd), common.Hash(fe).Hex(), common.Hash(ff).Hex(), fg)
+	fmt.Println("fa84d023-7e54-427d-9d64-c91e2a040dd0 ====>", uuid.UUID(fa), uuid.UUID(fb), uuid.UUID(fc), common.Hash(fd).Hex(), util.Bytes32_4ToString(fe), common.Hash(ff).Hex(), common.Hash(fg).Hex())
 	err, action := service.GetFileSignerAndDataList("fa84d023-7e54-427d-9d64-c91e2a040dd0", "0", "10")
 	if err != nil {
 		log.Fatal(err)
