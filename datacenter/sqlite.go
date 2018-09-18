@@ -59,8 +59,7 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	if fl == nil || len(fl) == 0 {
 		return nil
 	}
-	fmt.Printf("sqlite: now set []FileAddLog %d\n", len(fl))
-	fmt.Println(fl)
+	fmt.Printf("sqlite: now insert []FileAddLog %d\n", len(fl))
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
 	if err != nil {
 		return err
