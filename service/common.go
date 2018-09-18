@@ -9,7 +9,7 @@ var (
 	defaultStartStr = "0"
 	defaultLimitStr = "10"
 )
-func TransformPagingParamFromStringToBigInt(startStr string, limitStr string) (error, *big.Int, *big.Int) {
+func transformPagingParamFromStringToBigInt(startStr string, limitStr string) (error, *big.Int, *big.Int) {
 	if startStr == "" {
 		startStr = defaultStartStr
 	}

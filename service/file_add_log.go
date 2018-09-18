@@ -58,7 +58,7 @@ func GetFileAddLogList(idCartNo, orgUuidStr, startStr, limitStr string) (error, 
 		}
 		ownerUuidStr = uuid.String()
 	}
-	err, startBig, limitBig := TransformPagingParamFromStringToBigInt(startStr, limitStr)
+	err, startBig, limitBig := transformPagingParamFromStringToBigInt(startStr, limitStr)
 	if err != nil {
 		return err, nil
 	}

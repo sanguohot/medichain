@@ -219,7 +219,7 @@ func GetFileSignerAndDataList(fileUuidStr string, startStr, limitStr string) (er
 	if err != nil {
 		return err, nil
 	}
-	err, startBig, limitBig := TransformPagingParamFromStringToBigInt(startStr, limitStr)
+	err, startBig, limitBig := transformPagingParamFromStringToBigInt(startStr, limitStr)
 	if err != nil {
 		return err, nil
 	}
