@@ -82,6 +82,9 @@ func doReq(req *http.Request, isJsonRes bool) (*BigDataResponse, []byte, error) 
 	}
 }
 func UploadToBigDataCenter(fileBytes []byte) error {
+	if fileBytes == nil || len(fileBytes) == 0 {
+		return fmt.Errorf("%s:UploadToBigDataCenter(fileBytes []byte)", util.ErrParamShouldNotNil.Error())
+	}
 	buf := new(bytes.Buffer)
 	w := multipart.NewWriter(buf)
 	// do not set 0x
@@ -115,6 +118,10 @@ func UploadToBigDataCenter(fileBytes []byte) error {
 }
 
 func DownloadFromBigDataCenter(sha256Hash common.Hash) ([]byte, error) {
+	emptyHash := common.Hash{}
+	if sha256Hash == emptyHash {
+		return nil, fmt.Errorf("%s:DownloadFromBigDataCenter(sha256Hash common.Hash)", util.ErrParamShouldNotNil.Error())
+	}
 	url := fmt.Sprintf("http://%s%s?sha=%s", serverAddr, downloadPath, sha256Hash.Hex()[2:])
 	fmt.Println("DownloadFromBigDataCenter ===>", url)
 	req, err := getReqWrapper("GET", url, nil)
@@ -127,7 +134,7 @@ func DownloadFromBigDataCenter(sha256Hash common.Hash) ([]byte, error) {
 
 func CreateFolderInBigDataCenter(folderName string) (string, error) {
 	if folderName == "" {
-		return "", util.ErrParamShouldNotNil
+		return "", fmt.Errorf("%s:CreateFolderInBigDataCenter(folderName string)", util.ErrParamShouldNotNil.Error())
 	}
 	url := fmt.Sprintf("http://%s%s?name=%s", serverAddr, createFolderPath, folderName)
 	fmt.Println("DownloadFromBigDataCenter ===>", url)
