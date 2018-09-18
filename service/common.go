@@ -9,7 +9,7 @@ var (
 	defaultStartStr = "0"
 	defaultLimitStr = "10"
 )
-func transformPagingParamFromStringToBigInt(startStr string, limitStr string) (error, *big.Int, *big.Int) {
+func transformPagingParamFromStringToBigInt(startStr, limitStr string) (error, *big.Int, *big.Int) {
 	if startStr == "" {
 		startStr = defaultStartStr
 	}
@@ -28,4 +28,25 @@ func transformPagingParamFromStringToBigInt(startStr string, limitStr string) (e
 		return util.ErrParamPagingInvalid, nil, nil
 	}
 	return nil, big.NewInt(startInt64), big.NewInt(limitInt64)
+}
+
+func transformTimeParamFromStringToUint64(fromTimeStr, toTimeStr string) (error, uint64, uint64) {
+	if fromTimeStr == "" {
+		fromTimeStr = "0"
+	}
+	if toTimeStr == "" {
+		toTimeStr = "0"
+	}
+	fromTimeInt64, err := strconv.ParseInt(fromTimeStr, 10, 64)
+	if err != nil {
+		return err, 0, 0
+	}
+	toTimeInt64, err := strconv.ParseInt(toTimeStr, 10, 64)
+	if err != nil {
+		return err, 0, 0
+	}
+	if fromTimeInt64 < 0 || toTimeInt64 < 0 {
+		return util.ErrParamPagingInvalid, 0, 0
+	}
+	return nil, uint64(fromTimeInt64), uint64(toTimeInt64)
 }

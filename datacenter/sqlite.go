@@ -61,10 +61,10 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	}
 	fmt.Printf("sqlite: now insert []FileAddLog %d\n", len(fl))
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
+	defer db.Close()
 	if err != nil {
 		return err
 	}
-	defer db.Close()
 	stmt, err := db.Prepare("INSERT  OR IGNORE INTO tbl_file_add_event_log(FileUuid, OwnerUuid, UploaderUuid, OrgUuid, FileTypeHash, FileType" +
 		", FileDesc, Keccak256Hash, Sha256Hash, CreateTime, Signature, Signer, BlockNum, BlockHash, TransactionHash" +
 			", ContractAddress) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
@@ -86,31 +86,13 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	return nil
 }
 
-func SqliteGetFileAddLogList(fileUuid, orgUuid, ownerUuid string, start, limit uint64) (error, []FileAddLog) {
+func SqliteGetFileAddLogList(fileUuid, orgUuid, ownerUuid string, fromTime, toTime, start, limit uint64) (error, []FileAddLog) {
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
+	defer db.Close()
 	if err != nil {
 		return err, nil
 	}
-	defer db.Close()
-	var (
-		ownerQuery string
-		fileQuery string
-		limitQuery string
-		orgQuery string
-	)
-	if ownerUuid != "" {
-		ownerQuery = fmt.Sprintf("AND OwnerUuid=\"%s\"", ownerUuid)
-	}
-	if orgUuid != "" {
-		orgQuery = fmt.Sprintf("AND OrgUuid=\"%s\"", orgUuid)
-	}
-	if fileUuid != "" {
-		fileQuery = fmt.Sprintf("AND FileUuid=\"%s\"", fileUuid)
-	}
-	if limit > 0 {
-		limitQuery = fmt.Sprintf("LIMIT %d OFFSET %d", limit, start)
-	}
-	sql := fmt.Sprintf("SELECT * FROM tbl_file_add_event_log WHERE 1=1 %s %s %s ORDER BY CreateTime DESC %s", ownerQuery, fileQuery, orgQuery, limitQuery)
+	sql := getFileAddLogQuerySql(false, fileUuid, orgUuid, ownerUuid, fromTime, toTime, start, limit)
 	fmt.Printf("sqlite: %s\n", sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
@@ -132,10 +114,10 @@ func SqliteGetFileAddLogList(fileUuid, orgUuid, ownerUuid string, start, limit u
 
 func SqliteGetFileAddLogMaxBlockNum() (error, uint64) {
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
+	defer db.Close()
 	if err != nil {
 		return err, 0
 	}
-	defer db.Close()
 	sql := "SELECT MAX(BlockNum) FROM tbl_file_add_event_log"
 	//fmt.Printf("sqlite: %s\n", sql)
 	rows, err := db.Query(sql)
@@ -158,27 +140,13 @@ func SqliteGetFileAddLogMaxBlockNum() (error, uint64) {
 	return nil, *blockNum
 }
 
-func SqliteGetFileAddLogTotal(fileUuid, orgUuid, ownerUuid string) (error, uint64) {
+func SqliteGetFileAddLogTotal(fileUuid, orgUuid, ownerUuid string, fromTime, toTime uint64) (error, uint64) {
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
+	defer db.Close()
 	if err != nil {
 		return err, 0
 	}
-	defer db.Close()
-	var (
-		ownerQuery string
-		fileQuery string
-		orgQuery string
-	)
-	if ownerUuid != "" {
-		ownerQuery = fmt.Sprintf("AND OwnerUuid=\"%s\"", ownerUuid)
-	}
-	if orgUuid != "" {
-		orgQuery = fmt.Sprintf("AND OrgUuid=\"%s\"", orgUuid)
-	}
-	if fileUuid != "" {
-		fileQuery = fmt.Sprintf("AND FileUuid=\"%s\"", fileUuid)
-	}
-	sql := fmt.Sprintf("SELECT COUNT(*) FROM tbl_file_add_event_log WHERE 1=1 %s %s %s", ownerQuery, fileQuery, orgQuery)
+	sql := getFileAddLogQuerySql(true, fileUuid, orgUuid, ownerUuid, fromTime, toTime, 0, 0)
 	fmt.Printf("sqlite: %s\n", sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
@@ -198,4 +166,33 @@ func SqliteGetFileAddLogTotal(fileUuid, orgUuid, ownerUuid string) (error, uint6
 		break
 	}
 	return nil, *count
+}
+
+func getFileAddLogQuerySql(isCount bool, fileUuid, orgUuid, ownerUuid string, fromTime, toTime, start, limit uint64) string {
+	sql := "SELECT * FROM tbl_file_add_event_log WHERE 1=1"
+	if isCount  {
+		sql = "SELECT COUNT(*) FROM tbl_file_add_event_log WHERE 1=1"
+	}
+	if ownerUuid != "" {
+		sql = fmt.Sprintf("%s AND OwnerUuid=\"%s\"", sql, ownerUuid)
+	}
+	if orgUuid != "" {
+		sql = fmt.Sprintf("%s AND OrgUuid=\"%s\"", sql, orgUuid)
+	}
+	if fileUuid != "" {
+		sql = fmt.Sprintf("%s AND FileUuid=\"%s\"", sql, fileUuid)
+	}
+	if fromTime > 0 {
+		sql = fmt.Sprintf("%s AND CreateTime>=%d", sql, fromTime)
+	}
+	if toTime > 0 {
+		sql = fmt.Sprintf("%s AND CreateTime<=%d", sql, toTime)
+	}
+	if !isCount {
+		sql = fmt.Sprintf("%s ORDER BY CreateTime DESC", sql)
+	}
+	if limit > 0 {
+		sql = fmt.Sprintf("%s LIMIT %d OFFSET %d", sql, limit, start)
+	}
+	return sql
 }

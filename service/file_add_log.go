@@ -32,7 +32,7 @@ func SetFileAddLogList() error {
 	return nil
 }
 
-func GetFileAddLogList(idCartNo, orgUuidStr, startStr, limitStr string) (error, *FileAddLogSimpleAction) {
+func GetFileAddLogList(idCartNo, orgUuidStr, fromTimeStr, toTimeStr, startStr, limitStr string) (error, *FileAddLogSimpleAction) {
 	if orgUuidStr != ""{
 		orgUuid, err := uuid.Parse(orgUuidStr)
 		if err != nil {
@@ -62,12 +62,16 @@ func GetFileAddLogList(idCartNo, orgUuidStr, startStr, limitStr string) (error, 
 	if err != nil {
 		return err, nil
 	}
-	err, total := datacenter.SqliteGetFileAddLogTotal("", orgUuidStr, ownerUuidStr)
+	err, fromTime, toTime := transformTimeParamFromStringToUint64(fromTimeStr, toTimeStr)
+	if err != nil {
+		return err, nil
+	}
+	err, total := datacenter.SqliteGetFileAddLogTotal("", orgUuidStr, ownerUuidStr, fromTime, toTime)
 	if err != nil {
 		return err, nil
 	}
 	if total > 0 {
-		err, fl = datacenter.SqliteGetFileAddLogList("", orgUuidStr, ownerUuidStr, startBig.Uint64(), limitBig.Uint64())
+		err, fl = datacenter.SqliteGetFileAddLogList("", orgUuidStr, ownerUuidStr, fromTime, toTime, startBig.Uint64(), limitBig.Uint64())
 		if err != nil {
 			return err, nil
 		}
@@ -95,7 +99,7 @@ func GetFileAddLogDetail(fileUuidStr string) (error, *datacenter.FileAddLog) {
 	if err != nil {
 		return err, nil
 	}
-	err, fl := datacenter.SqliteGetFileAddLogList(fileUuidStr, "", "", 0, 0)
+	err, fl := datacenter.SqliteGetFileAddLogList(fileUuidStr, "", "", 0, 0,0, 0)
 	if err != nil {
 		return err, nil
 	}

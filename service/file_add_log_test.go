@@ -28,6 +28,8 @@ func TestGetFileAddLogList(t *testing.T) {
 	type args struct {
 		idCartNo   string
 		orgUuidStr string
+		fromTimeStr   string
+		toTimeStr   string
 		startStr   string
 		limitStr   string
 	}
@@ -38,11 +40,11 @@ func TestGetFileAddLogList(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: Add test cases.
-		{"", args{"", "", "", ""}, nil, false},
+		{"", args{"", "", "", "", "", ""}, nil, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err, got := GetFileAddLogList(tt.args.idCartNo, tt.args.orgUuidStr, tt.args.startStr, tt.args.limitStr)
+			err, got := GetFileAddLogList(tt.args.idCartNo, tt.args.orgUuidStr, tt.args.fromTimeStr, tt.args.toTimeStr, tt.args.startStr, tt.args.limitStr)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetFileAddLogList() error = %v, wantErr %v", err, tt.wantErr)
 				return

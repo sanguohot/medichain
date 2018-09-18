@@ -101,7 +101,9 @@ func GetFileAddLogListHandler(c *gin.Context) {
 	limitStr := c.Query("limit")
 	idCartNo := c.Query("idCartNo")
 	orgUuidStr := c.Query("orgUuid")
-	err, list := service.GetFileAddLogList(idCartNo, orgUuidStr, startStr, limitStr)
+	fromTimeStr := c.Query("fromTime")
+	toTimeStr := c.Query("toTime")
+	err, list := service.GetFileAddLogList(idCartNo, orgUuidStr, fromTimeStr, toTimeStr, startStr, limitStr)
 	DoJsonResponse(c, err, list)
 }
 
