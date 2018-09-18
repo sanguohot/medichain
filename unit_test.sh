@@ -7,6 +7,7 @@ echo "with diretory ${MEDICHAIN_PATH}"
 module_array=(\
 chain \
 datacenter \
+service \
 )
 for data in ${module_array[@]}
 do
