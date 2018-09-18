@@ -1,6 +1,7 @@
 #!/bin/bash
 set -o errexit
 echo "now going to do unit test..."
+mkdir -p ./databases
 export MEDICHAIN_PATH=$(pwd)
 echo "with diretory ${MEDICHAIN_PATH}"
 module_array=(\
