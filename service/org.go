@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/google/uuid"
 	"github.com/sanguohot/medichain/util"
@@ -31,6 +32,9 @@ func checkOrgNameHash(hash common.Hash) error {
 	return err
 }
 func AddOrg(name string, password string) (error, *OrgAction) {
+	if name == "" || password == "" {
+		return fmt.Errorf("%s:AddOrg(name string, password string)", util.ErrParamShouldNotNil.Error()), nil
+	}
 	bytes32_4, err := util.StringToBytes32_4(name)
 	if err != nil {
 		return err, nil
@@ -59,6 +63,10 @@ func AddOrg(name string, password string) (error, *OrgAction) {
 }
 
 func GetOrgByNameHash(hash common.Hash) (error, *OrgAction) {
+	emptyHash := common.Hash{}
+	if hash == emptyHash {
+		return fmt.Errorf("%s:GetOrgByNameHash(hash common.Hash)", util.ErrParamShouldNotNil.Error()), nil
+	}
 	orgUuid, err := chain.OrgsDataGetUuidByNameHash(hash)
 	if err != nil {
 		return err, nil

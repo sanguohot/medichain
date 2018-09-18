@@ -71,6 +71,10 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserA
 }
 
 func GetUserByIdCartNoHash(hash common.Hash) (error, *UserAction) {
+	emptyHash := common.Hash{}
+	if hash == emptyHash {
+		return fmt.Errorf("%s:GetUserByIdCartNoHash(hash common.Hash)", util.ErrParamShouldNotNil.Error()), nil
+	}
 	userUuid, err := chain.UsersDataGetUuidByIdCartNoHash(hash)
 	if err != nil {
 		return err, nil
