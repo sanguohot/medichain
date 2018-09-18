@@ -1,16 +1,11 @@
 package datacenter
 
 import (
-	"github.com/sanguohot/medichain/etc"
 	"reflect"
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
 )
-
-func init()  {
-	etc.InitConfig("../etc/config.json")
-}
 
 func TestSqliteSetFileAddLogList(t *testing.T) {
 	type args struct {

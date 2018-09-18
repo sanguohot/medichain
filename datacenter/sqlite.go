@@ -48,7 +48,7 @@ func init()  {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(etc.GetSqliteFileAddLogPath(), "===>", string(data))
+	//fmt.Println(etc.GetSqliteFileAddLogPath(), "===>", string(data))
 	_, err = db.Exec(string(data))
 	if err != nil {
 		log.Fatal(err)

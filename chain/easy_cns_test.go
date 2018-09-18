@@ -7,9 +7,6 @@ import (
 	"time"
 )
 
-func init()  {
-	etc.InitConfig("../etc/config.json")
-}
 func TestGetCnsInstance(t *testing.T)  {
 	if err, _ := GetCnsInstance(); err != nil {
 		t.Error(etc.TEST_FAIL)

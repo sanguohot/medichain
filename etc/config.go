@@ -1,6 +1,7 @@
 package etc
 
 import (
+	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/spf13/viper"
@@ -60,7 +61,7 @@ type ConfigStruct struct {
 }
 
 var (
-	defaultFilePath  = "./etc/config.json"
+	defaultFilePath  = "/etc/config.json"
 	ViperConfig *viper.Viper
 	Config *ConfigStruct
 	ContractUsersData = "UsersData"
@@ -87,10 +88,11 @@ func init()  {
 	if serverPath == "" {
 		log.Fatal("MEDICHAIN_PATH env required")
 	}
-	InitConfig(defaultFilePath)
+	InitConfig(path.Join(GetServerDir(), defaultFilePath))
 	initFileTypeMap()
 }
 func InitConfig(filePath string) {
+	fmt.Printf("config: init config path %s\n", filePath)
 	ViperConfig = viper.New()
 	if filePath == "" {
 		ViperConfig.SetConfigFile(defaultFilePath)

@@ -8,9 +8,6 @@ import (
 	"testing"
 )
 
-func init()  {
-	etc.InitConfig("../etc/config.json")
-}
 func TestGetControllerInstance(t *testing.T)  {
 	if err, _ := GetControllerInstance(); err != nil {
 		t.Error(etc.TEST_FAIL)
