@@ -42,7 +42,7 @@ spec:
         configMap:
           name: ${MEDICHAIN_NAME}-configmap
           items:
-          - key: first # 使用configmap里面key对应的数据
+          - key: config.json # 使用configmap里面key对应的数据
             path: config.json # 代表/root/etc/config.json文件
       restartPolicy: Always
 
