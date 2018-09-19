@@ -37,6 +37,8 @@ github.com/golang/sys v0.0.0-20180906133057-8cf3aee42992 h1:QwHJNnHk4wxkbXNHtFnC
 github.com/golang/sys v0.0.0-20180906133057-8cf3aee42992/go.mod h1:5JyrLPvD/ZdaYkT7IqKhsP5xt7aLjA99KXRtk4EIYDk=
 github.com/golang/text v0.3.0 h1:uI5zIUA9cg047ctlTptnVc0Ghjfurf2eZMFrod8R7v8=
 github.com/golang/text v0.3.0/go.mod h1:GUiq9pdJKRKKAZXiVgWFEvocYuREvC14NhI4OPgEjeE=
+github.com/golang/tools v0.0.0-20180910180008-18207bb12d3a h1:WVUORX0TREp7kH4k6aj830nmadR1kCp5Wu6csslrK2E=
+github.com/golang/tools v0.0.0-20180910180008-18207bb12d3a/go.mod h1:BZR6KJOI/IQ5FlSQroxL7yevEMRCz1dARTXHD9s4mHE=
 github.com/google/uuid v1.0.0 h1:b4Gk+7WdP/d3HZH8EJsZpvV7EtDOgaZLtnaNGIu1adA=
 github.com/google/uuid v1.0.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/hashicorp/golang-lru v0.5.0 h1:CL2msUPvZTLb5O648aiLNJw3hnBxN2+1Jq8rCOH9wdo=

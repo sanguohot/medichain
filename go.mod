@@ -68,4 +68,5 @@ replace (
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f => github.com/golang/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
 	golang.org/x/sys v0.0.0-20180906133057-8cf3aee42992 => github.com/golang/sys v0.0.0-20180906133057-8cf3aee42992
 	golang.org/x/text v0.3.0 => github.com/golang/text v0.3.0
+	golang.org/x/tools v0.0.0-20180910180008-18207bb12d3a => github.com/golang/tools v0.0.0-20180910180008-18207bb12d3a // indirect
 )
