@@ -10,6 +10,7 @@ import (
 	"github.com/sanguohot/medichain/datacenter"
 	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/zap"
 )
 
 type FileAction struct {
@@ -140,7 +141,10 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc 
 	// 上传到大数据库
 	err = datacenter.UploadToBigDataCenter(file)
 	if err != nil {
-		return err, nil
+		if err.Error() != "文件上传失败或者已经存在" {
+			return err, nil
+		}
+		zap.Sugar.Infof("upload file return %s, but it maybe successful because of it is shared by test/prod/pre env", err.Error())
 	}
 	fileAction := FileAction{
 		UUID: fileUuid,
