@@ -40,7 +40,6 @@ require (
 	github.com/spf13/viper v1.2.0
 	github.com/stretchr/testify v1.2.2 // indirect
 	github.com/syndtr/goleveldb v0.0.0-20180815032940-ae2bd5eed72d // indirect
-	github.com/uber-go/zap v1.9.1
 	github.com/ugorji/go/codec v0.0.0-20180831062425-e253f1f20942 // indirect
 	github.com/urfave/cli v1.20.0
 	github.com/vedranvuk/magnet v0.0.0-20130912231909-9a8503cc3543
