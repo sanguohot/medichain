@@ -11,6 +11,7 @@ import (
 	"github.com/sanguohot/medichain/contracts/medi" // for demo
 	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/zap"
 )
 
 func DeployContract(cnsAddress *common.Address, contract string) (error, *common.Address, *common.Hash) {

@@ -48,8 +48,18 @@
 		},
 		"keystore": "/keystore",
 		"easy_cns": {
-			"address": "0x178838F5d7d0a6eC4c54Bc969d3d79d81e69b20C",
-			"tx": "0x54a2fbd906abce260932c6a7dfeb05c9512f65eaad07ad7a771d3eb385d5fa18"
+			"pre": {
+				"address": "0xE5E7a9137Bb46f57Cd71F9220803BEf47BE758b6",
+				"tx": "0x8d5280f229472fbab9838f4742010c6622c47f9f1cc616cb4e6625790c933d19"
+			},
+			"prod": {
+				"address": "0x1c3D437b579Fbd7b6B38fE04A5d9b00d474C0252",
+				"tx": "0x0dfaea320838aed790f25b8fcf3dba879ce82a18bb549caba2a92958631cc2c3"
+			},
+			"test": {
+				"address": "0x178838F5d7d0a6eC4c54Bc969d3d79d81e69b20C",
+				"tx": "0x54a2fbd906abce260932c6a7dfeb05c9512f65eaad07ad7a771d3eb385d5fa18"
+			}
 		}
     }
 }
