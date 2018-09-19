@@ -5,7 +5,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/sanguohot/medichain/zap"
-	uberZap "go.uber.org/zap"
 	"github.com/spf13/viper"
 	"os"
 	"path"
@@ -77,6 +76,7 @@ var (
 	FileTypeList = []string{"预约", "接诊", "影像采集", "治疗方案", "诊断报告"}
 	FileTypeMap = map[common.Hash]string{}
 	serverPath = os.Getenv("MEDICHAIN_PATH")
+	defaultServerType = "test"
 	serverType = os.Getenv("MEDICHAIN_TYPE")
 	serverTypeMap = map[string]bool{"pre":true, "prod":true, "test":true}
 )
@@ -95,8 +95,9 @@ func init()  {
 		zap.Logger.Fatal("MEDICHAIN_TYPE env required")
 	}
 	if !serverTypeMap[serverType] {
-		zap.Logger.Fatal("MEDICHAIN_TYPE env not supported", uberZap.String("MEDICHAIN_TYPE", serverType))
+		serverType = defaultServerType
 	}
+	zap.Sugar.Infof("MEDICHAIN_TYPE is %s", serverType)
 	InitConfig(path.Join(GetServerDir(), defaultFilePath))
 	initFileTypeMap()
 }
