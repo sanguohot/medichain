@@ -1,12 +1,11 @@
 package main
 
 import (
-	"github.com/sanguohot/medichain/datacenter"
-	"fmt"
-	"github.com/sanguohot/medichain/util"
-	"io/ioutil"
 	"bytes"
-	"log"
+	"github.com/sanguohot/medichain/datacenter"
+	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/zap"
+	"io/ioutil"
 )
 
 func main() {
@@ -15,31 +14,28 @@ func main() {
 	if err != nil {
 		_, err2 := datacenter.CreateFolderInBigDataCenter(datacenter.FolderName)
 		if err2 != nil {
-			log.Fatal(err2)
+			zap.Logger.Fatal(err2.Error())
 		}
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}
-	fmt.Println("bigDataItemList size ===>", len(bigDataItemList))
-
+	zap.Sugar.Infof("bigDataItemList size %d", len(bigDataItemList))
 	fileName := "e:/evan/test.txt"
 	fileBytesUp, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		log.Fatal(err)
-		return
+		zap.Logger.Fatal(err.Error())
 	}
 	sha256Hash := util.Sha256Hash(fileBytesUp)
-	fmt.Println("begin upload ===>", fileName, sha256Hash.Hex())
+	zap.Sugar.Infof("bigDataItemList size %d", len(bigDataItemList))
 	err = datacenter.UploadToBigDataCenter(fileBytesUp)
 	if err != nil {
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}
-	fmt.Println("upload success ===>", fileName, sha256Hash.Hex())
+	zap.Sugar.Infof("upload success %s %s", fileName, sha256Hash.Hex())
 	fileBytesDown, err := datacenter.DownloadFromBigDataCenter(sha256Hash)
 	if err != nil {
-		fmt.Println(err)
-		return
+		zap.Logger.Fatal(err.Error())
 	}
-	fmt.Printf("\ndownload file length %d", len(fileBytesDown))
-	fmt.Println("\nbytes.Equal(fileBytesUp, fileBytesDown) ===>", bytes.Equal(fileBytesUp, fileBytesDown))
-	fmt.Println(string(fileBytesDown))
+	zap.Sugar.Infof("\ndownload file length %d", len(fileBytesDown))
+	zap.Sugar.Infof("\nbytes.Equal(fileBytesUp, fileBytesDown)=%v", bytes.Equal(fileBytesUp, fileBytesDown))
+	zap.Sugar.Info(string(fileBytesDown))
 }

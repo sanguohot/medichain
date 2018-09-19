@@ -1,12 +1,13 @@
 package chain
 
 import (
-	"fmt"
-	"github.com/sanguohot/medichain/etc"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ethereum/go-ethereum/common"
 	"context"
+	"fmt"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/zap"
 	"time"
 )
 
@@ -26,7 +27,7 @@ func CheckReceiptStatus(txHash common.Hash) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%s receipt logs len %d, status %d\n", txHash.Hex(), len(receipt.Logs), receipt.Status)
+	zap.Sugar.Infof("%s receipt logs len %d, status %d", txHash.Hex(), len(receipt.Logs), receipt.Status)
 	if len(receipt.Logs) <= 0 {
 		return util.ErrContractExeFail
 	}

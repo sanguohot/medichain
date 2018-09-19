@@ -11,7 +11,6 @@ import (
 	"github.com/sanguohot/medichain/contracts/medi" // for demo
 	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/util"
-	"log"
 )
 
 func DeployContract(cnsAddress *common.Address, contract string) (error, *common.Address, *common.Hash) {
@@ -65,14 +64,14 @@ func DeployContract(cnsAddress *common.Address, contract string) (error, *common
 func DeployEasyCns(forceDeploy bool)  {
 	cnsAddress := common.HexToAddress(etc.GetBcosEasyCnsAddress())
 	if util.IsValidAndNotZeroAddress(cnsAddress) && !forceDeploy {
-		log.Fatal(fmt.Errorf("%s:%s, 如果需要重新部署请设置forceDeploy=true", util.ErrContractAlreadyDeploy.Error(), cnsAddress.Hex()))
+		zap.Logger.Fatal(fmt.Errorf("%s:%s, 如果需要重新部署请设置forceDeploy=true", util.ErrContractAlreadyDeploy.Error(), cnsAddress.Hex()).Error())
 	}
 	err, address, hash := DeployContract(&cnsAddress, etc.ContractEasyCns)
 	if err != nil {
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}
-	fmt.Println("new easy cns address ===>", address.Hex())
-	fmt.Println("transaction hash ===>", hash.Hex())
+	zap.Sugar.Infof("new easy cns address ===> %s", address.Hex())
+	zap.Sugar.Infof("transaction hash ===> %s", hash.Hex())
 }
 func DeployAllByEasyCnsAddress(cnsAddress common.Address) error {
 	if !util.IsValidAndNotZeroAddress(cnsAddress) {
@@ -81,7 +80,7 @@ func DeployAllByEasyCnsAddress(cnsAddress common.Address) error {
 	if !util.IsValidAndNotZeroAddress(cnsAddress) {
 		return util.ErrParamCnsAddressShouldNotNil
 	}
-	fmt.Println("cnsAddress ===>", cnsAddress.Hex())
+	zap.Sugar.Infof("cnsAddress ===> %s", cnsAddress.Hex())
 	for key, value := range etc.ContractMap {
 		if value && key==etc.ContractEasyCns {
 			continue
@@ -93,35 +92,33 @@ func DeployAllByEasyCnsAddress(cnsAddress common.Address) error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("DeployContract %s tx sent: %s\n", key, hash.Hex())
-		//time.Sleep(time.Second * 1)
+		zap.Sugar.Infof("DeployContract %s tx sent: %s", key, hash.Hex())
 		err, hash = chain.SetAddressToCns(key, *address)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("SetAddressToCns %s ===> %s, tx sent: %s\n", key, address.Hex(), hash.Hex())
-		//time.Sleep(time.Second * 1)
+		zap.Sugar.Infof("SetAddressToCns %s ===> %s, tx sent: %s", key, address.Hex(), hash.Hex())
 	}
 	name := etc.ContractController
 	err, address := chain.GetAddressFromCns(name)
 	if err != nil {
 		return err
 	}
-	fmt.Println("ContractController address ===>", address.Hex())
+	zap.Sugar.Infof("ContractController address ===> %s", address.Hex())
 	if err, hash := chain.OrgsDataAddSuper(*address); err != nil {
 		return err
 	}else {
-		fmt.Printf("OrgsDataAddSuper %s, tx sent: %s\n", address.Hex(), hash.Hex())
+		zap.Sugar.Infof("OrgsDataAddSuper %s, tx sent: %s", address.Hex(), hash.Hex())
 	}
 	if err, hash := chain.UsersDataAddSuper(*address); err != nil {
 		return err
 	}else {
-		fmt.Printf("UsersDataAddSuper %s, tx sent: %s\n", address.Hex(), hash.Hex())
+		zap.Sugar.Infof("UsersDataAddSuper %s, tx sent: %s", address.Hex(), hash.Hex())
 	}
 	if err, hash := chain.FilesDataAddSuper(*address); err != nil {
 		return err
 	}else {
-		fmt.Printf("FilesDataAddSuper %s, tx sent: %s\n", address.Hex(), hash.Hex())
+		zap.Sugar.Infof("FilesDataAddSuper %s, tx sent: %s", address.Hex(), hash.Hex())
 	}
 	return nil
 }
@@ -133,13 +130,13 @@ func DeployAllByDefaultEasyCnsAddress(forceDeploy bool)  {
 		// 这里不要退出，可能是合约没有部署或者设置报错abi: unmarshalling empty output
 	}else {
 		if size.Uint64() > 0 && !forceDeploy {
-			log.Fatal(fmt.Errorf("%s, 如果需要重新部署请设置forceDeploy=true", util.ErrContractAlreadyDeploy.Error()))
+			zap.Logger.Fatal(fmt.Errorf("%s, 如果需要重新部署请设置forceDeploy=true", util.ErrContractAlreadyDeploy.Error()).Error())
 		}
 	}
 
 	if err := DeployAllByEasyCnsAddress(common.Address{}); err != nil {
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}else {
-		fmt.Println("deploy all contracts successfully!")
+		zap.Logger.Info("deploy all contracts successfully!")
 	}
 }

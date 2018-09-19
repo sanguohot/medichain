@@ -1,11 +1,10 @@
 package etc
 
 import (
-	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/sanguohot/medichain/zap"
 	"github.com/spf13/viper"
-	"log"
 	"os"
 	"path"
 )
@@ -86,13 +85,13 @@ func initFileTypeMap()  {
 }
 func init()  {
 	if serverPath == "" {
-		log.Fatal("MEDICHAIN_PATH env required")
+		zap.Logger.Fatal("MEDICHAIN_PATH env required")
 	}
 	InitConfig(path.Join(GetServerDir(), defaultFilePath))
 	initFileTypeMap()
 }
 func InitConfig(filePath string) {
-	fmt.Printf("config: init config path %s\n", filePath)
+	zap.Sugar.Infof("config: init config path %s", filePath)
 	ViperConfig = viper.New()
 	if filePath == "" {
 		ViperConfig.SetConfigFile(defaultFilePath)
@@ -103,12 +102,12 @@ func InitConfig(filePath string) {
 	err := ViperConfig.ReadInConfig()
 	if err != nil {
 		if filePath != defaultFilePath {
-			log.Fatal(err)
+			zap.Logger.Fatal(err.Error())
 		}
 	}
 	err = ViperConfig.Unmarshal(&Config)
 	if err != nil {
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}
 }
 func GetConfig() *ConfigStruct {

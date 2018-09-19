@@ -1,13 +1,14 @@
 package util
 
 import (
-	"github.com/ethereum/go-ethereum/crypto/sha3"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/common"
 	"crypto/md5"
 	"crypto/sha256"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/crypto/sha3"
+	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/sanguohot/medichain/zap"
 )
 
 func RlpHash(x interface{}) (h common.Hash) {
@@ -39,7 +40,7 @@ func PrintHexUseComma(data []byte)  {
 	}
 	str = fmt.Sprintf("%s,", str)
 	//0xed, 0x88, 0x60, 0x27, 0xbe, 0x89, 0x31, 0x62, 0x60, 0xab, 0x55, 0x21, 0x52, 0x48, 0xb5, 0x79, 0x98, 0x6c, 0xe2, 0x16, 0xce, 0xab, 0x58, 0x0b, 0x84, 0x51, 0x11, 0xc5, 0x01, 0x5b, 0xfd, 0x52,
-	fmt.Println(str)
+	zap.Sugar.Info(str)
 }
 
 func Bytes32_4Hash(input [4][32]byte) common.Hash {

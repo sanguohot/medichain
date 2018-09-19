@@ -2,11 +2,12 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"github.com/sanguohot/medichain/service"
-	"io/ioutil"
-	"fmt"
 	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/zap"
+	uberZap "go.uber.org/zap"
+	"io/ioutil"
+	"net/http"
 )
 func PongHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
@@ -20,6 +21,14 @@ func DoJsonResponse(c *gin.Context, err error, p interface{})  {
 			"Code": "FAIL",
 			"Message": err.Error(),
 		})
+		zap.Logger.Error(
+			err.Error(),
+			uberZap.String("remote", c.Request.RemoteAddr),
+			uberZap.String("method", c.Request.Method),
+			uberZap.String("url", c.Request.RequestURI),
+			uberZap.Any("form", c.Request.Form),
+			uberZap.Any("param", c.Params),
+		)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"Code": "SUCC",
@@ -55,7 +64,6 @@ func AddFileHandler(c *gin.Context) {
 	if err != nil {
 		DoJsonResponse(c, err, nil)
 	}
-	//fmt.Println("header.Filename ===>", header.Filename)
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		DoJsonResponse(c, err, nil)
@@ -83,7 +91,7 @@ func GetFileHandler(c *gin.Context) {
 	// charset=utf-8
 	// application/octet-stream
 	defaultDetect := util.DetectContentType(file)
-	fmt.Printf("file %s content type auto detect ===> %s\n", fileUuidStr, defaultDetect)
+	zap.Sugar.Infof("file %s content type auto detect ===> %s", fileUuidStr, defaultDetect)
 	c.Data(http.StatusOK, defaultDetect, file)
 	//c.Data(http.StatusOK, "text/plain;charset=utf8;gbk", file)
 }

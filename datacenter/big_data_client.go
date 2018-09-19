@@ -1,17 +1,18 @@
 package datacenter
 
 import (
-	"io/ioutil"
-	"fmt"
-	"net/http"
-	"errors"
 	"bytes"
-	"mime/multipart"
-	"github.com/sanguohot/medichain/util"
-	"io"
 	"encoding/json"
-	"github.com/sanguohot/medichain/etc"
+	"errors"
+	"fmt"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/sanguohot/medichain/etc"
+	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/zap"
+	"io"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
 )
 
 var (
@@ -105,7 +106,7 @@ func UploadToBigDataCenter(fileBytes []byte) error {
 	}
 	w.Close()
 	url := fmt.Sprintf("http://%s%s", serverAddr, uploadPath)
-	fmt.Println("UploadToBigDataCenter ===>", url)
+	zap.Sugar.Infof("UploadToBigDataCenter %s", url)
 	req, err := getReqWrapper("POST", url, buf)
 	if err != nil {
 		return err
@@ -123,7 +124,7 @@ func DownloadFromBigDataCenter(sha256Hash common.Hash) ([]byte, error) {
 		return nil, fmt.Errorf("%s:DownloadFromBigDataCenter(sha256Hash common.Hash)", util.ErrParamShouldNotNil.Error())
 	}
 	url := fmt.Sprintf("http://%s%s?sha=%s", serverAddr, downloadPath, sha256Hash.Hex()[2:])
-	fmt.Println("DownloadFromBigDataCenter ===>", url)
+	zap.Sugar.Infof("DownloadFromBigDataCenter %s", url)
 	req, err := getReqWrapper("GET", url, nil)
 	var body []byte
 	if _, body, err = doReq(req, false); err != nil {
@@ -137,13 +138,13 @@ func CreateFolderInBigDataCenter(folderName string) (string, error) {
 		return "", fmt.Errorf("%s:CreateFolderInBigDataCenter(folderName string)", util.ErrParamShouldNotNil.Error())
 	}
 	url := fmt.Sprintf("http://%s%s?name=%s", serverAddr, createFolderPath, folderName)
-	fmt.Println("DownloadFromBigDataCenter ===>", url)
+	zap.Sugar.Infof("DownloadFromBigDataCenter %s", url)
 	req, err := getReqWrapper("POST", url, nil)
 	var bigDataResponse *BigDataResponse
 	if bigDataResponse, _, err = doReq(req, true); err != nil {
 		return "", err
 	}
-	fmt.Println("CreateFolderInBigDataCenter ===>", bigDataResponse)
+	zap.Sugar.Infof("CreateFolderInBigDataCenter %s", bigDataResponse)
 	return bigDataResponse.InfoMap.FolderCode, err
 }
 
@@ -152,7 +153,7 @@ func GetFilesInFolder(folderCode string) ([]BigDataItem, error) {
 	if folderCode != "" {
 		url = fmt.Sprintf("%s?folderCode=%s", url, folderCode)
 	}
-	fmt.Println("getFilesInFolder ===>", url)
+	zap.Sugar.Infof("GetFilesInFolder %s", url)
 	req, err := getReqWrapper("GET", url, nil)
 	var bigDataResponse *BigDataResponse
 	if bigDataResponse, _, err = doReq(req, true); err != nil {

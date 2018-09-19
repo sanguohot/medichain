@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/sanguohot/medichain/util"
 	"github.com/urfave/cli"
-	"log"
 	"os"
 	"time"
 )
@@ -33,6 +33,6 @@ func InitApp() error {
 func main() {
 	err := InitApp()
 	if err != nil {
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}
 }

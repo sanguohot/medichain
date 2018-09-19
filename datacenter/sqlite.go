@@ -6,8 +6,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/util"
+	"github.com/sanguohot/medichain/zap"
 	"io/ioutil"
-	"log"
 	"os"
 )
 type FileAddLog struct {
@@ -32,26 +32,25 @@ func init()  {
 	if !util.FilePathExist(etc.GetSqliteFilePath()) {
 		_, err := os.Create(etc.GetSqliteFilePath())
 		if err != nil {
-			log.Fatal(err)
+			zap.Logger.Fatal(err.Error())
 		}
 	}
 	// 确保sql可以重复执行 也就是包含IF NOT EXISTS
 	if !util.FilePathExist(etc.GetSqliteFileAddLogPath()) {
-		log.Fatal(fmt.Errorf("sqlite: not found %s", etc.GetSqliteFileAddLogPath()))
+		zap.Logger.Fatal(fmt.Errorf("sqlite: not found %s", etc.GetSqliteFileAddLogPath()).Error())
 	}
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
 	defer db.Close()
 	if err != nil {
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}
 	data, err := ioutil.ReadFile(etc.GetSqliteFileAddLogPath())
 	if err != nil {
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}
-	//fmt.Println(etc.GetSqliteFileAddLogPath(), "===>", string(data))
 	_, err = db.Exec(string(data))
 	if err != nil {
-		log.Fatal(err)
+		zap.Logger.Fatal(err.Error())
 	}
 }
 
@@ -59,7 +58,7 @@ func SqliteSetFileAddLogList(fl []FileAddLog) error {
 	if fl == nil || len(fl) == 0 {
 		return nil
 	}
-	fmt.Printf("sqlite: now insert []FileAddLog %d\n", len(fl))
+	zap.Sugar.Infof("sqlite: now insert []FileAddLog %d", len(fl))
 	db, err := sql.Open("sqlite3", etc.GetSqliteFilePath())
 	defer db.Close()
 	if err != nil {
@@ -93,7 +92,7 @@ func SqliteGetFileAddLogList(fileUuid, orgUuid, ownerUuid string, fromTime, toTi
 		return err, nil
 	}
 	sql := getFileAddLogQuerySql(false, fileUuid, orgUuid, ownerUuid, fromTime, toTime, start, limit)
-	fmt.Printf("sqlite: %s\n", sql)
+	zap.Sugar.Infof("sqlite: %s", sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
 	if err != nil {
@@ -147,7 +146,7 @@ func SqliteGetFileAddLogTotal(fileUuid, orgUuid, ownerUuid string, fromTime, toT
 		return err, 0
 	}
 	sql := getFileAddLogQuerySql(true, fileUuid, orgUuid, ownerUuid, fromTime, toTime, 0, 0)
-	fmt.Printf("sqlite: %s\n", sql)
+	zap.Sugar.Infof("sqlite: %s", sql)
 	rows, err := db.Query(sql)
 	defer rows.Close()
 	if err != nil {

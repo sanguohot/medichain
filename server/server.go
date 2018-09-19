@@ -8,8 +8,8 @@ import (
 	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/server/middle"
 	_ "github.com/sanguohot/medichain/timer"
+	"github.com/sanguohot/medichain/zap"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -43,12 +43,13 @@ func InitServer() {
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20, // 1 MB
 	}
+	zap.Sugar.Infof("server listening on %s", s.Addr)
 	if etc.GetServerTlsEnable() {
 		pool := x509.NewCertPool()
 		caCertPath := etc.GetServerPkiCa()
 		caCrt, err := ioutil.ReadFile(caCertPath)
 		if err != nil {
-			log.Fatal(err)
+			zap.Logger.Fatal(err.Error())
 		}
 		pool.AppendCertsFromPEM(caCrt)
 		tlsConfig := &tls.Config{
@@ -58,11 +59,11 @@ func InitServer() {
 			tlsConfig.ClientAuth = tls.RequireAndVerifyClientCert
 		}
 		if err := s.ListenAndServeTLS(etc.GetServerPkiCert(), etc.GetServerPkiKey()); err != nil {
-			log.Fatal(err)
+			zap.Logger.Fatal(err.Error())
 		}
 	}else {
 		if err := s.ListenAndServe(); err != nil {
-			log.Fatal(err)
+			zap.Logger.Fatal(err.Error())
 		}
 	}
 }

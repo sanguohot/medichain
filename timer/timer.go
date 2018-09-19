@@ -1,8 +1,8 @@
 package timer
 
 import (
-	"fmt"
 	"github.com/sanguohot/medichain/service"
+	"github.com/sanguohot/medichain/zap"
 	"time"
 )
 
@@ -13,11 +13,10 @@ func initFileAddLogTimer()  {
 		for _ = range tick {
 			err := service.SetFileAddLogList()
 			if err != nil {
-				fmt.Printf("timer: FileAddLogTimer error %s\n", err.Error())
+				zap.Sugar.Error(err.Error())
 			}
 		}
 	}()
-	fmt.Printf("timer: FileAddLogTimer start %v.\n", time.Now())
 }
 func init() {
 	initFileAddLogTimer()
