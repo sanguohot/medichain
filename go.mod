@@ -62,6 +62,8 @@ require (
 
 replace (
 	github.com/ethereum/go-ethereum v1.8.15 => github.com/sanguohot/go-ethereum v1.8.14-0.20180905013405-eb10ed570864
+	go.uber.org/atomic v1.3.2 => github.com/uber-go/atomic v1.3.2 // indirect
+	go.uber.org/multierr v1.1.0 => github.com/uber-go/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1 => github.com/uber-go/zap v1.9.1
 	golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b => github.com/golang/crypto v0.0.0-20180910181607-0e37d006457b // indirect
 	golang.org/x/net v0.0.0-20180906233101-161cd47e91fd => github.com/golang/net v0.0.0-20180906233101-161cd47e91fd // indirect
