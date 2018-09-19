@@ -1,5 +1,6 @@
 #!/bin/bash
 set -o errexit
+type go >/dev/null 2>&1 || { echo >&2 "go command required but it's not installed.  Aborting."; exit 1; }
 echo "now going to do unit test..."
 mkdir -p ./databases
 export MEDICHAIN_PATH=$(pwd)
