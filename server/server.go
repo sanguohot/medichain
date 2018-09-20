@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sanguohot/medichain/etc"
-	"github.com/sanguohot/medichain/server/middle"
 	_ "github.com/sanguohot/medichain/timer"
 	"github.com/sanguohot/medichain/zap"
 	"io/ioutil"
@@ -21,9 +20,8 @@ func init()  {
 func InitServer() {
 	r := gin.Default()
 	r.MaxMultipartMemory = 100 << 20 // 100 MB
-	r.Use(middle.UserAuthHandler)
-	r.Use(middle.FileAuthHandler)
 	r.GET("/ping", PongHandler)
+	r.GET("/ping_sleep_one_sec", PingSleepOneSecHandler)
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/user", AddUserHandler)
@@ -57,6 +55,8 @@ func InitServer() {
 		}
 		if etc.GetServerTlsVerifyPeer() {
 			tlsConfig.ClientAuth = tls.RequireAndVerifyClientCert
+		}else {
+			tlsConfig.ClientAuth = tls.NoClientCert
 		}
 		if err := s.ListenAndServeTLS(etc.GetServerPkiCert(), etc.GetServerPkiKey()); err != nil {
 			zap.Logger.Fatal(err.Error())

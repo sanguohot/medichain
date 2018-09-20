@@ -8,13 +8,19 @@ import (
 	uberZap "go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 func PongHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})
 }
-
+func PingSleepOneSecHandler(c *gin.Context) {
+	time.Sleep(time.Second)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "pong",
+	})
+}
 func DoJsonResponse(c *gin.Context, err error, p interface{})  {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
