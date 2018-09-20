@@ -20,8 +20,10 @@ func init()  {
 
 func InitServer() {
 	//r := gin.Default()
-	if etc.ServerTypeIsProduction() {
+	if etc.ServerTypeIsProdOrPre() {
 		gin.SetMode(gin.ReleaseMode)
+	}else {
+		gin.SetMode(gin.DebugMode)
 	}
 	r := gin.New()
 	r.Use(gin.Recovery())
