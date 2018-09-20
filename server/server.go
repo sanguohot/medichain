@@ -10,6 +10,7 @@ import (
 	"github.com/sanguohot/medichain/zap"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -18,7 +19,13 @@ func init()  {
 }
 
 func InitServer() {
-	r := gin.Default()
+	//r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Recovery())
+	// 默认设置logger，但启用logger会导致吞吐量大幅度降低，具体查看benmark/wrk/output.txt
+	if os.Getenv("GIN_LOG") != "off" {
+		r.Use(gin.Logger())
+	}
 	r.MaxMultipartMemory = 100 << 20 // 100 MB
 	r.GET("/ping", PongHandler)
 	r.GET("/ping_sleep_one_sec", PingSleepOneSecHandler)

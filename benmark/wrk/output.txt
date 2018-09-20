@@ -1,0 +1,42 @@
+服务器和压测机配置统一
+8核心Intel Core Processor (Broadwell)
+16G内存
+CentOS Linux release 7.4.1708 (Core)
+
+注意去掉日志中间件，否则测试值有十倍的差距
+因为ping直接返回，流量很高，cpu占用也会非常高，我们无需太高并发连接数
+2000并发连接
+# wrk -t16 -c2000 -d60s http://10.6.250.55:8443/ping
+Running 1m test @ http://10.6.250.55:8443/ping
+  16 threads and 2000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    83.58ms  144.84ms   1.97s    91.15%
+    Req/Sec     5.33k     1.31k   18.70k    79.87%
+  5077717 requests in 1.00m, 682.79MB read
+  Socket errors: connect 0, read 0, write 0, timeout 55
+Requests/sec:  84589.95
+Transfer/sec:     11.37MB
+
+因为ping_sleep_one_sec会等待一秒钟，导致吞吐量大幅度下载，故而增加并发连接数
+10000并发连接，没有失败，吞吐量约8k，还可以继续增加
+# wrk -t16 -c10000 -d60s http://10.6.250.55:8443/ping_sleep_one_sec
+Running 1m test @ http://10.6.250.55:8443/ping_sleep_one_sec
+  16 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.00s    17.50ms   1.27s    99.09%
+    Req/Sec   528.74    489.19     2.94k    78.16%
+  470371 requests in 1.00m, 63.25MB read
+Requests/sec:   7828.96
+Transfer/sec:      1.05MB
+
+20000并发连接
+# wrk -t16 -c20000 -d60s http://10.6.250.55:8443/ping_sleep_one_sec
+Running 1m test @ http://10.6.250.55:8443/ping_sleep_one_sec
+  16 threads and 20000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.00s    29.90ms   1.93s    98.38%
+    Req/Sec     1.01k   767.13     5.23k    65.05%
+  908835 requests in 1.00m, 122.21MB read
+  Socket errors: connect 0, read 0, write 0, timeout 16
+Requests/sec:  15128.06
+Transfer/sec:      2.03MB
