@@ -1,0 +1,119 @@
+# fbender http throughput constraints \
+>     --target 10.6.250.55:8443 --duration 1m \
+>     --input test.txt --output results.json \
+>     1000 --growth +1000 --constraints "AVG(latency) < 20"
+Cleaning up the memory... Done.
+Preparing the test... Done.
+Running test: 1000
+ 1m0s [====================================================================] 60000 / 60000 100%
+Percentiles (1ms):
+ Min:     0
+ Median:  0
+ 90th:    0
+ 99th:    0
+ 99.9th:  1
+ 99.99th: 354
+ Max:     404
+Stats:
+ Average (1ms): 1.462800
+ Total requests: 60000
+ Elapsed Time (sec): 60.0511
+ Average QPS: 999.15
+ Errors: 0
+ Percent errors: 0.00
+Cleaning up the memory... Done.
+Preparing the test... Done.
+Running test: 2000
+ 1m0s [====================================================================] 120000 / 120000 100%
+Percentiles (1ms):
+ Min:     0
+ Median:  0
+ 90th:    0
+ 99th:    0
+ 99.9th:  0
+ 99.99th: 2
+ Max:     10
+Stats:
+ Average (1ms): 0.010725
+ Total requests: 120000
+ Elapsed Time (sec): 60.0966
+ Average QPS: 1996.78
+ Errors: 0
+ Percent errors: 0.00
+Cleaning up the memory... Done.
+Preparing the test... Done.
+Running test: 3000
+ 1m0s [====================================================================] 180000 / 180000 100%
+Percentiles (1ms):
+ Min:     0
+ Median:  0
+ 90th:    0
+ 99th:    0
+ 99.9th:  0
+ 99.99th: 2
+ Max:     9
+Stats:
+ Average (1ms): 0.012561
+ Total requests: 180000
+ Elapsed Time (sec): 60.1460
+ Average QPS: 2992.72
+ Errors: 0
+ Percent errors: 0.00
+Cleaning up the memory... Done.
+Preparing the test... Done.
+Running test: 4000
+ 1m0s [====================================================================] 240000 / 240000 100%
+Percentiles (1ms):
+ Min:     0
+ Median:  0
+ 90th:    0
+ 99th:    0
+ 99.9th:  1
+ 99.99th: 5
+ Max:     18
+Stats:
+ Average (1ms): 0.027563
+ Total requests: 240000
+ Elapsed Time (sec): 60.1999
+ Average QPS: 3986.72
+ Errors: 0
+ Percent errors: 0.00
+Cleaning up the memory... Done.
+Preparing the test... Done.
+Running test: 5000
+ 1m0s [====================================================================] 300000 / 300000 100%
+Percentiles (1ms):
+ Min:     0
+ Median:  0
+ 90th:    0
+ 99th:    0
+ 99.9th:  1
+ 99.99th: 3
+ Max:     5
+Stats:
+ Average (1ms): 0.022210
+ Total requests: 300000
+ Elapsed Time (sec): 60.2459
+ Average QPS: 4979.59
+ Errors: 0
+ Percent errors: 0.00
+Cleaning up the memory... Done.
+Preparing the test... Done.
+Running test: 6000
+1m42s [====================================================================] 360000 / 360000 100%
+Percentiles (1ms):
+ Min:     0
+ Median:  0
+ 90th:    2000
+ 99th:    2000
+ 99.9th:  2000
+ 99.99th: 2000
+ Max:     2000
+Stats:
+ Average (1ms): 3091.445761
+ Total requests: 360000
+ Elapsed Time (sec): 102.4614
+ Average QPS: 3513.52
+ Errors: 41836
+ Percent errors: 11.62
+Error checking "AVG(latency) < 20.00": unsatisfied 3091.7874 < 20.0000
