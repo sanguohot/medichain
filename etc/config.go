@@ -190,8 +190,8 @@ func GetSqliteFilePath() string {
 func GetSqliteFileAddLogPath() string {
 	return path.Join(GetServerDir(), "sql", GetViperConfig().GetString("sqlite.file_add_log_name"))
 }
-func ServerTypeIsProduction() bool {
-	if serverType == serverTypeProd {
+func ServerTypeIsProdOrPre() bool {
+	if serverType == serverTypeProd || serverType == serverTypePre {
 		return true
 	}
 	return false
