@@ -20,6 +20,9 @@ func init()  {
 
 func InitServer() {
 	//r := gin.Default()
+	if etc.ServerTypeIsProduction() {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	r := gin.New()
 	r.Use(gin.Recovery())
 	// 默认设置logger，但启用logger会导致吞吐量大幅度降低，具体查看benmark/wrk/output.txt

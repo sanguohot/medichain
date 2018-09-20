@@ -76,9 +76,11 @@ var (
 	FileTypeList = []string{"预约", "接诊", "影像采集", "治疗方案", "诊断报告"}
 	FileTypeMap = map[common.Hash]string{}
 	serverPath = os.Getenv("MEDICHAIN_PATH")
-	defaultServerType = "test"
 	serverType = os.Getenv("MEDICHAIN_TYPE")
-	serverTypeMap = map[string]bool{"pre":true, "prod":true, "test":true}
+	serverTypeTest = "test"
+	serverTypeProd = "prod"
+	serverTypePre = "pre"
+	serverTypeMap = map[string]bool{serverTypePre:true, serverTypeProd:true, serverTypeTest:true}
 )
 
 func initFileTypeMap()  {
@@ -95,7 +97,7 @@ func init()  {
 		zap.Logger.Fatal("MEDICHAIN_TYPE env required")
 	}
 	if !serverTypeMap[serverType] {
-		serverType = defaultServerType
+		serverType = serverTypeTest
 	}
 	zap.Sugar.Infof("MEDICHAIN_TYPE is %s", serverType)
 	InitConfig(path.Join(GetServerDir(), defaultFilePath))
@@ -187,4 +189,10 @@ func GetSqliteFilePath() string {
 }
 func GetSqliteFileAddLogPath() string {
 	return path.Join(GetServerDir(), "sql", GetViperConfig().GetString("sqlite.file_add_log_name"))
+}
+func ServerTypeIsProduction() bool {
+	if serverType == serverTypeProd {
+		return true
+	}
+	return false
 }
