@@ -13,6 +13,7 @@ func TestAddFile(t *testing.T) {
 		password      string
 		fileType      string
 		fileDesc      string
+		fileUrl       string
 		file          []byte
 		sha256HashStr string
 	}
@@ -23,11 +24,11 @@ func TestAddFile(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: Add test cases.
-		{"", args{"", "", "", "", "", "", nil, ""}, nil, true},
+		{"", args{"", "", "", "", "", "", "", nil, ""}, nil, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err, got := AddFile(tt.args.ownerUuidStr, tt.args.orgUuidStr, tt.args.addressStr, tt.args.password, tt.args.fileType, tt.args.fileDesc, tt.args.file, tt.args.sha256HashStr)
+			err, got := AddFile(tt.args.ownerUuidStr, tt.args.orgUuidStr, tt.args.addressStr, tt.args.password, tt.args.fileType, tt.args.fileDesc, tt.args.fileUrl, tt.args.file, tt.args.sha256HashStr)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("AddFile() error = %v, wantErr %v", err, tt.wantErr)
 				return
