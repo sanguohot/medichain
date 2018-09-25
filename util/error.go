@@ -13,7 +13,7 @@ var (
 	ErrPwdRequire = errors.New("密码不能为空")
 	ErrPublicKeyTransform = errors.New("公钥格式转换失败")
 	ErrUserExist = errors.New("用户已注册")
-	ErrUserNotExist = errors.New("用户不注册")
+	ErrUserNotExist = errors.New("用户未注册")
 	ErrOrgExist = errors.New("机构已注册")
 	ErrFileExist = errors.New("文件已存在")
 	ErrFileNotExist = errors.New("文件不存在")
