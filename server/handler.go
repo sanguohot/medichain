@@ -59,6 +59,10 @@ func AddOrgHandler(c *gin.Context) {
 }
 
 func AddFileHandler(c *gin.Context) {
+	var (
+		err error
+		fileBytes []byte
+	)
 	addressStr := c.PostForm("address")
 	password := c.PostForm("password")
 	ownerUuidStr := c.PostForm("ownerUuid")
@@ -67,13 +71,13 @@ func AddFileHandler(c *gin.Context) {
 	fileUrl := c.PostForm("fileUrl")
 	fileDesc := c.PostForm("fileDesc")
 	sha256Hash := c.PostForm("sha256Hash")
-	file, _ , err := c.Request.FormFile("file")
-	if err != nil {
-		DoJsonResponse(c, err, nil)
-	}
-	fileBytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		DoJsonResponse(c, err, nil)
+	file, fileHeader , _ := c.Request.FormFile("file")
+	if file != nil && fileHeader != nil && fileHeader.Size > 0 {
+		fileBytes, err = ioutil.ReadAll(file)
+		if err != nil {
+			DoJsonResponse(c, err, nil)
+			return
+		}
 	}
 	err, obj := service.AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc, fileUrl, fileBytes, sha256Hash)
 	DoJsonResponse(c, err, obj)
@@ -93,6 +97,7 @@ func GetFileHandler(c *gin.Context) {
 	err, file := service.GetFile(fileUuidStr)
 	if err != nil {
 		DoJsonResponse(c, err, nil)
+		return
 	}
 	c.Header("content-disposition", `attachment; filename=` + fileUuidStr)
 	// charset=utf-8

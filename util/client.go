@@ -1,9 +1,13 @@
 package util
 
 import (
+	"errors"
+	"fmt"
+	"github.com/sanguohot/medichain/zap"
+	"io/ioutil"
+	"net"
 	"net/http"
 	"time"
-	"net"
 )
 
 func NewTimeoutClient() *http.Client {
@@ -21,4 +25,25 @@ func NewTimeoutClient() *http.Client {
 		Transport: transport,
 	}
 	return client
+}
+
+func DownloadFromFileUrl(fileUrl string) ([]byte, error) {
+	if fileUrl == "" {
+		return nil, ErrParamShouldNotNil
+	}
+	zap.Sugar.Infof("DownloadFromFileUrl %s", fileUrl)
+	req, err := http.NewRequest("GET", fileUrl, nil)
+	res, err := NewTimeoutClient().Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		return nil, errors.New("resp status:" + fmt.Sprint(res.StatusCode))
+	}
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	return body, nil
 }

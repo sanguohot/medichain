@@ -3,9 +3,9 @@ package service
 import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/sanguohot/medichain/chain"
+	"github.com/sanguohot/medichain/util"
 	"github.com/sanguohot/medichain/zap"
 	"math/big"
-	"github.com/sanguohot/medichain/util"
 	"strconv"
 )
 var (

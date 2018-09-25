@@ -6,7 +6,6 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/google/uuid"
-	_ "github.com/parnurzeal/gorequest"
 	"github.com/sanguohot/medichain/chain"
 	"github.com/sanguohot/medichain/datacenter"
 	"github.com/sanguohot/medichain/etc"
@@ -86,11 +85,27 @@ func requireHashNotExist(keccak256Hash, sha256Hash common.Hash) error {
 	return nil
 }
 func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc, fileUrl string, file []byte, sha256HashStr string) (error, *FileAction) {
-	if sha256HashStr == "" {
+	var (
+		err error
+		sha256Hash common.Hash
+	)
+	if file != nil && sha256HashStr == "" {
 		return util.ErrParamdInvalid, nil
 	}
 	if file == nil && fileUrl == "" {
 		return util.ErrParamdInvalid, nil
+	}
+	if file == nil {
+		file, err = util.DownloadFromFileUrl(fileUrl)
+		if err != nil {
+			return err, nil
+		}
+		sha256Hash = util.Sha256Hash(file)
+	}else {
+		sha256Hash = common.HexToHash(sha256HashStr)
+		if sha256Hash != util.Sha256Hash(file) {
+			return util.ErrFileUploadNotComplete, nil
+		}
 	}
 	ownerUuid, err := uuid.Parse(ownerUuidStr)
 	if err != nil {
@@ -122,14 +137,7 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc,
 		return util.ErrInvalidAddress, nil
 	}
 	address := common.HexToAddress(addressStr)
-	sha256Hash := common.HexToHash(sha256HashStr)
-	if sha256Hash != util.Sha256Hash(file) {
-		return util.ErrFileUploadNotComplete, nil
-	}
 	// define them and check file type
-	//if file == nil {
-	//	_, body, errs := gorequest.New().Get("http://example.com/").End()
-	//}
 	fileTypeHash := crypto.Keccak256Hash([]byte(fileType))
 	if etc.FileTypeMap[fileTypeHash] != fileType {
 		return fmt.Errorf("%s ===> %s", util.ErrFileTypeNotSupport.Error(), fileType), nil
