@@ -8,7 +8,6 @@ import (
 	"github.com/sanguohot/medichain/etc"
 	"github.com/sanguohot/medichain/util"
 	"github.com/sanguohot/medichain/zap"
-	"time"
 )
 
 func GetEthDialClient() (*ethclient.Client, error) {
@@ -18,7 +17,12 @@ func GetEthDialClient() (*ethclient.Client, error) {
 
 func CheckReceiptStatus(txHash common.Hash) error {
 	// 一秒出块，需要延时一秒以上才能查询到交易结果
-	time.Sleep(time.Millisecond * 1100)
+	//time.Sleep(time.Millisecond * 1100)
+	//return CheckReceiptStatusWithoutWait(txHash)
+	return nil
+}
+
+func CheckReceiptStatusWithoutWait(txHash common.Hash) error {
 	client, err := GetEthDialClient()
 	if err != nil {
 		return err

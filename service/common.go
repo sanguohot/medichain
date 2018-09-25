@@ -1,6 +1,9 @@
 package service
 
 import (
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/sanguohot/medichain/chain"
+	"github.com/sanguohot/medichain/zap"
 	"math/big"
 	"github.com/sanguohot/medichain/util"
 	"strconv"
@@ -49,4 +52,18 @@ func transformTimeParamFromStringToUint64(fromTimeStr, toTimeStr string) (error,
 		return util.ErrParamPagingInvalid, 0, 0
 	}
 	return nil, uint64(fromTimeInt64), uint64(toTimeInt64)
+}
+
+func CheckTransactionResult(hashStr string) (bool) {
+	hash := common.HexToHash(hashStr)
+	emptyHash := common.Hash{}
+	if hash == emptyHash {
+		zap.Sugar.Error(util.ErrParamdInvalid.Error())
+		return false
+	}
+	if err := chain.CheckReceiptStatusWithoutWait(hash); err!=nil {
+		zap.Sugar.Error(err.Error())
+		return false
+	}
+	return true
 }

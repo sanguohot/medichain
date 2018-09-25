@@ -126,3 +126,11 @@ func GetFileAddLogDetailHandler(c *gin.Context) {
 	err, detail := service.GetFileAddLogDetail(fileUuid)
 	DoJsonResponse(c, err, detail)
 }
+
+func CheckTransactionResultHandler(c *gin.Context)  {
+	hashStr := c.Param("hash")
+	ok := service.CheckTransactionResult(hashStr)
+	DoJsonResponse(c, nil, struct {
+		TransationResult bool
+	}{TransationResult:ok})
+}

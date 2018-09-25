@@ -133,11 +133,6 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc 
 	if err != nil {
 		return err, nil
 	}
-	fileUuid := uuid.New()
-	err, txHash := chain.ControllerAddFile(fileUuid, ownerUuid, orgUuid, fileTypeHash, *fileDescBytes32_4, keccak256Hash, sha256Hash, address, password)
-	if err != nil {
-		return err, nil
-	}
 	// 上传到大数据库
 	err = datacenter.UploadToBigDataCenter(file)
 	if err != nil {
@@ -145,6 +140,11 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc 
 			return err, nil
 		}
 		zap.Sugar.Infof("upload file return %s, but it maybe successful because of it is shared by test/prod/pre env", err.Error())
+	}
+	fileUuid := uuid.New()
+	err, txHash := chain.ControllerAddFile(fileUuid, ownerUuid, orgUuid, fileTypeHash, *fileDescBytes32_4, keccak256Hash, sha256Hash, address, password)
+	if err != nil {
+		return err, nil
 	}
 	fileAction := FileAction{
 		UUID: fileUuid,

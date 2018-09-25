@@ -7,6 +7,7 @@ var (
 	ErrParamContractNotSupport = errors.New("合约名称不能为空")
 	ErrParamCnsAddressShouldNotNil = errors.New("命名合约地址不能为空")
 	ErrParamShouldNotNil = errors.New("参数不能为空")
+	ErrParamdInvalid = errors.New("参数非法")
 	ErrParamShouldNotMoreThan128Bytes = errors.New("参数不能大于128字节")
 	ErrParamShouldNotMoreThan64Bytes = errors.New("参数不能大于64字节")
 	ErrPublicKeyShouldEqualTo64Bytes = errors.New("公钥必须为64字节")
