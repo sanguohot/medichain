@@ -7,6 +7,7 @@ require (
 	github.com/cespare/cp v1.0.0 // indirect
 	github.com/deckarep/golang-set v0.0.0-20180831180637-cbaa98ba5575 // indirect
 	github.com/edsrzf/mmap-go v0.0.0-20170320065105-0bce6a688712 // indirect
+	github.com/elazarl/goproxy v0.0.0-20180725130230-947c36da3153 // indirect
 	github.com/ethereum/go-ethereum v1.8.15
 	github.com/fjl/memsize v0.0.0-20180427083637-f6d5545993d6 // indirect
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
@@ -15,11 +16,13 @@ require (
 	github.com/golang/protobuf v1.2.0 // indirect
 	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
 	github.com/google/uuid v1.0.0
+	github.com/gopherjs/gopherjs v0.0.0-20180825215210-0210a2f0f73c // indirect
 	github.com/hashicorp/golang-lru v0.5.0 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
 	github.com/huin/goupnp v0.0.0-20180415215157-1395d1447324 // indirect
 	github.com/jackpal/go-nat-pmp v1.0.1 // indirect
 	github.com/json-iterator/go v1.1.5 // indirect
+	github.com/jtolds/gls v4.2.1+incompatible // indirect
 	github.com/karalabe/hid v0.0.0-20180420081245-2b4488a37358 // indirect
 	github.com/luopotaotao/IdValidator v0.0.0-20170417064513-0c93c35562c6
 	github.com/mattn/go-colorable v0.0.9 // indirect
@@ -27,8 +30,10 @@ require (
 	github.com/mattn/go-sqlite3 v1.9.0
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/moul/http2curl v0.0.0-20170919181001-9ac6cf4d929b // indirect
 	github.com/onsi/ginkgo v1.6.0 // indirect
 	github.com/onsi/gomega v1.4.1 // indirect
+	github.com/parnurzeal/gorequest v0.2.15
 	github.com/pborman/uuid v0.0.0-20180909234540-25cd46ecac86 // indirect
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
@@ -36,6 +41,8 @@ require (
 	github.com/rs/cors v1.5.0 // indirect
 	github.com/sanguohot/chardet v0.0.0-20180903090850-20e22483e848
 	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24
+	github.com/smartystreets/assertions v0.0.0-20180820201707-7c9eb446e3cf // indirect
+	github.com/smartystreets/goconvey v0.0.0-20180222194500-ef6db91d284a // indirect
 	github.com/spacemonkeygo/openssl v0.0.0-20180905133406-3b86b4289698
 	github.com/spf13/viper v1.2.0
 	github.com/stretchr/testify v1.2.2 // indirect
