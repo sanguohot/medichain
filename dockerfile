@@ -9,7 +9,9 @@ RUN ls -al /opt/medichain
 #使用cgo并使用静态链接
 #RUN go build --ldflags "-linkmode external -extldflags -static" -a -o main -v
 #本地模块、cgo、全静态链接
-GOTEMP=$(mktemp -d) && GOPATH=$GOTEMP GOPROXY=file://$PWD/modvendor go build --ldflags "-linkmode external -extldflags -static" -a -o main -v && rm -rf $GOTEMP
+RUN GOTEMP=$(mktemp -d) && \
+    GOPATH=$GOTEMP GOPROXY=file://$PWD/modvendor go build --ldflags "-linkmode external -extldflags -static" -a -o main -v && \
+    rm -rf $GOTEMP
 
 FROM busybox:1.28
 WORKDIR /root/
