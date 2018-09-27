@@ -1,7 +1,6 @@
 FROM sanguohot/cgo:v1.11.0
 WORKDIR /opt/medichain
 COPY . .
-RUN ls -al /opt/medichain
 #禁用cgo
 #RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main -v
 #使用cgo并默认使用动态链接
