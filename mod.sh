@@ -1,3 +1,5 @@
+#!/bin/bash
+set -o errexit
 rm -rf modvendor
 tgp=$(mktemp -d)
 GOPROXY=file://$GOPATH/pkg/mod/cache/download GOPATH=$tgp go mod download
