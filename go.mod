@@ -11,20 +11,25 @@ require (
 	github.com/fjl/memsize v0.0.0-20180427083637-f6d5545993d6 // indirect
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v1.3.0
+	github.com/go-ini/ini v1.38.2 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/protobuf v1.2.0 // indirect
 	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
 	github.com/google/uuid v1.0.0
+	github.com/gopherjs/gopherjs v0.0.0-20180825215210-0210a2f0f73c // indirect
 	github.com/hashicorp/golang-lru v0.5.0 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
 	github.com/huin/goupnp v0.0.0-20180415215157-1395d1447324 // indirect
 	github.com/jackpal/go-nat-pmp v1.0.1 // indirect
 	github.com/json-iterator/go v1.1.5 // indirect
+	github.com/jtolds/gls v4.2.1+incompatible // indirect
 	github.com/karalabe/hid v0.0.0-20180420081245-2b4488a37358 // indirect
 	github.com/luopotaotao/IdValidator v0.0.0-20170417064513-0c93c35562c6
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mattn/go-sqlite3 v1.9.0
+	github.com/minio/minio-go v6.0.7+incompatible
+	github.com/mitchellh/go-homedir v1.0.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.6.0 // indirect
@@ -36,6 +41,8 @@ require (
 	github.com/rs/cors v1.5.0 // indirect
 	github.com/sanguohot/chardet v0.0.0-20180903090850-20e22483e848
 	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24
+	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
+	github.com/smartystreets/goconvey v0.0.0-20180222194500-ef6db91d284a // indirect
 	github.com/spacemonkeygo/openssl v0.0.0-20180905133406-3b86b4289698
 	github.com/spf13/viper v1.2.0
 	github.com/stretchr/testify v1.2.2 // indirect
@@ -54,6 +61,7 @@ require (
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
+	gopkg.in/ini.v1 v1.38.2 // indirect
 	gopkg.in/karalabe/cookiejar.v2 v2.0.0-20150724131613-8dcd6a7f4951 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
