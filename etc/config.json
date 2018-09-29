@@ -28,6 +28,14 @@
 		"file_name": "medichain.db",
 		"file_add_log_name": "tbl_file_add_event_log.sql"
 	},
+	"minio": {
+		"enable": true,
+		"secure": false,
+		"address": "10.6.250.49",
+		"port": 9000,
+		"access_key": "root",
+		"secret_key": "12345678"
+	},
 	"bcos": {
 		"host": {
 			"address": "10.6.250.55",

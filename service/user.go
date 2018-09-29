@@ -7,6 +7,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/google/uuid"
 	"github.com/sanguohot/medichain/chain"
+	"github.com/sanguohot/medichain/datacenter"
 	"github.com/sanguohot/medichain/util"
 )
 
@@ -67,6 +68,8 @@ func AddUser(orgUuidStr string, idCartNo string, password string) (error, *UserA
 		IDCartNoHash: idCartNoHash,
 		TransactionHash: *txHash,
 	}
+	// backup keystore to minio, this is goroutine
+	datacenter.SaveKeystoreToMinio(*address, password)
 	return nil, &user
 }
 

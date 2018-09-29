@@ -196,3 +196,22 @@ func ServerTypeIsProdOrPre() bool {
 	}
 	return false
 }
+
+func GetMinioEnable() bool {
+	return GetViperConfig().GetBool("minio.enable")
+}
+func GetMinioSecure() bool {
+	return GetViperConfig().GetBool("minio.secure")
+}
+func GetMinioAddress() string {
+	return GetViperConfig().GetString("minio.address")
+}
+func GetMinioPort() int {
+	return GetViperConfig().GetInt("minio.port")
+}
+func GetMinioAccessKey() string {
+	return GetViperConfig().GetString("minio.access_key")
+}
+func GetMinioSecretKey() string {
+	return GetViperConfig().GetString("minio.secret_key")
+}

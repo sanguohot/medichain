@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/google/uuid"
+	"github.com/sanguohot/medichain/datacenter"
 	"github.com/sanguohot/medichain/util"
 	"github.com/sanguohot/medichain/chain"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -59,6 +60,8 @@ func AddOrg(name string, password string) (error, *OrgAction) {
 		NameHash: hash,
 		TransactionHash: *txHash,
 	}
+	// backup keystore to minio, this is goroutine
+	datacenter.SaveKeystoreToMinio(*address, password)
 	return nil, &org
 }
 
