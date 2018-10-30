@@ -155,7 +155,7 @@ func AddFile(ownerUuidStr, orgUuidStr, addressStr, password, fileType, fileDesc,
 	err = datacenter.UploadToBigDataCenter(file)
 	if err != nil {
 		if err.Error() != "文件上传失败或者已经存在" {
-			return err, nil
+			return fmt.Errorf("大数据中心:%s", err.Error()), nil
 		}
 		zap.Sugar.Infof("upload file return %s, but it maybe successful because of it is shared by test/prod/pre env", err.Error())
 	}
