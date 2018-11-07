@@ -100,7 +100,7 @@ func init()  {
 		zap.Logger.Fatal("MEDICHAIN_PATH env required")
 	}
 	if !serverVendorMap[serverVendor] {
-		zap.Sugar.Warnf("MEDICHAIN_VENDOR not support or not set ===> %s, use default ===> %s", serverType, serverVendorAI)
+		zap.Sugar.Warnf("MEDICHAIN_VENDOR not support or not set ===> %s, use default ===> %s", serverVendor, serverVendorAI)
 		serverVendor = serverVendorAI
 	}
 	if !serverTypeMap[serverType] {
