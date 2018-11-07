@@ -80,7 +80,13 @@ var (
 	serverTypeTest = "test"
 	serverTypeProd = "prod"
 	serverTypePre = "pre"
+	serverVendor = os.Getenv("MEDICHAIN_VENDOR")
+	// AI医院
+	serverVendorAI = "ai"
+	// 赋能器
+	serverVendorEmpowering = "empowering"
 	serverTypeMap = map[string]bool{serverTypePre:true, serverTypeProd:true, serverTypeTest:true}
+	serverVendorMap = map[string]bool{serverVendorAI:true, serverVendorEmpowering:true}
 )
 
 func initFileTypeMap()  {
@@ -93,13 +99,17 @@ func init()  {
 	if serverPath == "" {
 		zap.Logger.Fatal("MEDICHAIN_PATH env required")
 	}
-	if serverPath == "" {
-		zap.Logger.Fatal("MEDICHAIN_TYPE env required")
+	if !serverVendorMap[serverVendor] {
+		zap.Sugar.Warnf("MEDICHAIN_VENDOR not support or not set ===> %s, use default ===> %s", serverType, serverVendorAI)
+		serverVendor = serverVendorAI
 	}
 	if !serverTypeMap[serverType] {
+		zap.Sugar.Warnf("MEDICHAIN_TYPE not support or not set ===> %s, use default ===> %s", serverType, serverTypeTest)
 		serverType = serverTypeTest
 	}
-	zap.Sugar.Infof("MEDICHAIN_TYPE is %s", serverType)
+	zap.Sugar.Infof("MEDICHAIN_PATH ===> %s", serverPath)
+	zap.Sugar.Infof("MEDICHAIN_VENDOR ===> %s", serverVendor)
+	zap.Sugar.Infof("MEDICHAIN_TYPE ===> %s", serverType)
 	InitConfig(path.Join(GetServerDir(), defaultFilePath))
 	initFileTypeMap()
 }
@@ -145,7 +155,7 @@ func GetBcosKeystore() string {
 	return path.Join(GetServerDir(), GetViperConfig().GetString("bcos.keystore"))
 }
 func GetBcosEasyCnsAddress() string {
-	return GetViperConfig().GetString(fmt.Sprintf("bcos.easy_cns.%s.address", serverType))
+	return GetViperConfig().GetString(fmt.Sprintf("bcos.easy_cns.%s.%s.address", serverVendor, serverType))
 }
 func GetServerDir() string {
 	//return GetViperConfig().GetString("server.dir")

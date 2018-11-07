@@ -56,17 +56,33 @@
 		},
 		"keystore": "/keystore",
 		"easy_cns": {
-			"pre": {
-				"address": "0xE5E7a9137Bb46f57Cd71F9220803BEf47BE758b6",
-				"tx": "0x8d5280f229472fbab9838f4742010c6622c47f9f1cc616cb4e6625790c933d19"
+			"ai": {
+				"pre": {
+					"address": "0xE5E7a9137Bb46f57Cd71F9220803BEf47BE758b6",
+					"tx": "0x8d5280f229472fbab9838f4742010c6622c47f9f1cc616cb4e6625790c933d19"
+				},
+				"prod": {
+					"address": "0x1c3D437b579Fbd7b6B38fE04A5d9b00d474C0252",
+					"tx": "0x0dfaea320838aed790f25b8fcf3dba879ce82a18bb549caba2a92958631cc2c3"
+				},
+				"test": {
+					"address": "0x178838F5d7d0a6eC4c54Bc969d3d79d81e69b20C",
+					"tx": "0x54a2fbd906abce260932c6a7dfeb05c9512f65eaad07ad7a771d3eb385d5fa18"
+				}
 			},
-			"prod": {
-				"address": "0x1c3D437b579Fbd7b6B38fE04A5d9b00d474C0252",
-				"tx": "0x0dfaea320838aed790f25b8fcf3dba879ce82a18bb549caba2a92958631cc2c3"
-			},
-			"test": {
-				"address": "0x178838F5d7d0a6eC4c54Bc969d3d79d81e69b20C",
-				"tx": "0x54a2fbd906abce260932c6a7dfeb05c9512f65eaad07ad7a771d3eb385d5fa18"
+			"empowering": {
+				"pre": {
+					"address": "0x36C7bf51F5c529F163c9d47EBB4fE57c4fCba6fD",
+					"tx": "0x3fb1f48294d59bcc5f2e2c7d56d8b7c1c38b79603eb89db7f65b8b8b17f7c29a"
+				},
+				"prod": {
+					"address": "0xCd155D777d4fa6daD96f45812318bBdd986ff4d5",
+					"tx": "0x686de2e22a5584a094c9822835df7d421d8dd09c5a1951461843071cc3dd44a4"
+				},
+				"test": {
+					"address": "0x7ceb8fC09be13D81e7f42Cf09dd1bc6D948fd690",
+					"tx": "0xf20a7db143ec1818f5e26967f33408abf52a67ef84eb6c7197376829027be8f3"
+				}
 			}
 		}
     }
